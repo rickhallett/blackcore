@@ -1,0 +1,140 @@
+{
+  "packageName": "Project Nassau Mobilization - June 11-18",
+  "source": "WhatsApp Transcript",
+  "recordedDate": "2025-06-18",
+  "agendas": [
+    {
+      "title": "Project Nassau - North Swanage Traffic Campaign",
+      "status": "Active",
+      "phase": "Phase 1: Mobilization",
+      "owner": "King Qirta Alladin Raml",
+      "objective": "Prevent the closure or implementation of one-way traffic on Shore Road, Swanage by influencing the public survey before the June 29 deadline."
+    },
+    {
+      "title": "Operation Serenity",
+      "status": "Planning",
+      "phase": "Phase 1: Mobilization",
+      "owner": "King Qirta Alladin Raml",
+      "objective": "A sub-agenda or related strategic goal discussed on June 12."
+    }
+  ],
+  "organizations": [
+    {
+      "name": "North Swanage Traffic Coalition Group (NSTCG)",
+      "category": "Weapon",
+      "website": "www.nstcg.org"
+    },
+    {
+      "name": "Swanage Town Council",
+      "category": "Antagonist"
+    },
+    {
+      "name": "Dorset Highways",
+      "category": "Lever of Power"
+    },
+    {
+      "name": "Granicus",
+      "category": "Antagonist",
+      "description": "The company running the survey platform, which implemented a CAPTCHA."
+    }
+  ],
+  "people": [
+    {
+      "fullName": "King Qirta Alladin Raml",
+      "role": "Internal Team",
+      "email": "blake@nstcg.org",
+      "status": "Active Engagement"
+    },
+    {
+      "fullName": "Kai",
+      "role": "Internal Team",
+      "email": "pete.mitchell@nstcg.org",
+      "status": "Active Engagement",
+      "notes": "Also known as Pete Mitchell, Long John Silver (LJS), The Technician, The Alchemist. Hired for £5,000/month for a 2-month minimum contract starting June 14, 2025."
+    },
+    {
+      "fullName": "The Captain",
+      "role": "Oversight",
+      "status": "Active Engagement",
+      "notes": "Kai's father. Supportive but concerned about financials. Needs to see tangible proof."
+    },
+    {
+      "fullName": "Ayshe",
+      "role": "Ally",
+      "status": "Active Engagement"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "Create Campaign Flyer",
+      "assignee": "Kai",
+      "status": "In Progress",
+      "priority": "High",
+      "relatedAgenda": "Project Nassau - North Swanage Traffic Campaign",
+      "dueDate": "2025-06-17"
+    },
+    {
+      "name": "Setup Google Workspace & Notion Integrations",
+      "assignee": "Kai",
+      "status": "In Progress",
+      "priority": "High",
+      "relatedAgenda": "Project Nassau - North Swanage Traffic Campaign"
+    },
+    {
+      "name": "Launch WhatsApp Campaign for Survey",
+      "assignee": "King Qirta Alladin Raml",
+      "status": "Done",
+      "priority": "High",
+      "relatedAgenda": "Project Nassau - North Swanage Traffic Campaign"
+    },
+    {
+      "name": "Get Flyers Printed",
+      "assignee": "King Qirta Alladin Raml",
+      "status": "In Progress",
+      "priority": "High",
+      "relatedAgenda": "Project Nassau - North Swanage Traffic Campaign",
+      "blockedBy": "Create Campaign Flyer"
+    },
+    {
+      "name": "Begin Door-Knocking Campaign",
+      "assignee": "King Qirta Alladin Raml",
+      "status": "To-Do",
+      "priority": "High",
+      "relatedAgenda": "Project Nassau - North Swanage Traffic Campaign",
+      "blockedBy": "Get Flyers Printed"
+    },
+    {
+      "name": "Resolve Bank Account Issue in London",
+      "assignee": "King Qirta Alladin Raml",
+      "status": "To-Do",
+      "priority": "Critical",
+      "relatedAgenda": "Project Nassau - North Swanage Traffic Campaign",
+      "notes": "Required to get a new passport to un-suspend bank account for payments."
+    }
+  ],
+  "transgressions": [
+    {
+      "summary": "Survey platform implemented CAPTCHA after campaign launch",
+      "perpetratorOrg": "Granicus",
+      "date": "2025-06-17",
+      "severity": "Medium",
+      "evidence": "WhatsApp Transcript"
+    }
+  ],
+  "intelligence": [
+    {
+      "title": "Full Transcript June 11-18",
+      "date": "2025-06-18",
+      "source": "External Source",
+      "rawNote": "The entire provided transcript text would go here.",
+      "taggedEntities": [
+        "King Qirta Alladin Raml",
+        "Kai",
+        "The Captain",
+        "Ayshe",
+        "NSTCG",
+        "Swanage Town Council"
+      ]
+    }
+  ]
+}
