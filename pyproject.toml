@@ -8,6 +8,7 @@ dependencies = [
     "notion-client>=2.2.1",
     "pydantic>=2.5.0",
     "python-dotenv>=1.0.0",
+    "rich>=14.0.0",
 ]
 
 [project.optional-dependencies]
