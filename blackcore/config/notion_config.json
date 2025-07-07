@@ -1,0 +1,184 @@
+{
+    "Key Places & Events": {
+        "id": "21f4753d-608e-812b-a22e-c805303cb28d",
+        "local_json_path": "blackcore/models/json/key_places_events.json",
+        "json_data_key": "Key Places & Events",
+        "title_property": "Event / Place Name",
+        "list_properties": [
+            "People Involved",
+            "Related Transgressions"
+        ],
+        "relations": {
+            "People Involved": "People & Contacts",
+            "Related Transgressions": "Identified Transgressions"
+        }
+    },
+    "Leads": {
+        "id": "2174753d-608e-80ac-b6be-cf0e623262fe",
+        "local_json_path": "blackcore/models/json/leads.json",
+        "json_data_key": "Leads",
+        "title_property": "Request Name",
+        "list_properties": [],
+        "relations": {}
+    },
+    "API Control Panel USER GEN": {
+        "id": "2254753d-608e-814f-8701-ca8112cd1de7",
+        "local_json_path": "blackcore/models/json/api_control_panel_user_gen.json",
+        "json_data_key": "API Control Panel USER GEN",
+        "title_property": "Name",
+        "list_properties": [],
+        "relations": {}
+    },
+    "Identified Transgressions": {
+        "id": "21f4753d-608e-8140-861f-f536b3c9262b",
+        "local_json_path": "blackcore/models/json/identified_transgressions.json",
+        "json_data_key": "Identified Transgressions",
+        "title_property": "Transgression Summary",
+        "list_properties": [
+            "Perpetrator (Org)",
+            "Related to Key Places & Events (Related Transgressions)",
+            "Related to People & Contacts (Linked Transgressions)",
+            "Perpetrator (Person)",
+            "Evidence"
+        ],
+        "relations": {
+            "Perpetrator (Org)": "Organizations & Bodies",
+            "Related to Key Places & Events (Related Transgressions)": "Key Places & Events",
+            "Related to People & Contacts (Linked Transgressions)": "People & Contacts",
+            "Perpetrator (Person)": "People & Contacts",
+            "Evidence": "Documents & Evidence"
+        }
+    },
+    "NSTCG Gamification Profiles": {
+        "id": "21d4753d-608e-81a4-9bdc-ef5920c5ec30",
+        "local_json_path": "blackcore/models/json/nstcg_gamification_profiles.json",
+        "json_data_key": "NSTCG Gamification Profiles",
+        "title_property": "Name",
+        "list_properties": [
+            "Submission"
+        ],
+        "relations": {
+            "Submission": "Leads"
+        }
+    },
+    "Documents & Evidence": {
+        "id": "21f4753d-608e-8102-9750-d25682bf1128",
+        "local_json_path": "blackcore/models/json/documents_evidence.json",
+        "json_data_key": "Documents & Evidence",
+        "title_property": "Document Name",
+        "list_properties": [
+            "Related to Organizations & Bodies (Linked Documents)",
+            "Related to Agendas & Epics (Key Documents)",
+            "Related to Identified Transgressions (Evidence)",
+            "Source Organization"
+        ],
+        "relations": {
+            "Related to Organizations & Bodies (Linked Documents)": "Organizations & Bodies",
+            "Related to Agendas & Epics (Key Documents)": "Agendas & Epics",
+            "Related to Identified Transgressions (Evidence)": "Identified Transgressions",
+            "Source Organization": "Organizations & Bodies"
+        }
+    },
+    "Intelligence & Transcripts": {
+        "id": "21f4753d-608e-81ea-9c50-fc5b78162374",
+        "local_json_path": "blackcore/models/json/intelligence_transcripts.json",
+        "json_data_key": "Intelligence & Transcripts",
+        "title_property": "Entry Title",
+        "list_properties": [
+            "Tagged Entities"
+        ],
+        "relations": {
+            "Tagged Entities": "People & Contacts"
+        }
+    },
+    "Organizations & Bodies": {
+        "id": "21f4753d-608e-81a9-8822-f40d30259853",
+        "local_json_path": "blackcore/models/json/organizations_bodies.json",
+        "json_data_key": "Organizations & Bodies",
+        "title_property": "Organization Name",
+        "list_properties": [
+            "Related to People & Contacts (Organization)",
+            "Key People",
+            "Related to Documents & Evidence (Source Organization)",
+            "Related to Identified Transgressions (Perpetrator (Org))",
+            "Linked Documents"
+        ],
+        "relations": {
+            "Related to People & Contacts (Organization)": "People & Contacts",
+            "Key People": "People & Contacts",
+            "Related to Documents & Evidence (Source Organization)": "Documents & Evidence",
+            "Related to Identified Transgressions (Perpetrator (Org))": "Identified Transgressions",
+            "Linked Documents": "Documents & Evidence"
+        }
+    },
+    "Agendas & Epics": {
+        "id": "21f4753d-608e-8109-8a14-f46f1e05e506",
+        "local_json_path": "blackcore/models/json/agendas_epics.json",
+        "json_data_key": "Agendas & Epics",
+        "title_property": "Agenda Title",
+        "list_properties": [
+            "Key Documents",
+            "Related to Actionable Tasks (Related Agenda)",
+            "Actionable Tasks"
+        ],
+        "relations": {
+            "Key Documents": "Documents & Evidence",
+            "Related to Actionable Tasks (Related Agenda)": "Actionable Tasks",
+            "Actionable Tasks": "Actionable Tasks"
+        }
+    },
+    "Actionable Tasks": {
+        "id": "21f4753d-608e-81ef-998f-ccc26b440542",
+        "local_json_path": "blackcore/models/json/actionable_tasks.json",
+        "json_data_key": "Actionable Tasks",
+        "title_property": "Task Name",
+        "list_properties": [
+            "Related Agenda",
+            "Related to Agendas & Epics (Actionable Tasks)",
+            "Blocked By"
+        ],
+        "relations": {
+            "Related Agenda": "Agendas & Epics",
+            "Related to Agendas & Epics (Actionable Tasks)": "Agendas & Epics",
+            "Blocked By": "Actionable Tasks"
+        }
+    },
+    "People & Contacts": {
+        "id": "21f4753d-608e-8173-b6dc-fc6302804e69",
+        "local_json_path": "blackcore/models/json/people_contacts.json",
+        "json_data_key": "People & Contacts",
+        "title_property": "Full Name",
+        "list_properties": [
+            "Linked Transgressions",
+            "Related to Organizations & Bodies (Key People)",
+            "Related to Key Places & Events (People Involved)",
+            "Related to Identified Transgressions (Perpetrator (Person))",
+            "Organization",
+            "Related to Intelligence & Transcripts (Tagged Entities)"
+        ],
+        "relations": {
+            "Linked Transgressions": "Identified Transgressions",
+            "Related to Organizations & Bodies (Key People)": "Organizations & Bodies",
+            "Related to Key Places & Events (People Involved)": "Key Places & Events",
+            "Related to Identified Transgressions (Perpetrator (Person))": "Identified Transgressions",
+            "Organization": "Organizations & Bodies",
+            "Related to Intelligence & Transcripts (Tagged Entities)": "Intelligence & Transcripts"
+        }
+    },
+    "Donations": {
+        "id": "21d4753d-608e-801a-86b3-d494a6df0e97",
+        "local_json_path": "blackcore/models/json/donations.json",
+        "json_data_key": "Donations",
+        "title_property": "Donation ID",
+        "list_properties": [],
+        "relations": {}
+    },
+    "NSTCG Feature Flags": {
+        "id": "21e4753d-608e-81c5-9ac2-c39e279a2948",
+        "local_json_path": "blackcore/models/json/nstcg_feature_flags.json",
+        "json_data_key": "NSTCG Feature Flags",
+        "title_property": "Feature Path",
+        "list_properties": [],
+        "relations": {}
+    }
+}
