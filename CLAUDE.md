@@ -10,8 +10,8 @@ Blackcore is a Python-based intelligence processing and automation system for "P
 
 ### Setup
 ```bash
-# Install dependencies (once implemented)
-uv pip install -r requirements-dev.txt
+# Install dependencies
+uv sync
 
 # Set up environment variables
 cp .env.example .env
@@ -28,6 +28,9 @@ pytest tests/test_filename.py
 
 # Run with coverage
 pytest --cov=blackcore
+
+# Run tests with verbose output
+pytest -v
 ```
 
 ### Code Quality
@@ -37,6 +40,9 @@ ruff check .
 
 # Format code
 ruff format .
+
+# Fix auto-fixable linting issues
+ruff check --fix .
 ```
 
 ### Main Scripts
@@ -44,11 +50,17 @@ ruff format .
 # Initialize Notion databases
 python scripts/setup_databases.py
 
-# Process new intelligence
-python scripts/process_new_intelligence.py
+# Verify database configuration
+python scripts/verify_databases.py
 
-# Main application (various modes)
-python main.py --mode [ingest|link|report]
+# Process new intelligence
+python scripts/process_intelligence.py
+
+# Discover and configure Notion workspace
+python scripts/discover_and_configure.py
+
+# Sync data between local JSON and Notion
+python scripts/notion_sync.py
 ```
 
 ## Architecture
@@ -80,6 +92,7 @@ The system uses 8 interconnected Notion databases:
 ### Environment Variables
 Required in `.env`:
 - `NOTION_API_KEY` - Notion integration token
+- `NOTION_PARENT_PAGE_ID` - Parent page for database creation
 - `ANTHROPIC_API_KEY` - Claude API key (optional)
 - `GOOGLE_API_KEY` - Gemini API key (optional)
 - `GOOGLE_DRIVE_FOLDER_ID` - Source folder for intelligence data
@@ -91,3 +104,10 @@ When implementing features:
 3. Follow TDD approach - write tests in `tests/` before implementation
 4. Use type hints and Pydantic models for data validation
 5. Keep AI prompts in separate files for maintainability
+
+### Current Phase
+The project is in Phase 0 (Foundation & Schema Automation) focusing on:
+- Database schema creation and validation
+- Basic Notion API wrapper implementation
+- Test infrastructure setup
+- Configuration discovery and management
