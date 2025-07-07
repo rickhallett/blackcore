@@ -1,0 +1,159 @@
+{
+  "Documents and Evidence": [
+    {
+      "Document Name": {
+        "title": [
+          {
+            "text": {
+              "content": "Email from Tony Powell confirming mid-survey CAPTCHA addition"
+            }
+          }
+        ]
+      },
+      "File": {
+        "files": []
+      },
+      "Document Type": {
+        "select": {
+          "name": "Evidence"
+        }
+      },
+      "Source Organization": {
+        "relation": []
+      },
+      "AI Analysis": {
+        "rich_text": [
+          {
+            "text": {
+              "content": "Email dated June 26th from Tony Powell (Dorset Coast Forum coordinator) to resident Sarah Streams. The email explicitly states that the survey's CAPTCHA security feature was 'added to the survey on recommendation of engagement HQ' midway through the survey period. This is critical evidence of potential survey manipulation intended to suppress responses, as it was not present from the start. This action can be framed as a deliberate attempt to invalidate the results of a grassroots canvassing effort."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Document Name": {
+        "title": [
+          {
+            "text": {
+              "content": "Gemini AI Analysis of Survey Bias"
+            }
+          }
+        ]
+      },
+      "File": {
+        "files": []
+      },
+      "Document Type": {
+        "select": {
+          "name": "Our Output"
+        }
+      },
+      "Source Organization": {
+        "relation": []
+      },
+      "AI Analysis": {
+        "rich_text": [
+          {
+            "text": {
+              "content": "An analysis of the official survey conducted using Google's Gemini AI. The AI was prompted with a neutral question about the survey's fairness and independently concluded that a significant percentage of questions were leading, and that it improperly conflated separate issues (e.g., Shore Road). This document serves as objective, third-party validation that the survey's construction was fundamentally flawed and biased, providing a basis to challenge the legitimacy of any results derived from it."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Document Name": {
+        "title": [
+          {
+            "text": {
+              "content": "Draft: Initial Outreach to Granicus re: Data Access"
+            }
+          }
+        ]
+      },
+      "File": {
+        "files": []
+      },
+      "Document Type": {
+        "select": {
+          "name": "Our Output"
+        }
+      },
+      "Source Organization": {
+        "relation": []
+      },
+      "AI Analysis": {
+        "rich_text": [
+          {
+            "text": {
+              "content": "A planned formal communication to Granicus, the survey platform provider. The email will introduce the campaign group (NSTG), explain the grassroots canvassing efforts, and formally request that the raw, unadulterated survey data be provided to a trusted, independent third-party firm for verification. The email will CC key oversight bodies (e.g., Governance and Audit Committee) to apply public pressure and ensure transparency."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Document Name": {
+        "title": [
+          {
+            "text": {
+              "content": "Draft: Formal Complaint to UK Statistics Authority"
+            }
+          }
+        ]
+      },
+      "File": {
+        "files": []
+      },
+      "Document Type": {
+        "select": {
+          "name": "Our Output"
+        }
+      },
+      "Source Organization": {
+        "relation": []
+      },
+      "AI Analysis": {
+        "rich_text": [
+          {
+            "text": {
+              "content": "A planned formal complaint to be submitted to the UK Statistics Authority. The document will argue that Dorset Coast Forum has failed to meet the 'gold standard' for statistical gathering, analysis, and presentation, citing the flawed 2023 survey and the manipulated current survey (e.g., mid-survey CAPTCHA addition) as evidence. The goal is to trigger an official inquiry into DCF's competence and credibility, thereby undermining the validity of their survey results and adding a layer of formal scrutiny."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Document Name": {
+        "title": [
+          {
+            "text": {
+              "content": "Evidence: David Hollister's Pro-Conservative Comment on STC Facebook Page during Purdah"
+            }
+          }
+        ]
+      },
+      "File": {
+        "files": []
+      },
+      "Document Type": {
+        "select": {
+          "name": "Evidence"
+        }
+      },
+      "Source Organization": {
+        "relation": []
+      },
+      "AI Analysis": {
+        "rich_text": [
+          {
+            "text": {
+              "content": "Screenshots and timestamped evidence of a comment made by local columnist David Hollister on the official Swanage Town Council (STC) Facebook page. The comment, made after the election was called (i.e., during the 'Purdah' period of impartiality), denigrates candidate Phillipe Eed and promotes conservative candidate Gary Suttle. The fact that STC, as an official body, allowed this political message to remain on their platform for two days constitutes a serious breach of Purdah rules and shows institutional bias."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

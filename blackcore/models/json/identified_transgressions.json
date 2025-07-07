@@ -1,0 +1,59 @@
+{
+  "Identified Transgressions": [
+    [
+      {
+        "Transgression Summary": "Mid-survey implementation of CAPTCHA to suppress survey participation",
+        "Perpetrator (Person)": [
+          "Tony Powell"
+        ],
+        "Perpetrator (Org)": [
+          "Dorset Coast Forum",
+          "Granicus"
+        ],
+        "Date of Transgression": "2024-06-26",
+        "Evidence": [
+          "Email from Tony Powell to Sarah Streams"
+        ],
+        "Severity": "Critical"
+      },
+      {
+        "Transgression Summary": "Breach of Purdah: Swanage Town Council allowing biased political comments on its official platform",
+        "Perpetrator (Person)": [
+          "David Hollister"
+        ],
+        "Perpetrator (Org)": [
+          "Swanage Town Council"
+        ],
+        "Date of Transgression": null,
+        "Evidence": [
+          "Screenshots of David Hollister's comment on STC Facebook page"
+        ],
+        "Severity": "Critical"
+      },
+      {
+        "Transgression Summary": "Biased presentation of road scheme options by Dorset Highways official",
+        "Perpetrator (Person)": [],
+        "Perpetrator (Org)": [
+          "Dorset Highways"
+        ],
+        "Date of Transgression": null,
+        "Evidence": [
+          "Speaker testimony regarding negative framing of Option 3 at public meeting"
+        ],
+        "Severity": "High"
+      },
+      {
+        "Transgression Summary": "Use of a statistically flawed 2023 survey to justify a major infrastructure project",
+        "Perpetrator (Person)": [],
+        "Perpetrator (Org)": [
+          "Dorset Coast Forum"
+        ],
+        "Date of Transgression": null,
+        "Evidence": [
+          "Original 2023 Survey Document"
+        ],
+        "Severity": "High"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "Key Places & Events": [
+    {
+      "Event / Place Name": "Election (Swanage)",
+      "Type": "Pivotal Event",
+      "Date of Event": "2024-07-24",
+      "Description": "The upcoming local election on July 24th is considered the most important short-term outcome for the campaign. The primary goal is to elect their candidate, Phillippe Eed, to disrupt the current council from within. The campaign involves door-to-door canvassing and countering propaganda from opponents like David Hollister and outlets like Swanage News.",
+      "People Involved": [
+        "Phillippe Eed",
+        "Gary Suttle",
+        "David Hollister"
+      ],
+      "Related Transgressions": [
+        "Biased political commentary on STC Facebook page during Purdah"
+      ]
+    },
+    {
+      "Event / Place Name": "Swanage",
+      "Type": "Key Location",
+      "Date of Event": null,
+      "Description": "The primary location for the entire political campaign. The conflict revolves around a town survey concerning traffic changes, local infrastructure, and the actions of Swanage Town Council and Dorset Coast Forum.",
+      "People Involved": [
+        "Phillippe Eed",
+        "Angelo Wiggins",
+        "Mel",
+        "Gary Suttle",
+        "David Hollister"
+      ],
+      "Related Transgressions": []
+    },
+    {
+      "Event / Place Name": "Battlemead Road",
+      "Type": "Key Location",
+      "Date of Event": null,
+      "Description": "A residential road identified as being one of the most affected by the proposed traffic changes. It's a key area for door-to-door canvassing, where Speaker 2 encountered a particularly patronizing and difficult resident, highlighting the challenge of mobilizing the public.",
+      "People Involved": [
+        "Mel"
+      ],
+      "Related Transgressions": []
+    },
+    {
+      "Event / Place Name": "Shore Road",
+      "Type": "Key Location",
+      "Date of Event": null,
+      "Description": "The central road at the heart of the controversial survey. The debate focuses on pedestrianization, one-way vs. two-way traffic, and the potential risk to children walking to a nearby school. An AI analysis of the survey independently flagged questions about Shore Road as being a separate, leading issue.",
+      "People Involved": [],
+      "Related Transgressions": [
+        "Biased survey construction by Dorset Coast Forum"
+      ]
+    },
+    {
+      "Event / Place Name": "Swanage Town Council Facebook Page",
+      "Type": "Key Location",
+      "Date of Event": null,
+      "Description": "A digital platform where Swanage Town Council allegedly breached pre-election impartiality rules ('Purdah'). A politically influential individual, David Hollister, posted a comment denouncing candidate Phillipe Eed and supporting his opponent, which was left visible for two days, effectively using a neutral platform for political campaigning.",
+      "People Involved": [
+        "David Hollister",
+        "Phillippe Eed",
+        "Gary Suttle"
+      ],
+      "Related Transgressions": [
+        "Biased political commentary on STC Facebook page during Purdah"
+      ]
+    }
+  ]
+}

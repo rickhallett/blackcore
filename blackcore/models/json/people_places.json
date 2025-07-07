@@ -1,0 +1,228 @@
+{
+  "People & Contacts": [
+    {
+      "Full Name": "David Hollister",
+      "Role": "Target",
+      "Status": "Monitoring",
+      "Organization": [
+        "Swanage News",
+        "Swanage Town Council (Affiliated)"
+      ],
+      "Notes": "Local columnist with significant influence. Used the Swanage Town Council platform to post a politically biased comment during the pre-election 'Purdah' period, denouncing Phillippe Edes and endorsing Gary Suttle. This is a critical transgression."
+    },
+    {
+      "Full Name": "Phillippe Edes",
+      "Role": "Ally",
+      "Status": "Active Engagement",
+      "Notes": "The campaign's chosen candidate for the Town Council election. Referred to as 'The Mayor of Paul' and the opposition's 'nightmare'. The central figure for the election push. His nomination is considered an 'unthinkable victory'."
+    },
+    {
+      "Full Name": "Tony Powell",
+      "Role": "Target",
+      "Status": "Initial Contact Made",
+      "Organization": [
+        "Dorset Coast Forum"
+      ],
+      "Linked Transgressions": [
+        "CAPTCHA added to survey mid-process"
+      ],
+      "Notes": "Dorset Coast Forum Coordinator (Head). Sent a critical email confirming the CAPTCHA was added to the survey mid-process on the 'recommendation' of Engagement HQ. This email is a key piece of evidence."
+    },
+    {
+      "Full Name": "Gary Suttle",
+      "Role": "Target",
+      "Status": "Monitoring",
+      "Organization": [
+        "Swanage Town Council"
+      ],
+      "Notes": "Conservative County Councillor running for the Swanage Town Council seat. Was endorsed by David Hollister in the Purdah violation."
+    },
+    {
+      "Full Name": "Sarah Streams",
+      "Role": "Ally",
+      "Status": "Active Engagement",
+      "Organization": [
+        "Local Property Owner"
+      ],
+      "Notes": "Local property owner on The Mowlem Road. Independently contacted Dorset Coast Forum about the survey's CAPTCHA issue and was the recipient of the key email from Tony Powell."
+    },
+    {
+      "Full Name": "Angelo Wiggins",
+      "Role": "Ally",
+      "Status": "Active Engagement",
+      "Organization": [
+        "Local Resident"
+      ],
+      "Notes": "Local resident on the corner. Initially described as 'hard work' and 'wishy-washy' regarding the vote but is a contact on the ground."
+    },
+    {
+      "Full Name": "Chris Toms",
+      "Role": "Target",
+      "Status": "Not Contacted",
+      "Organization": [
+        "Swanage Town Council"
+      ],
+      "Notes": "The Deputy Mayor of Swanage."
+    },
+    {
+      "Full Name": "Cliff Sutton",
+      "Role": "Target",
+      "Status": "Not Contacted",
+      "Notes": "A key target for the email pressure campaign, with the goal of having his vote taken away."
+    },
+    {
+      "Full Name": "Mel",
+      "Role": "Ally",
+      "Status": "Initial Contact Made",
+      "Organization": [
+        "Local Resident"
+      ],
+      "Notes": "A contact on the ground, described as a 'funny dude' who initially exhibited selfish interest but is part of the local network."
+    },
+    {
+      "Full Name": "Reuben / Harland",
+      "Role": "Oversight",
+      "Status": "Not Contacted",
+      "Organization": [
+        "UK Statistics Authority"
+      ],
+      "Notes": "Contacts at the UK Statistics Authority. The target recipients for the formal document questioning the statistical validity of the council's survey process."
+    },
+    {
+      "Full Name": "Blake Compton",
+      "Role": "Internal Team",
+      "Notes": "Alias for the 'Strategist' persona. Responsible for generating the campaign narrative and strategy."
+    },
+    {
+      "Full Name": "Pete Mitchell",
+      "Role": "Internal Team",
+      "Notes": "Alias for the 'Technician' persona. Responsible for the technical infrastructure and data analysis."
+    },
+    {
+      "Full Name": "Barricade",
+      "Role": "Operational Persona",
+      "Status": "Active Engagement",
+      "Notes": "The primary operational email persona used for initial outreach. All aliases feed into the same central account."
+    }
+  ],
+  "Organizations & Bodies": [
+    {
+      "Organization Name": "Swanage Town Council",
+      "Category": "Antagonist",
+      "Key People": [
+        "Gary Suttle",
+        "Chris Toms"
+      ],
+      "Linked Documents": [
+        "David Hollister's Purdah Comment"
+      ]
+    },
+    {
+      "Organization Name": "Dorset Coast Forum",
+      "Category": "Antagonist",
+      "Key People": [
+        "Tony Powell"
+      ],
+      "Linked Documents": [
+        "Tony Powell CAPTCHA Email"
+      ]
+    },
+    {
+      "Organization Name": "Granicus",
+      "Category": "Weapon",
+      "Notes": "The tech company behind the survey software. Their relationship with 'Engagement HQ' and their role in the CAPTCHA addition is a key point of investigation."
+    },
+    {
+      "Organization Name": "UK Statistics Authority",
+      "Category": "Lever of Power",
+      "Key People": [
+        "Reuben / Harland"
+      ],
+      "Notes": "A higher authority to which a formal complaint will be submitted regarding the flawed survey methodology used by the council."
+    },
+    {
+      "Organization Name": "Dorset Highways",
+      "Category": "Antagonist",
+      "Notes": "Accused of showing bias in their presentation of the three road options, specifically by casting negative doubt only on the campaign's preferred 'Option 3'."
+    },
+    {
+      "Organization Name": "Engagement HQ",
+      "Category": "Weapon",
+      "Notes": "The entity that 'recommended' the addition of the CAPTCHA. Their exact identity and relationship to Granicus needs clarification."
+    }
+  ],
+  "Key Places & Events": [
+    {
+      "Event / Place Name": "Shore Road",
+      "Type": "Key Location",
+      "Description": "The central point of contention in the campaign. The proposed closure is the primary issue being fought."
+    },
+    {
+      "Event / Place Name": "North Swanage",
+      "Type": "Key Location",
+      "Description": "The primary 'Impact Zone' for the proposed road closure and new car park development."
+    },
+    {
+      "Event / Place Name": "Battlemead Road",
+      "Type": "Key Location",
+      "Description": "A specific road where one of the campaign's ground contacts resides."
+    },
+    {
+      "Event / Place Name": "Washpond Lane",
+      "Type": "Key Location",
+      "Description": "Location of a school where children are 'dodging brick lorries'. Used as an example of the council's misplaced priorities (funding a Shore Road project over safety here)."
+    },
+    {
+      "Event / Place Name": "Emmanuel Church Meeting",
+      "Type": "Pivotal Event",
+      "Description": "A public consultation event where the council failed to provide paper surveys, cited as a failure to properly consult with residents.",
+      "Related Transgressions": [
+        "Failure to provide paper surveys at consultation"
+      ]
+    }
+  ],
+  "Identified Transgressions": [
+    {
+      "Transgression Summary": "CAPTCHA added to official survey mid-process",
+      "Perpetrator (Org)": [
+        "Dorset Coast Forum",
+        "Engagement HQ"
+      ],
+      "Perpetrator (Person)": [
+        "Tony Powell"
+      ],
+      "Date of Transgression": "c. late June 2025",
+      "Evidence": [
+        "Tony Powell CAPTCHA Email"
+      ],
+      "Severity": "Critical"
+    },
+    {
+      "Transgression Summary": "Political endorsement during Purdah on official platform",
+      "Perpetrator (Org)": [
+        "Swanage Town Council"
+      ],
+      "Perpetrator (Person)": [
+        "David Hollister"
+      ],
+      "Date of Transgression": "c. early July 2025",
+      "Evidence": [
+        "David Hollister's Purdah Comment (Screenshot)"
+      ],
+      "Severity": "High"
+    }
+  ],
+  "Documents & Evidence": [
+    {
+      "Document Name": "Tony Powell CAPTCHA Email",
+      "Document Type": "Evidence",
+      "Source Organization": "Dorset Coast Forum",
+      "Notes": "Email from Tony Powell to Sarah Streams confirming the CAPTCHA was added to the survey on the 'recommendation' of Engagement HQ. This is a critical piece of evidence proving process manipulation."
+    },
+    {
+      "Document Name": "Gemini AI Survey Analysis",
+      "Document Type": "Our Output",
+      "Notes": "An independent analysis of the official survey which concluded, without prompting, that the survey was biased and structured unfairly. Validates the campaign's core arguments."
+    }
+  ]
+}

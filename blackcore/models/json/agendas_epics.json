@@ -1,0 +1,75 @@
+{
+  "Agendas and Epics": [
+    {
+      "Agenda Title": "Phase 1: Evidence Documentation & Intelligence Gathering",
+      "Status": "Completed",
+      "Owner": "Pete Mitchell",
+      "Phase": "Phase 1: Mobilization",
+      "Actionable Tasks": [
+        "Document and archive Purdah violation evidence",
+        "Analyze Granicus/Engagement HQ relationship",
+        "Engage local ground contacts for intelligence gathering"
+      ],
+      "Key Documents": [
+        "Tony Powell CAPTCHA Email",
+        "Gemini AI Survey Analysis",
+        "David Hollister's Purdah Comment"
+      ],
+      "Objective Summary": "Systematic collection and documentation of evidence regarding survey manipulation and Purdah violations. Establish ground intelligence network and preserve critical evidence for use in subsequent phases."
+    },
+    {
+      "Agenda Title": "Phase 2: Pressure Campaign Implementation",
+      "Status": "Active",
+      "Owner": "Barricade",
+      "Phase": "Phase 2: Pressure",
+      "Actionable Tasks": [
+        "Submit formal complaint to UK Statistics Authority",
+        "Organize email pressure campaign targeting Cliff Sutton"
+      ],
+      "Key Documents": [
+        "UK Statistics Authority Complaint Document",
+        "Pressure Campaign Email Templates"
+      ],
+      "Objective Summary": "Execute targeted pressure campaign against key council members and submit formal complaints to higher authorities. Focus on Cliff Sutton vote influence and leveraging documented evidence with UK Statistics Authority."
+    },
+    {
+      "Agenda Title": "Phase 3: Endgame Strategy & Escalation",
+      "Status": "Planning",
+      "Owner": "Blake Compton",
+      "Phase": "Phase 3: Endgame",
+      "Actionable Tasks": [
+        "Prepare Phase 3 escalation strategy"
+      ],
+      "Key Documents": [],
+      "Objective Summary": "Final phase contingency planning and escalation tactics. Reserved for scenarios where Phase 1 and Phase 2 objectives do not achieve desired outcomes. Strategic escalation protocols and alternative pressure mechanisms."
+    },
+    {
+      "Agenda Title": "Shore Road Closure Opposition Campaign",
+      "Status": "Active",
+      "Owner": "Barricade",
+      "Phase": "Phase 2: Pressure",
+      "Actionable Tasks": [
+        "Submit formal complaint to UK Statistics Authority",
+        "Organize email pressure campaign targeting Cliff Sutton",
+        "Engage local ground contacts for intelligence gathering"
+      ],
+      "Key Documents": [
+        "Tony Powell CAPTCHA Email",
+        "Gemini AI Survey Analysis",
+        "David Hollister's Purdah Comment"
+      ],
+      "Objective Summary": "Master campaign to prevent Shore Road closure through systematic opposition leveraging survey manipulation evidence, Purdah violations, and targeted pressure on key decision makers. Primary focus on protecting North Swanage community interests."
+    },
+    {
+      "Agenda Title": "Phillippe Edes Election Support",
+      "Status": "Completed",
+      "Owner": "Blake Compton",
+      "Phase": "Phase 1: Mobilization",
+      "Actionable Tasks": [],
+      "Key Documents": [
+        "David Hollister's Purdah Comment"
+      ],
+      "Objective Summary": "Support campaign for Phillippe Edes ('The Mayor of Paul') in Town Council election. Leverage David Hollister's Purdah violation as evidence of opposition impropriety. Achieved 'unthinkable victory' with successful nomination."
+    }
+  ]
+}
