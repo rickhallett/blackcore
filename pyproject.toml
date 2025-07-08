@@ -9,6 +9,10 @@ dependencies = [
     "pydantic>=2.5.0",
     "python-dotenv>=1.0.0",
     "rich>=14.0.0",
+    "cryptography>=41.0.0",
+    "structlog>=24.0.0",
+    "redis>=5.0.0",
+    "dnspython>=2.4.0",
 ]
 
 [project.optional-dependencies]
