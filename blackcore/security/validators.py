@@ -106,17 +106,16 @@ class URLValidator:
             for ip_str in ips:
                 try:
                     ip = ipaddress.ip_address(ip_str)
-                    
-                    # Check against blocked networks
-                    for network in self.BLOCKED_NETWORKS:
-                        if ip in network:
-                            raise ValueError(
-                                f"URL resolves to blocked network {network}: {ip}"
-                            )
-                            
                 except ValueError:
                     # Not a valid IP, skip
                     continue
+                
+                # Check against blocked networks
+                for network in self.BLOCKED_NETWORKS:
+                    if ip in network:
+                        raise ValueError(
+                            f"URL resolves to blocked network {network}: {ip}"
+                        )
                     
         except socket.gaierror as e:
             raise ValueError(f"Cannot resolve hostname {parsed.hostname}: {e}")
@@ -130,6 +129,14 @@ class URLValidator:
     def _resolve_hostname(self, hostname: str) -> List[str]:
         """Resolve hostname to all IP addresses."""
         ips = []
+        
+        # Check if hostname is already an IP address
+        try:
+            ipaddress.ip_address(hostname)
+            return [hostname]
+        except ValueError:
+            # Not an IP address, continue with DNS resolution
+            pass
         
         try:
             # Try DNS resolution first
@@ -294,17 +301,12 @@ class InputSanitizer:
         )
         
         # HTML escape for safety (basic)
-        html_escapes = {
-            '<': '&lt;',
-            '>': '&gt;',
-            '&': '&amp;',
-            '"': '&quot;',
-            "'": '&#x27;',
-            '/': '&#x2F;',
-        }
-        
-        for char, escape in html_escapes.items():
-            cleaned = cleaned.replace(char, escape)
+        # IMPORTANT: Escape & first to avoid double-escaping
+        cleaned = cleaned.replace('&', '&amp;')
+        cleaned = cleaned.replace('<', '&lt;')
+        cleaned = cleaned.replace('>', '&gt;')
+        cleaned = cleaned.replace('"', '&quot;')
+        cleaned = cleaned.replace("'", '&#x27;')
         
         return cleaned
     
