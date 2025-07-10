@@ -26,11 +26,20 @@ pytest
 # Run specific test file
 pytest tests/test_filename.py
 
+# Run specific test function
+pytest tests/test_filename.py::test_function_name
+
 # Run with coverage
 pytest --cov=blackcore
 
 # Run tests with verbose output
 pytest -v
+
+# Run tests matching a pattern
+pytest -k "test_pattern"
+
+# Run async tests (automatically handled by pytest-asyncio)
+pytest tests/test_async.py
 ```
 
 ### Code Quality
@@ -43,34 +52,50 @@ ruff format .
 
 # Fix auto-fixable linting issues
 ruff check --fix .
+
+# Check specific files/directories
+ruff check blackcore/security/
 ```
 
 ### Main Scripts
 ```bash
 # Initialize Notion databases
 python scripts/setup_databases.py
+# Or using uv script alias:
+uv run setup-databases
 
 # Verify database configuration
 python scripts/verify_databases.py
+# Or:
+uv run verify-databases
 
 # Process new intelligence
 python scripts/process_intelligence.py
+# Or:
+uv run process-intelligence
 
 # Discover and configure Notion workspace
 python scripts/discover_and_configure.py
 
 # Sync data between local JSON and Notion
 python scripts/notion_sync.py
+
+# Analyze database relationships
+python scripts/analyse_relations.py
 ```
 
 ## Architecture
 
 ### Core Components
-1. **Ingestion Engine** (`blackcore/ingestion/`) - Processes raw data from Google Drive
-2. **Notion ORM** (`blackcore/models/`) - Object-relational mapper for Notion databases
-3. **Relational Linker** (`blackcore/linker/`) - Creates connections between data objects
-4. **AI Integration** (`blackcore/ai/`) - Interfaces for Claude and Gemini models
-5. **Reporting Engine** (`blackcore/reporting/`) - Query and report generation
+The project follows a clean, layered architecture:
+
+1. **Property Handlers** (`blackcore/handlers/`) - Type-specific handlers for all Notion property types (text, select, multi_select, relation, etc.)
+2. **Repository Layer** (`blackcore/repositories/`) - Data access abstraction using repository pattern with base classes for CRUD operations
+3. **Service Layer** (`blackcore/services/`) - Business logic including sync services and domain-specific operations
+4. **Notion Client** (`blackcore/notion/`) - Custom Notion API wrapper with database creators and client abstraction
+5. **Security Module** (`blackcore/security/`) - Comprehensive security with secrets management, validators, and audit logging
+6. **Rate Limiting** (`blackcore/rate_limiting/`) - Thread-safe rate limiting for API calls with configurable limits
+7. **Error Handling** (`blackcore/errors/`) - Custom exception hierarchy for graceful error handling
 
 ### Database Schema
 The system uses 8 interconnected Notion databases:
@@ -111,3 +136,32 @@ The project is in Phase 0 (Foundation & Schema Automation) focusing on:
 - Basic Notion API wrapper implementation
 - Test infrastructure setup
 - Configuration discovery and management
+
+## Key Architectural Patterns
+
+### Repository Pattern
+All data access goes through repository classes that inherit from `BaseRepository`:
+```python
+# Example: PersonRepository inherits from BaseRepository
+# Provides standard CRUD operations plus custom queries
+```
+
+### Property Handler System
+Each Notion property type has a dedicated handler:
+- `TextPropertyHandler` - Plain text fields
+- `SelectPropertyHandler` - Single select options
+- `RelationPropertyHandler` - Database relations
+- Custom handlers for each Notion property type
+
+### Testing Strategy
+- **Fixtures**: Comprehensive fixtures in `tests/conftest.py` for mock clients and test data
+- **Test Organization**: Tests mirror source structure (e.g., `blackcore/security/` → `tests/test_security.py`)
+- **Async Testing**: Full support for async tests with `pytest-asyncio`
+- **Mock Strategy**: Use fixtures for Notion client mocking to avoid API calls in tests
+
+### Error Handling
+Custom exception hierarchy in `blackcore/errors/`:
+- `BlackcoreError` - Base exception
+- `ConfigurationError` - Configuration issues
+- `ValidationError` - Data validation failures
+- `NotionAPIError` - Notion API specific errors
