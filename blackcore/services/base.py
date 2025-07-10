@@ -13,12 +13,13 @@ from ..rate_limiting.thread_safe import ThreadSafeRateLimiter
 
 class ServiceError(Exception):
     """Service layer error."""
+
     pass
 
 
 class BaseService(ABC):
     """Abstract base service for business logic."""
-    
+
     def __init__(
         self,
         client: Client,
@@ -27,7 +28,7 @@ class BaseService(ABC):
         audit_logger: Optional[AuditLogger] = None,
     ):
         """Initialize service.
-        
+
         Args:
             client: Notion API client
             rate_limiter: Optional rate limiter
@@ -39,21 +40,21 @@ class BaseService(ABC):
         self.error_handler = error_handler or ErrorHandler()
         self.audit_logger = audit_logger or AuditLogger()
         self.logger = logging.getLogger(self.__class__.__name__)
-        
+
         # Initialize repositories
         self._init_repositories()
-    
+
     @abstractmethod
     def _init_repositories(self) -> None:
         """Initialize required repositories."""
         pass
-    
+
     def _create_repository(self, repository_class: type) -> BaseRepository:
         """Create a repository instance with shared dependencies.
-        
+
         Args:
             repository_class: Repository class to instantiate
-            
+
         Returns:
             Repository instance
         """
@@ -63,19 +64,18 @@ class BaseService(ABC):
             error_handler=self.error_handler,
             audit_logger=self.audit_logger,
         )
-    
+
     def log_operation(self, operation: str, **details) -> None:
         """Log a service operation.
-        
+
         Args:
             operation: Operation name
             **details: Operation details
         """
         self.logger.info(
-            f"Service operation: {operation}",
-            extra={"operation": operation, **details}
+            f"Service operation: {operation}", extra={"operation": operation, **details}
         )
-        
+
         # Also log to audit trail
         self.audit_logger.log_data_access(
             operation=operation,

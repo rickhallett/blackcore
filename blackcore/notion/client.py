@@ -30,62 +30,65 @@ RATE_LIMIT_DELAY = 1.0 / RATE_LIMIT_REQUESTS_PER_SECOND  # ~334ms
 
 # Validation constants
 MAX_TEXT_LENGTH = 2000
-EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-URL_REGEX = re.compile(r'^https?://[^\s]+$')
-ISO_DATE_REGEX = re.compile(r'^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})?)?$')
+EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+URL_REGEX = re.compile(r"^https?://[^\s]+$")
+ISO_DATE_REGEX = re.compile(r"^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})?)?$")
 
 
 class RateLimiter:
     """Simple rate limiter to comply with Notion API limits."""
-    
+
     def __init__(self, requests_per_second: float = RATE_LIMIT_REQUESTS_PER_SECOND):
         self.min_interval = 1.0 / requests_per_second
         self.last_request_time = 0.0
-    
+
     def wait_if_needed(self):
         """Wait if necessary to maintain rate limit."""
         current_time = time.time()
         time_since_last_request = current_time - self.last_request_time
-        
+
         if time_since_last_request < self.min_interval:
             sleep_time = self.min_interval - time_since_last_request
             time.sleep(sleep_time)
-        
+
         self.last_request_time = time.time()
 
 
 def rate_limited(func):
     """Decorator to apply rate limiting to Notion API calls."""
+
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        if hasattr(self, '_rate_limiter'):
+        if hasattr(self, "_rate_limiter"):
             self._rate_limiter.wait_if_needed()
         return func(self, *args, **kwargs)
+
     return wrapper
 
 
 def with_retry(max_attempts: int = 3, backoff_base: float = 2.0):
     """Decorator to add retry logic with exponential backoff for API calls."""
+
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs):
             last_exception = None
-            
+
             for attempt in range(max_attempts):
                 try:
                     return func(*args, **kwargs)
                 except APIResponseError as e:
                     last_exception = e
-                    
+
                     # Don't retry on certain error codes
-                    if hasattr(e, 'code'):
-                        if e.code in ['invalid_request', 'unauthorized', 'restricted_resource']:
+                    if hasattr(e, "code"):
+                        if e.code in ["invalid_request", "unauthorized", "restricted_resource"]:
                             raise  # Don't retry these errors
-                    
+
                     if attempt < max_attempts - 1:
                         # Calculate backoff time with jitter
-                        backoff_time = (backoff_base ** attempt) + random.uniform(0, 1)
-                        
+                        backoff_time = (backoff_base**attempt) + random.uniform(0, 1)
+
                         console.print(
                             f"[yellow]API error (attempt {attempt + 1}/{max_attempts}): {str(e)}. "
                             f"Retrying in {backoff_time:.1f} seconds...[/yellow]"
@@ -93,16 +96,19 @@ def with_retry(max_attempts: int = 3, backoff_base: float = 2.0):
                         time.sleep(backoff_time)
                     else:
                         # Last attempt failed
-                        console.print(f"[red]API error after {max_attempts} attempts: {str(e)}[/red]")
+                        console.print(
+                            f"[red]API error after {max_attempts} attempts: {str(e)}[/red]"
+                        )
                 except Exception as e:
                     # For non-API errors, don't retry
                     raise
-            
+
             # If we get here, all attempts failed
             if last_exception:
                 raise last_exception
-                
+
         return wrapper
+
     return decorator
 
 
@@ -122,10 +128,10 @@ def validate_iso_date(date_str: str) -> bool:
         return False
     try:
         # Additional validation to ensure it's a valid date
-        if 'T' in date_str:
-            datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        if "T" in date_str:
+            datetime.fromisoformat(date_str.replace("Z", "+00:00"))
         else:
-            datetime.strptime(date_str, '%Y-%m-%d')
+            datetime.strptime(date_str, "%Y-%m-%d")
         return True
     except ValueError:
         return False
@@ -157,22 +163,14 @@ class NotionClient:
     @with_retry()
     def discover_databases(self) -> List[Dict[str, Any]]:
         """Searches the workspace for all databases accessible by the integration."""
-        console.print(
-            "Searching for databases in the Notion workspace...", style="yellow"
-        )
-        response = self.client.search(
-            filter={"property": "object", "value": "database"}
-        )
+        console.print("Searching for databases in the Notion workspace...", style="yellow")
+        response = self.client.search(filter={"property": "object", "value": "database"})
         databases = response.get("results", [])
 
         if not databases:
-            console.print(
-                "[bold yellow]Warning:[/] No databases found.", style="yellow"
-            )
+            console.print("[bold yellow]Warning:[/] No databases found.", style="yellow")
         else:
-            console.print(
-                f"Found {len(databases)} accessible database(s).", style="green"
-            )
+            console.print(f"Found {len(databases)} accessible database(s).", style="green")
         return databases
 
     @rate_limited
@@ -182,17 +180,15 @@ class NotionClient:
         pages = []
         has_more = True
         start_cursor = None
-        
+
         while has_more:
             response = self.client.databases.query(
-                database_id=database_id,
-                page_size=100,
-                start_cursor=start_cursor
+                database_id=database_id, page_size=100, start_cursor=start_cursor
             )
             pages.extend(response.get("results", []))
             has_more = response.get("has_more", False)
             start_cursor = response.get("next_cursor", None)
-        
+
         return pages
 
     @staticmethod
@@ -207,15 +203,9 @@ class NotionClient:
                 continue
 
             if prop_type == "title":
-                value = (
-                    prop_data["title"][0]["plain_text"] if prop_data["title"] else None
-                )
+                value = prop_data["title"][0]["plain_text"] if prop_data["title"] else None
             elif prop_type == "rich_text":
-                value = (
-                    prop_data["rich_text"][0]["plain_text"]
-                    if prop_data["rich_text"]
-                    else None
-                )
+                value = prop_data["rich_text"][0]["plain_text"] if prop_data["rich_text"] else None
             elif prop_type == "select":
                 value = prop_data["select"]["name"] if prop_data["select"] else None
             elif prop_type == "people":
@@ -262,9 +252,13 @@ class NotionClient:
                 value = []
                 for file in files:
                     if file.get("type") == "external":
-                        value.append({"name": file.get("name"), "url": file.get("external", {}).get("url")})
+                        value.append(
+                            {"name": file.get("name"), "url": file.get("external", {}).get("url")}
+                        )
                     elif file.get("type") == "file":
-                        value.append({"name": file.get("name"), "url": file.get("file", {}).get("url")})
+                        value.append(
+                            {"name": file.get("name"), "url": file.get("file", {}).get("url")}
+                        )
             else:
                 value = None
             simple_page[prop_name] = value
@@ -360,9 +354,7 @@ class NotionClient:
             List of matching databases
         """
         try:
-            response = self.client.search(
-                filter={"property": "object", "value": "database"}
-            )
+            response = self.client.search(filter={"property": "object", "value": "database"})
 
             # Filter results by title
             databases = []
@@ -403,9 +395,7 @@ class NotionClient:
             List of all databases
         """
         try:
-            response = self.client.search(
-                filter={"property": "object", "value": "database"}
-            )
+            response = self.client.search(filter={"property": "object", "value": "database"})
             return response.get("results", [])
         except APIResponseError as e:
             print(f"Error listing databases: {e}")
@@ -476,7 +466,9 @@ class NotionClient:
             elif prop_type == "select" and isinstance(local_value, str):
                 # Note: We can't validate select options without fetching them from the schema
                 # The API will create new options if they don't exist (depending on DB settings)
-                payload_props[prop_name] = {"select": {"name": truncate_text(local_value, 100)}}  # Select options have shorter limits
+                payload_props[prop_name] = {
+                    "select": {"name": truncate_text(local_value, 100)}
+                }  # Select options have shorter limits
             elif prop_type == "multi_select" and isinstance(local_value, list):
                 payload_props[prop_name] = {
                     "multi_select": [{"name": str(opt)} for opt in local_value]
@@ -526,11 +518,13 @@ class NotionClient:
                 files_list = []
                 for file_info in local_value:
                     if isinstance(file_info, dict) and "url" in file_info:
-                        files_list.append({
-                            "type": "external",
-                            "name": file_info.get("name", "File"),
-                            "external": {"url": file_info["url"]}
-                        })
+                        files_list.append(
+                            {
+                                "type": "external",
+                                "name": file_info.get("name", "File"),
+                                "external": {"url": file_info["url"]},
+                            }
+                        )
                 if files_list:
                     payload_props[prop_name] = {"files": files_list}
             elif prop_type == "relation" and isinstance(local_value, list):
@@ -567,21 +561,15 @@ def save_config_to_file(databases: List[Dict[str, Any]]):
     client = NotionClient()
 
     # --- Pass 1: Discover all databases and create an ID-to-Name map ---
-    console.print(
-        "Pass 1: Discovering all databases and building an ID map...", style="yellow"
-    )
+    console.print("Pass 1: Discovering all databases and building an ID map...", style="yellow")
     id_to_name_map = {
-        db["id"]: (
-            db.get("title", [])[0]["plain_text"] if db.get("title") else "Untitled"
-        )
+        db["id"]: (db.get("title", [])[0]["plain_text"] if db.get("title") else "Untitled")
         for db in databases
     }
     console.print(f"Mapped {len(id_to_name_map)} database IDs to names.", style="green")
 
     # --- Pass 2: Fetch schema for each database and resolve relations ---
-    console.print(
-        "\nPass 2: Fetching schemas and resolving relations...", style="yellow"
-    )
+    console.print("\nPass 2: Fetching schemas and resolving relations...", style="yellow")
     for db in databases:
         db_id = db["id"]
         db_title = id_to_name_map.get(db_id, "Untitled Database")
@@ -634,9 +622,7 @@ def save_config_to_file(databases: List[Dict[str, Any]]):
 def load_config_from_file() -> Dict[str, Any]:
     """Loads the database configuration from the JSON file."""
     if not CONFIG_FILE_PATH.exists():
-        console.print(
-            f"[bold red]Error:[/] Configuration file '{CONFIG_FILE_PATH}' not found."
-        )
+        console.print(f"[bold red]Error:[/] Configuration file '{CONFIG_FILE_PATH}' not found.")
         return None
     with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
         return json.load(f)

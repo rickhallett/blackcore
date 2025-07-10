@@ -159,7 +159,7 @@ class RelationProperty(PropertySchema):
             return {"relation": {"database_id": "placeholder", "type": "dual_property"}}
 
         relation_data = {"database_id": self.config.database_id}
-        
+
         # For dual_property type, we need to include the dual_property configuration
         if self.config.type == "dual_property":
             if self.config.dual_property_name:

@@ -6,7 +6,7 @@ from .audit import AuditLogger
 
 __all__ = [
     "SecretsManager",
-    "URLValidator", 
+    "URLValidator",
     "validate_email",
     "validate_url",
     "AuditLogger",

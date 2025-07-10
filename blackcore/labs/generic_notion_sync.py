@@ -80,9 +80,7 @@ def dry_run_sync(db_name: str, local_data_key: str, data_file: Path):
     # 1. Load Schema and Data
     schema = DB_SCHEMAS.get(db_name)
     if not schema:
-        print(
-            f"Error: No schema defined for database '{db_name}'. Please update DB_SCHEMAS."
-        )
+        print(f"Error: No schema defined for database '{db_name}'. Please update DB_SCHEMAS.")
         return
 
     title_prop = schema["title_property"]
@@ -165,12 +163,8 @@ def main():
     # --- Configuration ---
     # You can change these values to sync a different DB
     database_name_to_sync = "Agendas & Epics"
-    json_file_path = (
-        workspace_root / "blackcore" / "models" / "json" / "agendas_epics.json"
-    )
-    json_top_level_key = (
-        "Agendas and Epics"  # The key in the JSON file containing the data array
-    )
+    json_file_path = workspace_root / "blackcore" / "models" / "json" / "agendas_epics.json"
+    json_top_level_key = "Agendas and Epics"  # The key in the JSON file containing the data array
     # -------------------
 
     dry_run_sync(

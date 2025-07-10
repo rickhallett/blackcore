@@ -57,9 +57,7 @@ def get_simulated_notion_data() -> List[Dict[str, Any]]:
     ]
 
 
-def compare_items(
-    local_item: Dict[str, Any], notion_item: Dict[str, Any]
-) -> Dict[str, Any]:
+def compare_items(local_item: Dict[str, Any], notion_item: Dict[str, Any]) -> Dict[str, Any]:
     """Compares two items and returns a dictionary of differences."""
     diff = {}
     all_keys = set(local_item.keys()) | set(notion_item.keys())
