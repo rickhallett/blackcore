@@ -92,7 +92,7 @@ class TestBaseNotionError:
         
         error_dict = error.to_dict()
         assert error_dict["error_type"] == "BaseNotionError"
-        assert error_dict["message"] == "Test error"
+        assert error_dict["error_message"] == "Test error"
         assert error_dict["severity"] == "medium"
         assert error_dict["category"] == "validation"
         assert error_dict["context"]["operation"] == "test_op"

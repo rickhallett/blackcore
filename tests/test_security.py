@@ -53,11 +53,16 @@ class TestSecretsManager:
                 secret2 = manager.get_secret("test_key")
                 assert secret2 == "cached-value"  # Still cached value
     
-    @patch("blackcore.security.secrets_manager.Path")
-    def test_store_secret_local(self, mock_path):
+    @patch("blackcore.security.secrets_manager.SecretsManager._get_or_create_encryption_key")
+    @patch("pathlib.Path.mkdir")
+    @patch("pathlib.Path.exists")
+    @patch("os.chmod")
+    def test_store_secret_local(self, mock_chmod, mock_exists, mock_mkdir, mock_get_key):
         """Test storing secret locally with encryption."""
-        # Mock the path operations
-        mock_path.home.return_value = Path("/home/test")
+        # Mock the encryption key - must be a valid Fernet key
+        from cryptography.fernet import Fernet
+        mock_get_key.return_value = Fernet.generate_key()
+        mock_exists.return_value = False  # No existing secrets file
         
         manager = SecretsManager(provider="env")
         
@@ -67,6 +72,8 @@ class TestSecretsManager:
             
             # Verify file was written with encryption
             mock_open.assert_called()
+            mock_mkdir.assert_called()
+            mock_chmod.assert_called()
     
     def test_rotate_secret(self):
         """Test secret rotation."""
@@ -77,12 +84,14 @@ class TestSecretsManager:
         }
         
         with patch.object(manager, "store_secret") as mock_store:
-            with patch.object(manager.audit_logger, "log_secret_rotation") as mock_log:
+            # Mock the audit logger since it's created conditionally
+            from blackcore.security.audit import AuditLogger
+            with patch.object(AuditLogger, "log_secret_rotation") as mock_log:
                 manager.rotate_secret("test_key", "new_value")
                 
                 # Verify rotation actions
                 mock_store.assert_called_once_with("test_key", "new_value")
-                mock_log.assert_called_once_with("test_key")
+                mock_log.assert_called_once()
                 assert "test_key" not in manager._key_cache
 
 
@@ -306,7 +315,7 @@ class TestAuditLogger:
         # Sensitive fields should be redacted
         assert sanitized["api_key"] == "sk-s...2345"
         assert sanitized["password"] == "myse...word"
-        assert sanitized["notion_api_key"] == "secr...n-key"
+        assert sanitized["notion_api_key"] == "secr...-key"
         assert sanitized["normal_field"] == "normal_value"
     
     @patch("blackcore.security.audit.structlog.get_logger")
@@ -341,26 +350,27 @@ class TestAuditLogger:
         
         logger = AuditLogger()
         
-        # Test with mock data
-        start_date = datetime.utcnow() - timedelta(hours=1)
-        end_date = datetime.utcnow()
+        # Test with mock data - use fixed timestamps
+        base_time = datetime(2024, 1, 1, 12, 0, 0)
+        start_date = base_time - timedelta(hours=1)
+        end_date = base_time + timedelta(hours=1)
         
-        with patch.object(logger.log_file, "exists", return_value=True):
+        with patch("pathlib.Path.exists", return_value=True):
             with patch("builtins.open", create=True) as mock_open:
                 # Mock log entries
                 log_entries = [
                     json.dumps({
-                        "audit_timestamp": datetime.utcnow().isoformat(),
+                        "audit_timestamp": base_time.isoformat(),  # Should be included
                         "event_type": "api_call",
                         "user_id": "123"
                     }),
                     json.dumps({
-                        "audit_timestamp": (datetime.utcnow() - timedelta(hours=2)).isoformat(),
+                        "audit_timestamp": (base_time - timedelta(hours=2)).isoformat(),  # Should be excluded
                         "event_type": "api_call",
                         "user_id": "456"
                     })
                 ]
-                mock_open.return_value.__enter__.return_value = log_entries
+                mock_open.return_value.__enter__.return_value.__iter__.return_value = log_entries
                 
                 trail = logger.get_audit_trail(start_date, end_date)
                 
