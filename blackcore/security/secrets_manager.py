@@ -31,7 +31,7 @@ class SecretsManager:
     def _get_or_create_encryption_key(self) -> bytes:
         """Get or create encryption key for local secret storage."""
         key_file = Path.home() / ".blackcore" / "secret.key"
-        key_file.parent.mkdir(exist_ok=True, mode=0o700)
+        key_file.parent.mkdir(exist_ok=True, mode=0o700, parents=True)
         
         if key_file.exists():
             with open(key_file, 'rb') as f:
