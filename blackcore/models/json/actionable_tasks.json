@@ -2,37 +2,45 @@
   "Actionable Tasks": [
     {
       "Task Name": "Submit formal complaint to UK Statistics Authority",
-      "Assignee": "Barricade",
+      "Assignee": "Barry Cade",
       "Status": "To-Do",
       "Priority": "High",
-      "Related Agenda": ["Phase 2: Pressure Campaign"],
+      "Related Agenda": [
+        "Phase 2: Pressure Campaign"
+      ],
       "Notes": "Submit comprehensive document questioning the statistical validity of the council's survey process, focusing on the CAPTCHA manipulation and biased methodology.",
       "Inferred": true
     },
     {
       "Task Name": "Organize email pressure campaign targeting Cliff Sutton",
-      "Assignee": "Barricade", 
+      "Assignee": "Barry Cade",
       "Status": "To-Do",
       "Priority": "High",
-      "Related Agenda": ["Phase 2: Pressure Campaign"],
+      "Related Agenda": [
+        "Phase 2: Pressure Campaign"
+      ],
       "Notes": "Strategic email campaign designed to pressure Cliff Sutton and influence his voting decision.",
       "Inferred": true
     },
     {
       "Task Name": "Document and archive Purdah violation evidence",
       "Assignee": "Pete Mitchell",
-      "Status": "In Progress", 
+      "Status": "In Progress",
       "Priority": "High",
-      "Related Agenda": ["Phase 1: Evidence Documentation"],
+      "Related Agenda": [
+        "Phase 1: Evidence Documentation"
+      ],
       "Notes": "Capture and preserve David Hollister's politically biased comment posted during the pre-election Purdah period.",
       "Inferred": true
     },
     {
       "Task Name": "Engage local ground contacts for intelligence gathering",
-      "Assignee": "Barricade",
+      "Assignee": "Barry Cade",
       "Status": "In Progress",
-      "Priority": "Medium", 
-      "Related Agenda": ["Phase 1: Intelligence Network"],
+      "Priority": "Medium",
+      "Related Agenda": [
+        "Phase 1: Intelligence Network"
+      ],
       "Notes": "Maintain contact with Angelo Wiggins, Mel, and other local residents for on-ground intelligence and support.",
       "Inferred": true
     },
@@ -41,19 +49,26 @@
       "Assignee": "Pete Mitchell",
       "Status": "To-Do",
       "Priority": "Medium",
-      "Related Agenda": ["Phase 1: Evidence Documentation"],
+      "Related Agenda": [
+        "Phase 1: Evidence Documentation"
+      ],
       "Notes": "Investigate the technical and organizational relationship between Granicus and Engagement HQ regarding the CAPTCHA recommendation.",
       "Inferred": true
     },
     {
       "Task Name": "Prepare Phase 3 escalation strategy",
       "Assignee": "Blake Compton",
-      "Status": "To-Do", 
+      "Status": "To-Do",
       "Priority": "Low",
-      "Related Agenda": ["Phase 3: Endgame Planning"],
-      "Blocked By": ["Submit formal complaint to UK Statistics Authority", "Organize email pressure campaign targeting Cliff Sutton"],
+      "Related Agenda": [
+        "Phase 3: Endgame Planning"
+      ],
+      "Blocked By": [
+        "Submit formal complaint to UK Statistics Authority",
+        "Organize email pressure campaign targeting Cliff Sutton"
+      ],
       "Notes": "Develop contingency plans and escalation tactics for the final phase of the campaign.",
       "Inferred": true
     }
   ]
-} 
+}

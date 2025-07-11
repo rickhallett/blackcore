@@ -99,130 +99,121 @@
       "Notes": "Alias for the 'Technician' persona. Responsible for the technical infrastructure and data analysis."
     },
     {
-      "Full Name": "Barricade",
+      "Full Name": "Barry Cade",
       "Role": "Operational Persona",
       "Status": "Active Engagement",
       "Notes": "The primary operational email persona used for initial outreach. All aliases feed into the same central account."
-    }
-  ],
-  "Organizations & Bodies": [
+    },
     {
-      "Organization Name": "Swanage Town Council",
-      "Category": "Antagonist",
-      "Key People": [
-        "Gary Suttle",
-        "Chris Toms"
+      "Full Name": "Elaine Snow",
+      "Role": "Target",
+      "Status": "Active Engagement",
+      "Organization": [
+        "Dorset Coast Forum (DCF)"
       ],
-      "Linked Documents": [
-        "David Hollister's Purdah Comment"
-      ]
+      "Notes": "Project Officer for DCF. The strategist believes she is a 'puppet' of Swanage Town Council. Phase 2 involves directly challenging her credibility and the survey analysis she will present."
     },
     {
-      "Organization Name": "Dorset Coast Forum",
-      "Category": "Antagonist",
-      "Key People": [
-        "Tony Powell"
+      "Full Name": "Harland",
+      "Role": "Oversight",
+      "Status": "Not Contacted",
+      "Organization": [
+        "UK Statistics Authority (UKSA)"
       ],
-      "Linked Documents": [
-        "Tony Powell CAPTCHA Email"
-      ]
+      "Notes": "Press officer at the UKSA. He has agreed to receive and review a technical document outlining the flaws in the survey process and pass it to the Office of Statistical Regulation (OSR)."
     },
     {
-      "Organization Name": "Granicus",
-      "Category": "Weapon",
-      "Notes": "The tech company behind the survey software. Their relationship with 'Engagement HQ' and their role in the CAPTCHA addition is a key point of investigation."
-    },
-    {
-      "Organization Name": "UK Statistics Authority",
-      "Category": "Lever of Power",
-      "Key People": [
-        "Reuben / Harland"
+      "Full Name": "Gary Suttle",
+      "Role": "Ally",
+      "Status": "Not Contacted",
+      "Organization": [
+        "Dorset Council"
       ],
-      "Notes": "A higher authority to which a formal complaint will be submitted regarding the flawed survey methodology used by the council."
+      "Notes": "A County Councillor who is understood to be in favour of the two-way traffic option. The plan is for him to be briefed on the campaign's progress by Lacey Clark."
     },
     {
-      "Organization Name": "Dorset Highways",
-      "Category": "Antagonist",
-      "Notes": "Accused of showing bias in their presentation of the three road options, specifically by casting negative doubt only on the campaign's preferred 'Option 3'."
-    },
-    {
-      "Organization Name": "Engagement HQ",
-      "Category": "Weapon",
-      "Notes": "The entity that 'recommended' the addition of the CAPTCHA. Their exact identity and relationship to Granicus needs clarification."
-    }
-  ],
-  "Key Places & Events": [
-    {
-      "Event / Place Name": "Shore Road",
-      "Type": "Key Location",
-      "Description": "The central point of contention in the campaign. The proposed closure is the primary issue being fought."
-    },
-    {
-      "Event / Place Name": "North Swanage",
-      "Type": "Key Location",
-      "Description": "The primary 'Impact Zone' for the proposed road closure and new car park development."
-    },
-    {
-      "Event / Place Name": "Battlemead Road",
-      "Type": "Key Location",
-      "Description": "A specific road where one of the campaign's ground contacts resides."
-    },
-    {
-      "Event / Place Name": "Washpond Lane",
-      "Type": "Key Location",
-      "Description": "Location of a school where children are 'dodging brick lorries'. Used as an example of the council's misplaced priorities (funding a Shore Road project over safety here)."
-    },
-    {
-      "Event / Place Name": "Emmanuel Church Meeting",
-      "Type": "Pivotal Event",
-      "Description": "A public consultation event where the council failed to provide paper surveys, cited as a failure to properly consult with residents.",
-      "Related Transgressions": [
-        "Failure to provide paper surveys at consultation"
-      ]
-    }
-  ],
-  "Identified Transgressions": [
-    {
-      "Transgression Summary": "CAPTCHA added to official survey mid-process",
-      "Perpetrator (Org)": [
-        "Dorset Coast Forum",
-        "Engagement HQ"
+      "Full Name": "Lacey Clark",
+      "Role": "Target",
+      "Status": "Monitoring",
+      "Organization": [
+        "Dorset Council"
       ],
-      "Perpetrator (Person)": [
-        "Tony Powell"
-      ],
-      "Date of Transgression": "c. late June 2025",
-      "Evidence": [
-        "Tony Powell CAPTCHA Email"
-      ],
-      "Severity": "Critical"
+      "Notes": "Chair of the Scrutiny Committee. A key individual to be influenced."
     },
     {
-      "Transgression Summary": "Political endorsement during Purdah on official platform",
-      "Perpetrator (Org)": [
-        "Swanage Town Council"
+      "Full Name": "Tony Powell",
+      "Role": "Target",
+      "Status": "Active Engagement",
+      "Organization": [
+        "Dorset Coast Forum (DCF)"
       ],
-      "Perpetrator (Person)": [
-        "David Hollister"
-      ],
-      "Date of Transgression": "c. early July 2025",
-      "Evidence": [
-        "David Hollister's Purdah Comment (Screenshot)"
-      ],
-      "Severity": "High"
-    }
-  ],
-  "Documents & Evidence": [
-    {
-      "Document Name": "Tony Powell CAPTCHA Email",
-      "Document Type": "Evidence",
-      "Source Organization": "Dorset Coast Forum",
-      "Notes": "Email from Tony Powell to Sarah Streams confirming the CAPTCHA was added to the survey on the 'recommendation' of Engagement HQ. This is a critical piece of evidence proving process manipulation."
+      "Notes": "Key figure who changed the survey data review timeline from 6 weeks to 3 months. Implied he is the source of the email stating 'Engagement HQ' recommended the survey Captcha."
     },
     {
-      "Document Name": "Gemini AI Survey Analysis",
-      "Document Type": "Our Output",
-      "Notes": "An independent analysis of the official survey which concluded, without prompting, that the survey was biased and structured unfairly. Validates the campaign's core arguments."
+      "Full Name": "Elaine Snow",
+      "Role": "Target",
+      "Status": "Active Engagement",
+      "Organization": [
+        "Dorset Coast Forum (DCF)"
+      ],
+      "Notes": "Initially stated that the survey data review would take 6 weeks before Tony Powell changed it."
+    },
+    {
+      "Full Name": "Colin Bright",
+      "Role": "Ally",
+      "Status": "Active Engagement",
+      "Email": "34crbright@gmail.com",
+      "Notes": "Ex-Town Councillor described as a 'superior ally' and a 'spanner in the works'. He is actively conducting research and filing Freedom of Information requests to hold the council accountable. His motivation is partly driven by the potential sale of the wooden beach huts. Lives near 34 Old Wells Road."
+    },
+    {
+      "Full Name": "Karen Leyland",
+      "Role": "Ally",
+      "Status": "Active Engagement",
+      "Email": "karenleyland25@gmail.com",
+      "Notes": "A solicitor living at 25 De Moulham Road, described as a 'sonic boom' for the campaign. Her designated task is to write strategically challenging emails to waste candidates' time, specifically focusing on the indiscretions of Phil Eades and Swanage Town Council regarding David Hollister."
+    },
+    {
+      "Full Name": "Karen (Last name TBD)",
+      "Role": "Ally",
+      "Status": "Initial Contact Made",
+      "Notes": "A solicitor who lives on De Moulham Road and has expressed willingness to help the campaign."
+    },
+    {
+      "Full Name": "John Deere",
+      "Role": "Ally",
+      "Status": "Initial Contact Made",
+      "Email": "unknown, sent to contact@nstcg",
+      "Notes": "Has sent an email to the NSTCG containing a letter he wrote to Swanage Town Council."
+    },
+    {
+      "Full Name": "Phil Eades",
+      "Role": "Target",
+      "Status": "Monitoring",
+      "Organization": [
+        "Swanage Town Council (STC)"
+      ],
+      "Notes": "Linked to an 'indiscretion' with Swanage Town Council and David Hollister."
+    },
+    {
+      "Full Name": "David Hollister",
+      "Role": "Target",
+      "Status": "Monitoring",
+      "Notes": "Subject of an 'indiscretion' by Swanage Town Council that was inappropriately left public."
+    },
+    {
+      "Full Name": "Colvin Milmer",
+      "Role": "Target",
+      "Status": "Monitoring",
+      "Organization": [
+        "Swanage Town Council (STC)"
+      ],
+      "Notes": "Individual confronted about the paper survey data incident at St Aldhelm's Court where chain of custody was lost."
+    },
+    {
+      "Full Name": "Angelo",
+      "Role": "Ally",
+      "Status": "Active Engagement",
+      "Notes": "Organizing a council meeting on the 21st with the goal of packing the hall with supporters to ask targeted questions."
     }
   ]
 }

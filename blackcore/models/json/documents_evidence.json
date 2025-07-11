@@ -154,6 +154,11 @@
           }
         ]
       }
+    },
+    {
+      "Document Name": "Technical Document for UKSA/OSR",
+      "Document Type": "Our Output",
+      "Description": "A planned document that will analyze and compare the DCF/STC survey methodology against the official UK Statistics Authority's Code of Practice to expose its flaws and biases."
     }
   ]
 }

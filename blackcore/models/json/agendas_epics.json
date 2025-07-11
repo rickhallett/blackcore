@@ -20,7 +20,7 @@
     {
       "Agenda Title": "Phase 2: Pressure Campaign Implementation",
       "Status": "Active",
-      "Owner": "Barricade",
+      "Owner": "Barry Cade",
       "Phase": "Phase 2: Pressure",
       "Actionable Tasks": [
         "Submit formal complaint to UK Statistics Authority",
@@ -46,7 +46,7 @@
     {
       "Agenda Title": "Shore Road Closure Opposition Campaign",
       "Status": "Active",
-      "Owner": "Barricade",
+      "Owner": "Barry Cade",
       "Phase": "Phase 2: Pressure",
       "Actionable Tasks": [
         "Submit formal complaint to UK Statistics Authority",
@@ -70,6 +70,31 @@
         "David Hollister's Purdah Comment"
       ],
       "Objective Summary": "Support campaign for Phillippe Edes ('The Mayor of Paul') in Town Council election. Leverage David Hollister's Purdah violation as evidence of opposition impropriety. Achieved 'unthinkable victory' with successful nomination."
+    },
+    {
+      "Agenda Title": "Phase 1: Mobilization & Mandate Building",
+      "Status": "Active",
+      "Phase": "Phase 1: Mobilization",
+      "Objective Summary": "To build a formidable, citizen-led coalition to counter the proposed changes to Shore Road. The primary goal is to drive residents and tourists to complete the official survey, selecting Option 3 (Keep as is) to create a quantifiable public mandate. Key tactics include a physical leaflet drop, door-knocking, a dedicated website for data capture, and a WhatsApp campaign.",
+      "Key Documents": [
+        "NSTCG Website & Data Capture",
+        "Campaign Leaflet"
+      ]
+    },
+    {
+      "Agenda Title": "Phase 2: Exert Pressure & Dismantle Credibility",
+      "Status": "Planning",
+      "Phase": "Phase 2: Pressure",
+      "Objective Summary": "To be initiated after the survey deadline (June 29th). The objective is to influence the vote of Swanage Town Councillors by casting doubt on the credibility and objectivity of the survey process conducted by Dorset Coast Forum. This involves highlighting bureaucratic overreach, exposing potential conflicts of interest, and presenting evidence to oversight bodies like the UKSA and local council committees.",
+      "Key Documents": [
+        "Technical Document for UKSA/OSR"
+      ]
+    },
+    {
+      "Agenda Title": "Phase 3: Endgame & Accountability",
+      "Status": "Planning",
+      "Phase": "Phase 3: Endgame",
+      "Objective Summary": "This phase follows the councillors' vote. Phase 3A (if we win) will focus on pursuing a judicial review and lodging complaints with the Local Government Ombudsman to hold STC accountable and prevent future transgressions. Phase 3B (if we lose) involves handing over the campaign intelligence and evidence to more powerful partners to continue the fight during the formal planning and consultation stages."
     }
   ]
 }

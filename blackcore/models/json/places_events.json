@@ -61,6 +61,55 @@
       "Related Transgressions": [
         "Biased political commentary on STC Facebook page during Purdah"
       ]
+    },
+    {
+      "Organization Name": "Dorset Coast Forum (DCF)",
+      "Category": "Antagonist"
+    },
+    {
+      "Organization Name": "Swanage Town Council (STC)",
+      "Category": "Antagonist"
+    },
+    {
+      "Organization Name": "Dorset Highways",
+      "Category": "Antagonist"
+    },
+    {
+      "Organization Name": "Engagement HQ / Granicus",
+      "Category": "Lever of Power",
+      "Notes": "The company that provided the survey portal and recommended the use of a Captcha, which led to a poisoned dataset. The speaker believes Engagement HQ is a front or subsidiary of Granicus."
+    },
+    {
+      "Organization Name": "North Swanage Traffic Concern Group (NSTCG)",
+      "Category": "Weapon",
+      "Notes": "The primary operational group for the campaign."
+    },
+    {
+      "Event / Place Name": "Council Meeting (Organized by Angelo)",
+      "Type": "Pivotal Event",
+      "Date of Event": "The 21st of the month (inferred)",
+      "Description": "A council meeting scheduled for 7pm. The group plans to mobilize 60 people to attend and ask coordinated, challenging questions.",
+      "People Involved": [
+        "Angelo"
+      ]
+    },
+    {
+      "Event / Place Name": "Paper Survey Incident at St Aldhelm's Court",
+      "Type": "Pivotal Event",
+      "Description": "A private presentation was given by the council exclusively to residents of St Aldhelm's Court, after which the collected paper survey data was left with no chain of custody for a week.",
+      "People Involved": [
+        "Colvin Milmer"
+      ]
+    },
+    {
+      "Event / Place Name": "De Moulham Road",
+      "Type": "Key Location",
+      "Description": "Residential street where key allies Karen Leyland (No. 25) and another Karen live."
+    },
+    {
+      "Event / Place Name": "Old Wells Road",
+      "Type": "Key Location",
+      "Description": "Residential street where key ally Colin Bright lives."
     }
   ]
 }
