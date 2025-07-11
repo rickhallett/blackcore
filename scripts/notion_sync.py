@@ -174,6 +174,12 @@ def main():
         console.print(f"[bold red]Error:[/] {e}", style="red")
         return
 
+    # Check if --refresh-config flag is present
+    if "--refresh-config" in sys.argv:
+        console.print("Refreshing Notion configuration...", style="yellow")
+        notion_client.refresh_config()
+        console.print("[bold green]Configuration refreshed successfully![/bold]")
+
     DATABASE_CONFIG = load_config_from_file()
     if not DATABASE_CONFIG:
         return
@@ -182,7 +188,7 @@ def main():
     is_live_run = "--live" in sys.argv
     db_to_sync = None
     for arg in sys.argv[1:]:
-        if arg != "--live":
+        if arg not in ["--live", "--refresh-config"]:
             db_to_sync = arg
             break
 
@@ -195,6 +201,27 @@ def main():
     if not config:
         console.print(f"[bold red]Error:[/] No configuration found for database '{db_to_sync}'.")
         return
+
+    # Validate that the database still exists
+    db_id = config.get("id")
+    if db_id and not notion_client.validate_database_exists(db_id):
+        console.print(
+            f"[bold red]Error:[/] Database '{db_to_sync}' (ID: {db_id}) not found or inaccessible."
+        )
+        refresh = input("Would you like to refresh the configuration? (y/n): ").lower().strip()
+        if refresh == "y":
+            notion_client.refresh_config()
+            console.print("[bold green]Configuration refreshed![/bold]")
+            # Reload config and try again
+            DATABASE_CONFIG = load_config_from_file()
+            config = DATABASE_CONFIG.get(db_to_sync)
+            if not config:
+                console.print(
+                    f"[bold red]Error:[/] Database '{db_to_sync}' still not found after refresh."
+                )
+                return
+        else:
+            return
 
     # Run the sync process
     engine = SyncEngine(db_to_sync, config, notion_client)

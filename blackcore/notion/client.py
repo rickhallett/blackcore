@@ -99,7 +99,7 @@ def with_retry(max_attempts: int = 3, backoff_base: float = 2.0):
                         console.print(
                             f"[red]API error after {max_attempts} attempts: {str(e)}[/red]"
                         )
-                except Exception as e:
+                except Exception:
                     # For non-API errors, don't retry
                     raise
 
@@ -550,6 +550,27 @@ class NotionClient:
             # Note: People properties require user IDs which need to be fetched separately
 
         return payload_props
+
+    def refresh_config(self) -> Dict[str, Any]:
+        """Refreshes the configuration by rediscovering all databases and their schemas."""
+        console.print("Refreshing Notion configuration...", style="yellow")
+        databases = self.discover_databases()
+        if databases:
+            save_config_to_file(databases)
+            return load_config_from_file()
+        return {}
+
+    @rate_limited
+    @with_retry()
+    def validate_database_exists(self, database_id: str) -> bool:
+        """Validates that a database ID still exists and is accessible."""
+        try:
+            self.client.databases.retrieve(database_id=database_id)
+            return True
+        except APIResponseError as e:
+            if hasattr(e, "code") and e.code in ["object_not_found", "unauthorized"]:
+                return False
+            raise
 
 
 def save_config_to_file(databases: List[Dict[str, Any]]):
