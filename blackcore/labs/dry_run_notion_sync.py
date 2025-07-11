@@ -32,7 +32,7 @@ def get_simulated_notion_data() -> List[Dict[str, Any]]:
             # This one EXISTS but has a different status ("Planning" vs "Active").
             "Agenda Title": "Phase 2: Pressure Campaign Implementation",
             "Status": "Planning",  # The local JSON has this as "Active"
-            "Owner": "Barricade",
+            "Owner": "Barry Cade",
             "Phase": "Phase 2: Pressure",
             "Actionable Tasks": [
                 "Submit formal complaint to UK Statistics Authority",
@@ -57,7 +57,9 @@ def get_simulated_notion_data() -> List[Dict[str, Any]]:
     ]
 
 
-def compare_items(local_item: Dict[str, Any], notion_item: Dict[str, Any]) -> Dict[str, Any]:
+def compare_items(
+    local_item: Dict[str, Any], notion_item: Dict[str, Any]
+) -> Dict[str, Any]:
     """Compares two items and returns a dictionary of differences."""
     diff = {}
     all_keys = set(local_item.keys()) | set(notion_item.keys())
