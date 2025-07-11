@@ -5349,5 +5349,943 @@
       "command": "git add -A",
       "description": "Stage all changes"
     }
+  },
+  {
+    "session_id": "00758d1e-9e89-483c-abd3-6c4e210369d8",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/00758d1e-9e89-483c-abd3-6c4e210369d8.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git commit -m \"STYLE: Apply consistent code formatting across entire codebase\n\n- Apply consistent double-quote style throughout codebase\n- Standardize spacing and indentation\n- Remove trailing whitespace\n- Format docstrings consistently\n- No functional changes - purely stylistic improvements\"",
+      "description": "Create the formatting commit"
+    }
+  },
+  {
+    "session_id": "00758d1e-9e89-483c-abd3-6c4e210369d8",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/00758d1e-9e89-483c-abd3-6c4e210369d8.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git status",
+      "description": "Verify commit status"
+    }
+  },
+  {
+    "session_id": "00758d1e-9e89-483c-abd3-6c4e210369d8",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/00758d1e-9e89-483c-abd3-6c4e210369d8.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Analyze all git diffs to understand the scope of changes",
+          "status": "completed",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Group related changes into logical commits",
+          "status": "completed",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Create commit plan and present to user",
+          "status": "completed",
+          "priority": "high",
+          "id": "3"
+        },
+        {
+          "content": "Execute commits if approved",
+          "status": "completed",
+          "priority": "medium",
+          "id": "4"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Task",
+    "tool_input": {
+      "description": "Analyze Notion config approach",
+      "prompt": "Analyze how the blackcore project currently handles Notion configuration and database mapping. Look for:\n1. How database IDs are stored/retrieved\n2. Whether it fetches configuration from live Notion databases\n3. Any existing database discovery or configuration synchronization features\n4. Configuration files or environment variables used\n\nSearch through the codebase for:\n- Database configuration handling\n- Notion client initialization\n- Database discovery functions\n- Configuration sync mechanisms\n- Any hardcoded database IDs or mappings\n\nProvide a summary of the current approach and identify gaps where live configuration fetching could be implemented."
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "database.*id|DATABASE.*ID",
+      "output_mode": "files_with_matches",
+      "-i": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/minimal/config.py"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/repositories/database.py"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "discover|discovery",
+      "output_mode": "files_with_matches",
+      "-i": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/discover_and_configure.py"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "limit": 150
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "offset": 150,
+      "limit": 200
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "save_config_to_file",
+      "output_mode": "content",
+      "-B": 2,
+      "-A": 10,
+      "-n": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Glob",
+    "tool_input": {
+      "pattern": "**/notion_config.json"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/config/notion_config.json"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "notion_config.json|CONFIG_FILE_PATH",
+      "output_mode": "content",
+      "-B": 2,
+      "-A": 5,
+      "-n": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "load.*config|read.*config",
+      "output_mode": "content",
+      "-n": true,
+      "-i": true,
+      "head_limit": 30
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "limit": 100
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "def load_config_from_file",
+      "output_mode": "content",
+      "-A": 20,
+      "-n": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "offset": 620,
+      "limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/setup_databases.py",
+      "limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/database_creator.py",
+      "limit": 100
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/labs/generic_notion_sync.py",
+      "limit": 100
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "exit_plan_mode",
+    "tool_input": {
+      "plan": "## Summary of Current Notion Configuration Approach\n\n### Current Implementation\n\n1. **Static Configuration File**: The project uses a static JSON configuration file at `/blackcore/config/notion_config.json` that stores:\n   - Database IDs (hardcoded)\n   - Local JSON file paths for each database\n   - Title property names\n   - List properties and relation mappings\n   - Relation configurations between databases\n\n2. **Database Discovery**: The project has a `discover_and_configure.py` script that:\n   - Uses `NotionClient.discover_databases()` to search for all accessible databases\n   - Fetches database schemas including properties and relations\n   - Generates and saves the configuration to the static JSON file\n   - This is a one-time process, not dynamically executed\n\n3. **Configuration Loading**:\n   - `load_config_from_file()` simply reads the static JSON file\n   - No live fetching from Notion during runtime\n   - Database IDs are stored and reused from the configuration\n\n4. **Environment Variables**:\n   - The minimal config module can override database IDs from environment variables (e.g., `NOTION_DB_PEOPLE_ID`)\n   - But still primarily relies on static configuration\n\n### Identified Gaps\n\n1. **No Dynamic Configuration Sync**: Once the configuration file is created, it's never updated unless manually re-run\n2. **Hardcoded Database IDs**: If databases are recreated or IDs change, the configuration becomes invalid\n3. **No Schema Change Detection**: Property changes in Notion databases aren't reflected automatically\n4. **Manual Relation Mapping**: Relations between databases must be manually configured\n\n### Implementation Plan for Live Configuration Fetching\n\n1. **Create a Configuration Sync Service**:\n   - Add a `ConfigurationSyncService` class that can fetch live database configurations\n   - Implement caching with TTL to avoid excessive API calls\n   - Compare live schema with stored configuration to detect changes\n\n2. **Enhance NotionClient**:\n   - Add methods to fetch database schema including all properties and relations\n   - Implement intelligent caching for database metadata\n   - Add schema validation against expected structure\n\n3. **Dynamic Database Discovery**:\n   - Implement pattern-based database discovery (e.g., by name patterns)\n   - Auto-detect relations between databases based on property types\n   - Generate configuration dynamically from live Notion data\n\n4. **Configuration Validation & Updates**:\n   - Add validation to ensure database IDs are still valid\n   - Implement automatic configuration updates when schemas change\n   - Add logging for configuration changes\n\n5. **Backwards Compatibility**:\n   - Keep static configuration as fallback\n   - Allow manual overrides for specific databases\n   - Implement migration from static to dynamic configuration\n\nThis approach would make the system more resilient to Notion workspace changes and reduce manual configuration maintenance."
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/discover_and_configure.py"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "limit": 100
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/config/notion_config.json"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "load_config|CONFIG_FILE_PATH",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore",
+      "glob": "*.py"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "offset": 200,
+      "limit": 100
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "load_config_from_file|save_config_to_file",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "output_mode": "content",
+      "-B": 5,
+      "-A": 20
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "exit_plan_mode",
+    "tool_input": {
+      "plan": "## Simplest Path to Live Notion Configuration Fetching\n\nBased on my analysis, the current system:\n- Stores database IDs in a static JSON file (`notion_config.json`)\n- Only fetches configuration when explicitly running `discover_and_configure.py`\n- Never updates configuration during normal operation\n\n### Minimal Implementation Plan\n\n**1. Add a simple refresh method to NotionClient** (5 lines)\n- Add `refresh_config()` method that re-runs database discovery\n- Store the refreshed config in memory\n- No caching, no complexity - just fetch when needed\n\n**2. Create a `--refresh-config` flag for sync script** (10 lines)\n- When flag is set, refresh configuration before syncing\n- Save updated config to the JSON file\n- Continue with normal sync operation\n\n**3. Add database validation on sync startup** (15 lines)\n- Before syncing, verify database ID still exists\n- If database not found, offer to refresh configuration\n- Simple yes/no prompt to the user\n\n### Implementation Details\n\n**File: `blackcore/notion/client.py`**\n- Add `refresh_config()` method that calls existing `discover_databases()` and `save_config_to_file()`\n- Add `validate_database_exists(db_id)` method\n\n**File: `scripts/notion_sync.py`**\n- Add `--refresh-config` argument\n- Call `client.refresh_config()` if flag is present\n- Add database validation before sync starts\n\n### Usage Examples\n```bash\n# Refresh configuration before syncing\npython scripts/notion_sync.py --refresh-config\n\n# Normal sync (validates database exists)\npython scripts/notion_sync.py\n# If database not found: \"Database not found. Refresh config? (y/n)\"\n```\n\nThis approach:\n- Reuses all existing code\n- No new dependencies or complex caching\n- User controls when to refresh (not automatic)\n- Validates databases exist before operations\n- Total implementation: ~30 lines of code"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Add refresh_config() method to NotionClient",
+          "status": "pending",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Add validate_database_exists() method to NotionClient",
+          "status": "pending",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Add --refresh-config flag to notion_sync.py",
+          "status": "pending",
+          "priority": "medium",
+          "id": "3"
+        },
+        {
+          "content": "Add database validation on sync startup with user prompt",
+          "status": "pending",
+          "priority": "medium",
+          "id": "4"
+        },
+        {
+          "content": "Test the implementation",
+          "status": "pending",
+          "priority": "low",
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Add refresh_config() method to NotionClient",
+          "status": "in_progress",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Add validate_database_exists() method to NotionClient",
+          "status": "pending",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Add --refresh-config flag to notion_sync.py",
+          "status": "pending",
+          "priority": "medium",
+          "id": "3"
+        },
+        {
+          "content": "Add database validation on sync startup with user prompt",
+          "status": "pending",
+          "priority": "medium",
+          "id": "4"
+        },
+        {
+          "content": "Test the implementation",
+          "status": "pending",
+          "priority": "low",
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "offset": 800,
+      "limit": 100
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "class NotionClient",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "output_mode": "content",
+      "-A": 30
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "^    def ",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "output_mode": "content",
+      "-n": true,
+      "head_limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "^class |^def |^    return|^$",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "output_mode": "content",
+      "-n": true,
+      "head_limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "^def |^class",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "output_mode": "content",
+      "-n": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "offset": 540,
+      "limit": 20
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/blackcore/notion/client.py",
+      "old_string": "        return payload_props\n\n\ndef save_config_to_file(databases: List[Dict[str, Any]]):",
+      "new_string": "        return payload_props\n\n    def refresh_config(self) -> Dict[str, Any]:\n        \"\"\"Refreshes the configuration by rediscovering all databases and their schemas.\"\"\"\n        console.print(\"Refreshing Notion configuration...\", style=\"yellow\")\n        databases = self.discover_databases()\n        if databases:\n            save_config_to_file(databases)\n            return load_config_from_file()\n        return {}\n\n    @rate_limited\n    @with_retry()\n    def validate_database_exists(self, database_id: str) -> bool:\n        \"\"\"Validates that a database ID still exists and is accessible.\"\"\"\n        try:\n            self.client.databases.retrieve(database_id=database_id)\n            return True\n        except APIResponseError as e:\n            if hasattr(e, 'code') and e.code in ['object_not_found', 'unauthorized']:\n                return False\n            raise\n\n\ndef save_config_to_file(databases: List[Dict[str, Any]]):"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Add refresh_config() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Add validate_database_exists() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Add --refresh-config flag to notion_sync.py",
+          "status": "in_progress",
+          "priority": "medium",
+          "id": "3"
+        },
+        {
+          "content": "Add database validation on sync startup with user prompt",
+          "status": "pending",
+          "priority": "medium",
+          "id": "4"
+        },
+        {
+          "content": "Test the implementation",
+          "status": "pending",
+          "priority": "low",
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "offset": 280,
+      "limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "if __name__|def main|argparse|ArgumentParser",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "output_mode": "content",
+      "-B": 5,
+      "-A": 20
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "offset": 240,
+      "limit": 80
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "^def main",
+      "path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "output_mode": "content",
+      "-A": 40,
+      "-n": true
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "old_string": "def main():\n    \"\"\"Main function to orchestrate the sync process for a given database.\"\"\"\n    try:\n        notion_client = NotionClient()\n    except ValueError as e:\n        console.print(f\"[bold red]Error:[/] {e}\", style=\"red\")\n        return\n\n    DATABASE_CONFIG = load_config_from_file()\n    if not DATABASE_CONFIG:\n        return\n\n    # Determine which database to sync and if it's a live run\n    is_live_run = \"--live\" in sys.argv\n    db_to_sync = None\n    for arg in sys.argv[1:]:\n        if arg != \"--live\":\n            db_to_sync = arg\n            break\n\n    if not db_to_sync:",
+      "new_string": "def main():\n    \"\"\"Main function to orchestrate the sync process for a given database.\"\"\"\n    try:\n        notion_client = NotionClient()\n    except ValueError as e:\n        console.print(f\"[bold red]Error:[/] {e}\", style=\"red\")\n        return\n\n    # Check if --refresh-config flag is present\n    if \"--refresh-config\" in sys.argv:\n        console.print(\"Refreshing Notion configuration...\", style=\"yellow\")\n        notion_client.refresh_config()\n        console.print(\"[bold green]Configuration refreshed successfully![/bold]\")\n\n    DATABASE_CONFIG = load_config_from_file()\n    if not DATABASE_CONFIG:\n        return\n\n    # Determine which database to sync and if it's a live run\n    is_live_run = \"--live\" in sys.argv\n    db_to_sync = None\n    for arg in sys.argv[1:]:\n        if arg not in [\"--live\", \"--refresh-config\"]:\n            db_to_sync = arg\n            break\n\n    if not db_to_sync:"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Add refresh_config() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Add validate_database_exists() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Add --refresh-config flag to notion_sync.py",
+          "status": "completed",
+          "priority": "medium",
+          "id": "3"
+        },
+        {
+          "content": "Add database validation on sync startup with user prompt",
+          "status": "in_progress",
+          "priority": "medium",
+          "id": "4"
+        },
+        {
+          "content": "Test the implementation",
+          "status": "pending",
+          "priority": "low",
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/scripts/notion_sync.py",
+      "old_string": "    config = DATABASE_CONFIG.get(db_to_sync)\n    if not config:\n        console.print(f\"[bold red]Error:[/] No configuration found for database '{db_to_sync}'.\")\n        return\n\n    # Run the sync process\n    engine = SyncEngine(db_to_sync, config, notion_client)",
+      "new_string": "    config = DATABASE_CONFIG.get(db_to_sync)\n    if not config:\n        console.print(f\"[bold red]Error:[/] No configuration found for database '{db_to_sync}'.\")\n        return\n\n    # Validate that the database still exists\n    db_id = config.get(\"id\")\n    if db_id and not notion_client.validate_database_exists(db_id):\n        console.print(f\"[bold red]Error:[/] Database '{db_to_sync}' (ID: {db_id}) not found or inaccessible.\")\n        refresh = input(\"Would you like to refresh the configuration? (y/n): \").lower().strip()\n        if refresh == 'y':\n            notion_client.refresh_config()\n            console.print(\"[bold green]Configuration refreshed![/bold]\")\n            # Reload config and try again\n            DATABASE_CONFIG = load_config_from_file()\n            config = DATABASE_CONFIG.get(db_to_sync)\n            if not config:\n                console.print(f\"[bold red]Error:[/] Database '{db_to_sync}' still not found after refresh.\")\n                return\n        else:\n            return\n\n    # Run the sync process\n    engine = SyncEngine(db_to_sync, config, notion_client)"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Add refresh_config() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Add validate_database_exists() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Add --refresh-config flag to notion_sync.py",
+          "status": "completed",
+          "priority": "medium",
+          "id": "3"
+        },
+        {
+          "content": "Add database validation on sync startup with user prompt",
+          "status": "completed",
+          "priority": "medium",
+          "id": "4"
+        },
+        {
+          "content": "Test the implementation",
+          "status": "in_progress",
+          "priority": "low",
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/specs/live-config-fetch.md",
+      "content": "# Live Notion Configuration Fetching\n\n## Overview\nThis feature enables the blackcore project to fetch its Notion database configuration dynamically from the live Notion workspace, rather than relying solely on a static JSON configuration file.\n\n## Implementation\n\n### 1. NotionClient Enhancements\nAdded two new methods to the `NotionClient` class:\n\n#### `refresh_config()`\n- Rediscovers all accessible databases in the Notion workspace\n- Fetches their schemas and properties\n- Saves the updated configuration to `notion_config.json`\n- Returns the refreshed configuration\n\n#### `validate_database_exists(database_id)`\n- Checks if a specific database ID is still valid and accessible\n- Returns `True` if the database exists, `False` otherwise\n- Handles API errors gracefully\n\n### 2. Sync Script Enhancements\nModified `scripts/notion_sync.py` to support dynamic configuration:\n\n#### `--refresh-config` Flag\n- When provided, refreshes the configuration before any sync operation\n- Example: `python scripts/notion_sync.py --refresh-config \"People & Contacts\"`\n\n#### Automatic Database Validation\n- Before syncing, validates that the target database still exists\n- If not found, prompts the user to refresh the configuration\n- Provides a simple y/n prompt for user control\n\n## Usage Examples\n\n### Refresh configuration manually\n```bash\npython scripts/notion_sync.py --refresh-config\n```\n\n### Sync with automatic validation\n```bash\npython scripts/notion_sync.py \"People & Contacts\"\n# If database not found: \"Database not found. Refresh config? (y/n)\"\n```\n\n### Force refresh before sync\n```bash\npython scripts/notion_sync.py --refresh-config \"People & Contacts\" --live\n```\n\n## Benefits\n1. **Resilience**: Handles database ID changes gracefully\n2. **Simplicity**: No complex caching or automatic updates\n3. **User Control**: User decides when to refresh configuration\n4. **Validation**: Ensures databases exist before operations\n5. **Minimal Changes**: ~30 lines of code total\n\n## Technical Details\n- Reuses existing `discover_databases()` and `save_config_to_file()` functions\n- No new dependencies or complex state management\n- Configuration still stored in JSON for offline access\n- Backwards compatible with existing workflows"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ruff check blackcore/notion/client.py scripts/notion_sync.py",
+      "description": "Run linter on modified files"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ruff check --fix blackcore/notion/client.py",
+      "description": "Fix linting error automatically"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ruff format blackcore/notion/client.py scripts/notion_sync.py",
+      "description": "Format modified files"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Add refresh_config() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "1"
+        },
+        {
+          "content": "Add validate_database_exists() method to NotionClient",
+          "status": "completed",
+          "priority": "high",
+          "id": "2"
+        },
+        {
+          "content": "Add --refresh-config flag to notion_sync.py",
+          "status": "completed",
+          "priority": "medium",
+          "id": "3"
+        },
+        {
+          "content": "Add database validation on sync startup with user prompt",
+          "status": "completed",
+          "priority": "medium",
+          "id": "4"
+        },
+        {
+          "content": "Test the implementation",
+          "status": "completed",
+          "priority": "low",
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git status",
+      "description": "Check overall git status"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git diff --name-only",
+      "description": "Get list of all modified files"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git diff blackcore/notion/client.py",
+      "description": "Check changes in NotionClient"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git diff scripts/notion_sync.py",
+      "description": "Check changes in notion_sync.py"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git diff --stat blackcore/models/json/*.json",
+      "description": "Check statistics for JSON file changes"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git diff --stat logs/*.json repomix-output.xml",
+      "description": "Check log file changes"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/oceanheart/Documents/Manual Library/code/blackcore/specs/live-config-fetch.md",
+      "limit": 50
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git diff --stat blackcore/labs/*.py",
+      "description": "Check lab file changes"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git reset HEAD .",
+      "description": "Reset staging area to start fresh"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git add blackcore/notion/client.py scripts/notion_sync.py specs/live-config-fetch.md",
+      "description": "Stage files for the feature commit"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git commit -m \"$(cat <<'EOF'\nFEAT: Add live Notion configuration fetching\n\n- Add refresh_config() method to NotionClient for dynamic config updates\n- Add validate_database_exists() method to check database accessibility\n- Add --refresh-config flag to notion_sync.py for manual refresh\n- Add automatic database validation with user prompt on sync startup\n- Create spec documentation for the feature implementation\n\nThis enables the system to fetch database configuration from live Notion\nworkspace instead of relying solely on static JSON configuration.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\"",
+      "description": "Create first commit for the feature"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git add blackcore/models/json/*.json",
+      "description": "Stage all JSON data files"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git commit -m \"$(cat <<'EOF'\nCHORE: Update JSON data models with latest Notion content\n\n- Update actionable_tasks.json with new task entries\n- Update agendas_epics.json with additional epics\n- Update documents_evidence.json with new documents\n- Update identified_transgressions.json with significant new entries\n- Update intelligence_transcripts.json with latest transcripts\n- Update organizations_bodies.json with new organization data\n- Update people_places.json with restructured person entries\n- Update places_events.json with new event records\n\nThese updates reflect the latest synchronized data from Notion databases.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\"",
+      "description": "Create second commit for JSON data updates"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git add blackcore/labs/dry_run_notion_sync.py blackcore/labs/generic_notion_sync.py",
+      "description": "Stage lab script files"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git commit -m \"$(cat <<'EOF'\nSTYLE: Format lab sync scripts\n\n- Update dry_run_notion_sync.py with improved formatting\n- Update generic_notion_sync.py with code style improvements\n\nThese changes improve code readability and maintain consistent formatting\nacross the lab scripts.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\"",
+      "description": "Create third commit for lab script formatting"
+    }
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git add logs/*.json repomix-output.xml",
+      "description": "Stage log and generated files"
+    }
   }
 ]

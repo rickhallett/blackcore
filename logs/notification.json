@@ -88,5 +88,23 @@
     "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/00758d1e-9e89-483c-abd3-6c4e210369d8.jsonl",
     "hook_event_name": "Notification",
     "message": "Claude is waiting for your input"
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use "
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use "
+  },
+  {
+    "session_id": "21da9dd0-cce2-402a-b272-b20bdea402ac",
+    "transcript_path": "/Users/oceanheart/.claude/projects/-Users-oceanheart-Documents-Manual-Library-code-blackcore/21da9dd0-cce2-402a-b272-b20bdea402ac.jsonl",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input"
   }
 ]
