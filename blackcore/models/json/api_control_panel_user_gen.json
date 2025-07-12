@@ -1,0 +1,15 @@
+{
+  "API Control Panel USER GEN": [
+    {
+      "openAIPercentage": 0.46,
+      "endTime": "23:59",
+      "jitter": 678,
+      "minSignups": 5,
+      "avgDelay": 1756,
+      "startTime": "08:30",
+      "enabled": true,
+      "maxSignups": 40,
+      "Name": "LLM Comment Prompt_USER_GEN"
+    }
+  ]
+}

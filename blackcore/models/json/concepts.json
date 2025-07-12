@@ -1,0 +1,36 @@
+{
+  "Concepts": [
+    {
+      "Concept Name": "Survey Manipulation",
+      "Category": "Strategy",
+      "Description": "Various tactics used to manipulate survey results",
+      "Related Intelligence": [
+        "Intelligence from various transcripts"
+      ]
+    },
+    {
+      "Concept Name": "Gemini AI",
+      "Category": "Technology",
+      "Description": "AI tool used for survey data analysis",
+      "Related Intelligence": [
+        "Intelligence from various transcripts"
+      ]
+    },
+    {
+      "Concept Name": "Data Analysis",
+      "Category": "Process",
+      "Description": "Analysis of survey and other data",
+      "Related Intelligence": [
+        "Intelligence from various transcripts"
+      ]
+    },
+    {
+      "Concept Name": "Scrutiny Committee",
+      "Category": "Governance",
+      "Description": "Committee responsible for oversight",
+      "Related Intelligence": [
+        "Intelligence from various transcripts"
+      ]
+    }
+  ]
+}

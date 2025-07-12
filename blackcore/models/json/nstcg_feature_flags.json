@@ -1,0 +1,254 @@
+{
+  "NSTCG Feature Flags": [
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:14:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_TIMER_BLINK",
+      "Value": "true",
+      "Category": "ui",
+      "Description": "Make timer blink when less than 1 hour remains",
+      "Feature Path": "ui.timerBlink"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:14:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_COLORED_TIMER",
+      "Value": "true",
+      "Category": "ui",
+      "Description": "Color code countdown timer based on time remaining",
+      "Notes": "Yellow > 24h, Amber 12-24h, Orange 1-12h, Red < 1h",
+      "Feature Path": "ui.coloredTimer"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_COMMUNITY_ACTION_REQUIRED",
+      "Value": "true",
+      "Category": "ui",
+      "Description": "Show \"Community Action Required\" alert header",
+      "Feature Path": "ui.communityActionRequired"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-29T09:11:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_REFERRAL_POINTS",
+      "Value": "false",
+      "Category": "referralScheme",
+      "Description": "Award points for successful referrals",
+      "Feature Path": "referralScheme.awardReferralPoints"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_REFERRAL_BANNER",
+      "Value": "true",
+      "Category": "referralScheme",
+      "Description": "Show referral banner on homepage",
+      "Feature Path": "referralScheme.showReferralBanner"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_TRACK_REFERRALS",
+      "Value": "true",
+      "Category": "referralScheme",
+      "Description": "Track and attribute referrals",
+      "Feature Path": "referralScheme.trackReferrals"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_SHARE_BUTTONS",
+      "Value": "true",
+      "Category": "referralScheme",
+      "Description": "Show social share buttons after registration",
+      "Feature Path": "referralScheme.showShareButtons"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_REFERRAL",
+      "Value": "true",
+      "Category": "referralScheme",
+      "Description": "Enable referral system",
+      "Feature Path": "referralScheme.enabled"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-29T09:11:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_FULL_LEADERBOARD",
+      "Value": "false",
+      "Category": "leaderboard",
+      "Description": "Show full leaderboard page",
+      "Feature Path": "leaderboard.showFullLeaderboard"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-29T09:11:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_TOP_THREE",
+      "Value": "false",
+      "Category": "leaderboard",
+      "Description": "Show top three on homepage",
+      "Feature Path": "leaderboard.showTopThree"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-29T09:11:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_PRIZE_POOL",
+      "Value": "false",
+      "Category": "leaderboard",
+      "Description": "Show prize pool information",
+      "Feature Path": "leaderboard.showPrizePool"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-29T09:11:00.000Z",
+      "Default Value": "true",
+      "Environment Variable": "FEATURE_LEADERBOARD",
+      "Value": "false",
+      "Category": "leaderboard",
+      "Description": "Enable leaderboard functionality",
+      "Feature Path": "leaderboard.enabled"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_COST_BREAKDOWN",
+      "Value": "false",
+      "Category": "campaignCosts",
+      "Description": "Show detailed cost breakdown",
+      "Feature Path": "campaignCosts.showBreakdown"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_LIVE_COUNTER",
+      "Value": "false",
+      "Category": "campaignCosts",
+      "Description": "Show live updating cost counter",
+      "Feature Path": "campaignCosts.showLiveCounter"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_CAMPAIGN_COSTS",
+      "Value": "false",
+      "Category": "campaignCosts",
+      "Description": "Show campaign running costs",
+      "Feature Path": "campaignCosts.enabled"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_TOTAL_DONATIONS",
+      "Value": "false",
+      "Category": "donations",
+      "Description": "Show total donations amount in financial status",
+      "Feature Path": "donations.showTotalDonations"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_RECENT_DONATIONS",
+      "Value": "false",
+      "Category": "donations",
+      "Description": "Show recent donations list on donate page",
+      "Feature Path": "donations.showRecentDonations"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_FINANCIAL_STATUS",
+      "Value": "false",
+      "Category": "donations",
+      "Description": "Show financial status card on homepage",
+      "Notes": "Displays campaign costs, donations, and balance",
+      "Feature Path": "donations.showFinancialStatus"
+    },
+    {
+      "Modified By": {
+        "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+        "name": "Pete Mitchell"
+      },
+      "Last Modified": "2025-06-26T08:15:00.000Z",
+      "Default Value": "false",
+      "Environment Variable": "FEATURE_DONATIONS",
+      "Value": "false",
+      "Category": "donations",
+      "Description": "Enable donation functionality across the site",
+      "Notes": "Controls donate button, donation page, and Stripe integration",
+      "Feature Path": "donations.enabled"
+    }
+  ]
+}
