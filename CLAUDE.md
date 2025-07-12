@@ -4,18 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Blackcore is a Python-based intelligence processing and automation system for "Project Nassau" that interfaces with Notion workspaces to create structured knowledge graphs from raw intelligence data.
+Blackcore is a Python-based intelligence processing and automation system for "Project Nassau" that interfaces with Notion workspaces to create structured knowledge graphs from raw intelligence data. The system emphasizes security-first design, robust error handling, and enterprise-grade reliability.
 
 ## Development Commands
 
 ### Setup
 ```bash
-# Install dependencies
+# Install dependencies (Python 3.11+ required)
 uv sync
+
+# Alternative installation
+pip install -e .
 
 # Set up environment variables
 cp .env.example .env
-# Then edit .env with your API keys
+# Edit .env with required API keys
 ```
 
 ### Testing
@@ -82,23 +85,57 @@ python scripts/notion_sync.py
 
 # Analyze database relationships
 python scripts/analyse_relations.py
+
+# Ingest new intelligence data
+python scripts/ingest_intelligence.py
+
+# Run minimal transcript processor
+python -m blackcore.minimal
 ```
 
 ## Architecture
 
 ### Core Components
-The project follows a clean, layered architecture:
 
-1. **Property Handlers** (`blackcore/handlers/`) - Type-specific handlers for all Notion property types (text, select, multi_select, relation, etc.)
-2. **Repository Layer** (`blackcore/repositories/`) - Data access abstraction using repository pattern with base classes for CRUD operations
-3. **Service Layer** (`blackcore/services/`) - Business logic including sync services and domain-specific operations
-4. **Notion Client** (`blackcore/notion/`) - Custom Notion API wrapper with database creators and client abstraction
-5. **Security Module** (`blackcore/security/`) - Comprehensive security with secrets management, validators, and audit logging
-6. **Rate Limiting** (`blackcore/rate_limiting/`) - Thread-safe rate limiting for API calls with configurable limits
-7. **Error Handling** (`blackcore/errors/`) - Custom exception hierarchy for graceful error handling
+1. **Security Layer** (`blackcore/security/`)
+   - Encrypted secrets management with rotation capabilities
+   - SSRF protection with private IP blocking
+   - Input sanitization against injection attacks
+   - Comprehensive audit logging with PII redaction
+
+2. **Property Handlers** (`blackcore/handlers/`)
+   - Type-specific handlers for all 15+ Notion property types
+   - Bidirectional conversion between Notion API and Python objects
+   - Automatic registration system with validation
+
+3. **Repository Layer** (`blackcore/repositories/`)
+   - Clean data access abstraction using repository pattern
+   - Page, Database, and Search repositories
+   - Type-safe CRUD operations with batch support
+
+4. **Service Layer** (`blackcore/services/`)
+   - Business logic including sync services
+   - Domain-specific operations
+   - AI integration for entity extraction
+
+5. **Notion Client** (`blackcore/notion/`)
+   - Rate-limited API wrapper with automatic retries
+   - Database schema creators
+   - Response validation with Pydantic models
+
+6. **Error Handling** (`blackcore/errors/`)
+   - Contextual error system preserving debugging info
+   - Intelligent retry logic with exponential backoff
+   - User-friendly error messages
+
+7. **Rate Limiting** (`blackcore/rate_limiting/`)
+   - Thread-safe rate limiting for API calls
+   - Configurable limits per endpoint
+   - Automatic backoff handling
 
 ### Database Schema
-The system uses 8 interconnected Notion databases:
+
+The system manages 14 interconnected Notion databases:
 - **People & Contacts** - Individual tracking with relationships
 - **Organizations & Bodies** - Institutional entities
 - **Agendas & Epics** - Strategic goals and initiatives
@@ -107,61 +144,88 @@ The system uses 8 interconnected Notion databases:
 - **Documents & Evidence** - File and document library
 - **Key Places & Events** - Location and event tracking
 - **Identified Transgressions** - Issue and violation catalog
+- **Plus 6 additional specialized databases**
 
-### Development Principles
-1. Test-Driven Development (TDD) - Write tests before implementation
-2. Incremental approach - Start with Phase 0 (foundation), then Phase 1 (read), Phase 2 (write)
-3. Human-in-the-Middle verification - AI suggests, human approves
-4. API-first but abstracted - Hide Notion API complexity behind clean interfaces
+Database configuration is stored in `blackcore/config/notion_config.json`.
+
+### The Minimal Module
+
+A self-contained transcript processing implementation at `blackcore/minimal/`:
+- Streamlined architecture for easier adoption
+- CLI interface with batch processing support
+- Full test coverage target of 90%+
+- Support for all Notion property types
+- Simple file-based caching
+
+### Development Workflow
+
+1. **Capture**: Record raw intelligence (transcripts, documents)
+2. **Structure**: Parse intelligence, create/link Notion objects
+3. **Analyze**: AI extracts entities and relationships
+4. **Enrich**: AI-generated insights written back to Notion
 
 ### Environment Variables
+
 Required in `.env`:
 - `NOTION_API_KEY` - Notion integration token
 - `NOTION_PARENT_PAGE_ID` - Parent page for database creation
 - `ANTHROPIC_API_KEY` - Claude API key (optional)
 - `GOOGLE_API_KEY` - Gemini API key (optional)
 - `GOOGLE_DRIVE_FOLDER_ID` - Source folder for intelligence data
+- `OPENAI_API_KEY` - OpenAI API key (optional)
 
-### Key Development Tasks
-When implementing features:
-1. Check the roadmap in `specs/roadmap.md` for current phase requirements
-2. Reference `specs/db-relations.md` for database schema details
-3. Follow TDD approach - write tests in `tests/` before implementation
-4. Use type hints and Pydantic models for data validation
-5. Keep AI prompts in separate files for maintainability
+### Key Architectural Patterns
 
-### Current Phase
-The project is in Phase 0 (Foundation & Schema Automation) focusing on:
+**Repository Pattern**
+All data access through repository classes inheriting from `BaseRepository`:
+- Standard CRUD operations
+- Custom query methods
+- Pagination handling
+- Batch operations
+
+**Property Handler System**
+Each Notion property type has a dedicated handler:
+- `TextPropertyHandler` - Plain text fields
+- `SelectPropertyHandler` - Single select options
+- `RelationPropertyHandler` - Database relations
+- Plus handlers for all other Notion types
+
+**Security-First Design**
+- Defense-in-depth security model
+- Input validation at all boundaries
+- Encrypted storage for sensitive data
+- Comprehensive audit trails
+
+### Testing Strategy
+
+- **Test Organization**: Tests mirror source structure
+- **Fixtures**: Comprehensive fixtures in `tests/conftest.py`
+- **Mock Strategy**: Notion client mocking to avoid API calls
+- **Performance Tests**: Scalability testing included
+- **Coverage Target**: 94%+ for critical paths
+
+### Current Development Phase
+
+The project is in Phase 0 (Foundation & Schema Automation):
 - Database schema creation and validation
 - Basic Notion API wrapper implementation
 - Test infrastructure setup
 - Configuration discovery and management
 
-## Key Architectural Patterns
+Reference `specs/roadmap.md` for detailed phase requirements.
 
-### Repository Pattern
-All data access goes through repository classes that inherit from `BaseRepository`:
-```python
-# Example: PersonRepository inherits from BaseRepository
-# Provides standard CRUD operations plus custom queries
-```
+### Working with AI Integration
 
-### Property Handler System
-Each Notion property type has a dedicated handler:
-- `TextPropertyHandler` - Plain text fields
-- `SelectPropertyHandler` - Single select options
-- `RelationPropertyHandler` - Database relations
-- Custom handlers for each Notion property type
+When implementing AI features:
+1. Prompts are stored in separate files for maintainability
+2. Support both Claude (Anthropic) and OpenAI APIs
+3. Entity extraction focuses on: People, Organizations, Tasks, Places, Events, Transgressions
+4. AI-generated content includes metadata for tracking
 
-### Testing Strategy
-- **Fixtures**: Comprehensive fixtures in `tests/conftest.py` for mock clients and test data
-- **Test Organization**: Tests mirror source structure (e.g., `blackcore/security/` → `tests/test_security.py`)
-- **Async Testing**: Full support for async tests with `pytest-asyncio`
-- **Mock Strategy**: Use fixtures for Notion client mocking to avoid API calls in tests
+### Performance Considerations
 
-### Error Handling
-Custom exception hierarchy in `blackcore/errors/`:
-- `BlackcoreError` - Base exception
-- `ConfigurationError` - Configuration issues
-- `ValidationError` - Data validation failures
-- `NotionAPIError` - Notion API specific errors
+- Local JSON caching reduces API calls
+- Batch operations for bulk updates
+- Rate limiting prevents API throttling
+- Async support for concurrent operations
+- Connection pooling for database operations

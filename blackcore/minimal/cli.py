@@ -148,6 +148,44 @@ def cache_info(args):
     return 0
 
 
+def sync_json(args):
+    """Sync local JSON files to Notion databases."""
+    from .json_sync import JSONSyncProcessor
+
+    print("🔄 Starting JSON sync to Notion...")
+
+    # Initialize processor
+    processor = JSONSyncProcessor(config_path=args.config)
+
+    # Set processing options
+    processor.dry_run = args.dry_run
+    processor.verbose = args.verbose
+
+    if args.dry_run:
+        print("🔍 DRY RUN MODE - No changes will be made to Notion")
+
+    # Sync either specific database or all
+    if args.database:
+        result = processor.sync_database(args.database)
+    else:
+        result = processor.sync_all()
+
+    # Print summary
+    if result.success:
+        print(f"\n✅ Sync completed successfully!")
+        print(f"   Created: {result.created_count} pages")
+        print(f"   Updated: {result.updated_count} pages")
+        print(f"   Skipped: {result.skipped_count} pages")
+        if result.errors:
+            print(f"   Errors: {len(result.errors)}")
+    else:
+        print(f"\n❌ Sync failed with {len(result.errors)} errors")
+        for error in result.errors:
+            print(f"   - {error}")
+
+    return 0 if result.success else 1
+
+
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -211,6 +249,15 @@ Examples:
     cache_parser.add_argument("--cleanup", action="store_true", help="Remove expired entries")
     cache_parser.add_argument("--clear", action="store_true", help="Clear all cache")
 
+    # JSON sync
+    sync_parser = subparsers.add_parser("sync-json", help="Sync local JSON files to Notion databases")
+    sync_parser.add_argument("-c", "--config", help="Path to configuration file")
+    sync_parser.add_argument("-d", "--database", help="Specific database to sync (default: all)")
+    sync_parser.add_argument(
+        "--dry-run", action="store_true", help="Preview changes without updating Notion"
+    )
+    sync_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+
     # Parse arguments
     args = parser.parse_args()
 
@@ -230,6 +277,8 @@ Examples:
             return generate_sample(args)
         elif args.command == "cache-info":
             return cache_info(args)
+        elif args.command == "sync-json":
+            return sync_json(args)
     except KeyboardInterrupt:
         print("\n⚠️  Interrupted by user")
         return 1

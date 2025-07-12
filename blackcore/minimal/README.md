@@ -9,6 +9,7 @@ A streamlined Python module for processing transcripts, extracting entities usin
 - 📊 **Notion Integration**: Automatically create and update entries in Notion databases
 - 🔧 **All Property Types**: Support for all Notion property types (text, select, relations, etc.)
 - 💾 **Simple Caching**: File-based caching to reduce API calls
+- 🔄 **JSON Sync**: Sync local JSON data files directly to Notion databases without AI processing
 - ⚡ **High Test Coverage**: Comprehensive test suite with 90%+ coverage target
 
 ## Quick Start
@@ -120,6 +121,22 @@ python -m blackcore.minimal process-batch ./transcripts/
 
 ```bash
 python -m blackcore.minimal process transcript.json --dry-run
+```
+
+### Sync JSON Files to Notion
+
+```bash
+# Sync all JSON files to Notion databases
+python -m blackcore.minimal sync-json
+
+# Sync a specific database
+python -m blackcore.minimal sync-json --database "People & Contacts"
+
+# Dry run to preview changes
+python -m blackcore.minimal sync-json --dry-run
+
+# Verbose output
+python -m blackcore.minimal sync-json --verbose
 ```
 
 ### Generate Config Template
