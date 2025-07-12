@@ -48,3 +48,18 @@ coverage.xml
 *.log
 
 logs/
+
+# Backup files and directories
+backups/
+reports/
+*backup*.json
+*.backup_*
+*_backup.*
+exports/
+
+# Database and sync artifacts
+*.db
+dry_run_report.json
+validation_report.json
+notion_schemas.json
+deduplication_audit.db
