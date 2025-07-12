@@ -1,0 +1,152 @@
+{
+  "People & Contacts": {
+    "title_property": "Full Name",
+    "mappings": {
+      "Full Name": "Full Name",
+      "Role": "Role",
+      "Status": "Status",
+      "Organization": "Organization",
+      "Email": "Email",
+      "Phone": "Phone",
+      "Notes": "Notes",
+      "Linked Transgressions": "Linked Transgressions"
+    },
+    "exclude": [],
+    "transformations": {
+      "Organization": {"type": "relation", "stage": 3},
+      "Linked Transgressions": {"type": "relation", "stage": 3}
+    }
+  },
+  
+  "Organizations & Bodies": {
+    "title_property": "Organization Name",
+    "mappings": {
+      "Organization Name": "Organization Name",
+      "Organization Type": "Category",
+      "Category": "Category",
+      "Website": "Website"
+    },
+    "exclude": ["Notes"],
+    "transformations": {
+      "Website": {"type": "url"},
+      "Category": {"type": "select", "default": "Antagonist", "mappings": {
+        "Public Body": "Lever of Power",
+        "Private Company": "Weapon",
+        "Government": "Lever of Power",
+        "NGO": "Weapon",
+        "Community Group": "Weapon"
+      }}
+    }
+  },
+  
+  "Actionable Tasks": {
+    "title_property": "Task Name",
+    "mappings": {
+      "Task Name": "Task Name",
+      "Status": "Status",
+      "Due Date": "Due Date",
+      "Related Agenda": "Agendas & Epics"
+    },
+    "exclude": ["Assignee", "Priority", "Notes", "Inferred"],
+    "transformations": {
+      "Status": {"type": "status", "default": "Not started"},
+      "Due Date": {"type": "date"},
+      "Agendas & Epics": {"type": "relation", "stage": 3}
+    }
+  },
+  
+  "Intelligence & Transcripts": {
+    "title_property": "Entry Title",
+    "mappings": {
+      "Entry Title": "Entry Title",
+      "Transcript Title": "Entry Title",
+      "Date Recorded": "Date Recorded",
+      "Source": "Source",
+      "Raw Transcript/Note": "Raw Transcript/Note",
+      "AI Summary": "AI Summary",
+      "Tagged Entities": "Tagged Entities",
+      "Processing Status": "Processing Status"
+    },
+    "exclude": ["Inferred"],
+    "transformations": {
+      "Date Recorded": {"type": "date"},
+      "Source": {"type": "select", "default": "Personal Note"},
+      "Processing Status": {"type": "select", "default": "Needs Processing"},
+      "Raw Transcript/Note": {"type": "rich_text", "max_length": 2000},
+      "Tagged Entities": {"type": "relation", "stage": 3}
+    }
+  },
+  
+  "Identified Transgressions": {
+    "title_property": "Transgression Summary",
+    "mappings": {
+      "Transgression Summary": "Transgression Summary",
+      "Transgression Name": "Transgression Summary",
+      "Date of Transgression": "Date of Transgression",
+      "Date/Period": "Date of Transgression",
+      "Severity": "Severity",
+      "Perpetrator (Person)": "Perpetrator (Person)",
+      "Perpetrator (Org)": "Perpetrator (Org)",
+      "Evidence": "Evidence"
+    },
+    "exclude": [],
+    "transformations": {
+      "Date of Transgression": {"type": "date"},
+      "Severity": {"type": "select", "default": "Medium"},
+      "Perpetrator (Person)": {"type": "relation", "stage": 3},
+      "Perpetrator (Org)": {"type": "relation", "stage": 3},
+      "Evidence": {"type": "relation", "stage": 3}
+    }
+  },
+  
+  "Documents & Evidence": {
+    "title_property": "Document Name",
+    "mappings": {
+      "Document Name": "Document Name",
+      "Document Type": "Document Type",
+      "Source Organization": "Source Organization"
+    },
+    "exclude": ["AI Analysis", "Description", "File"],
+    "transformations": {
+      "Document Type": {"type": "select", "default": "Evidence", "extract_nested": true},
+      "Source Organization": {"type": "relation", "stage": 3}
+    }
+  },
+  
+  "Agendas & Epics": {
+    "title_property": "Agenda Title",
+    "mappings": {
+      "Agenda Title": "Agenda Title",
+      "Agenda Name": "Agenda Title",
+      "Status": "Status",
+      "Phase": "Phase",
+      "Actionable Tasks": "Actionable Tasks",
+      "Key Documents": "Key Documents"
+    },
+    "exclude": ["Owner", "Objective Summary"],
+    "transformations": {
+      "Status": {"type": "select", "default": "Planning"},
+      "Phase": {"type": "select", "default": "Phase 1: Mobilization"},
+      "Actionable Tasks": {"type": "relation", "stage": 3},
+      "Key Documents": {"type": "relation", "stage": 3}
+    }
+  },
+  
+  "Key Places & Events": {
+    "title_property": "Event / Place Name",
+    "mappings": {
+      "Event/Place Name": "Event / Place Name",
+      "Event / Place Name": "Event / Place Name",
+      "Date": "Date of Event",
+      "Date of Event": "Date of Event",
+      "People Involved": "People Involved",
+      "Related Transgressions": "Related Transgressions"
+    },
+    "exclude": [],
+    "transformations": {
+      "Date of Event": {"type": "date"},
+      "People Involved": {"type": "relation", "stage": 3},
+      "Related Transgressions": {"type": "relation", "stage": 3}
+    }
+  }
+}
