@@ -1,154 +1,30 @@
 {
   "Identified Transgressions": [
-    [
-      {
-        "Transgression Summary": "Mid-survey implementation of CAPTCHA to suppress survey participation",
-        "Perpetrator (Person)": [
-          "Tony Powell"
-        ],
-        "Perpetrator (Org)": [
-          "Dorset Coast Forum",
-          "Granicus"
-        ],
-        "Date of Transgression": "2024-06-26",
-        "Evidence": [
-          "Email from Tony Powell to Sarah Streams"
-        ],
-        "Severity": "Critical"
-      },
-      {
-        "Transgression Summary": "Breach of Purdah: Swanage Town Council allowing biased political comments on its official platform",
-        "Perpetrator (Person)": [
-          "David Hollister"
-        ],
-        "Perpetrator (Org)": [
-          "Swanage Town Council"
-        ],
-        "Date of Transgression": null,
-        "Evidence": [
-          "Screenshots of David Hollister's comment on STC Facebook page"
-        ],
-        "Severity": "Critical"
-      },
-      {
-        "Transgression Summary": "Biased presentation of road scheme options by Dorset Highways official",
-        "Perpetrator (Person)": [],
-        "Perpetrator (Org)": [
-          "Dorset Highways"
-        ],
-        "Date of Transgression": null,
-        "Evidence": [
-          "Speaker testimony regarding negative framing of Option 3 at public meeting"
-        ],
-        "Severity": "High"
-      },
-      {
-        "Transgression Summary": "Use of a statistically flawed 2023 survey to justify a major infrastructure project",
-        "Perpetrator (Person)": [],
-        "Perpetrator (Org)": [
-          "Dorset Coast Forum"
-        ],
-        "Date of Transgression": null,
-        "Evidence": [
-          "Original 2023 Survey Document"
-        ],
-        "Severity": "High"
-      },
-      {
-        "Transgression Summary": "Corrupt survey process designed to manufacture consent",
-        "Perpetrator (Org)": [
-          "Swanage Town Council (STC)",
-          "Dorset Coast Forum (DCF)"
-        ],
-        "Severity": "Critical",
-        "Notes": "Accused of designing the entire public engagement process to achieve a predetermined outcome (road closure). This involves using a biased 2023 'Masterplan' survey, which highlighted superficial benefits like 'food stalls' over critical issues like traffic safety and flow, to justify a multi-million-pound project that directly benefits STC's own commercial assets at the expense of the public highway and other local businesses."
-      },
-      {
-        "Transgression Summary": "Unilateral change of survey review timeline",
-        "Perpetrator (Person)": [
-          "Tony Powell"
-        ],
-        "Perpetrator (Org)": [
-          "Dorset Coast Forum (DCF)"
-        ],
-        "Severity": "Medium",
-        "Notes": "The timeline for reviewing survey data was changed from the initially stated 6 weeks to 3 months without clear justification, delaying the process."
-      },
-      {
-        "Transgression Summary": "Implementation of a 'Tier 4' Captcha leading to poisoned data",
-        "Perpetrator (Org)": [
-          "Dorset Coast Forum (DCF)",
-          "Swanage Town Council (STC)"
-        ],
-        "Severity": "High",
-        "Notes": "On the recommendation of 'Engagement HQ', a highly restrictive Captcha was added to the survey. This action is believed to have skewed the demographics of respondents, creating two distinct and incompatible datasets (pre and post-Captcha) and disenfranchising parts of the community."
-      },
-      {
-        "Transgression Summary": "Paper survey chain of custody breach",
-        "Perpetrator (Person)": [
-          "Colvin Milmer"
-        ],
-        "Perpetrator (Org)": [
-          "Swanage Town Council (STC)"
-        ],
-        "Date of Transgression": "2024-06-06",
-        "Severity": "High",
-        "Notes": "Following a private presentation, paper survey forms were left unaccounted for and without a secure chain of custody for a week."
-      },
-      {
-        "Transgression Summary": "David Hollister public information 'indiscretion'",
-        "Perpetrator (Person)": [
-          "Phil Eades"
-        ],
-        "Perpetrator (Org)": [
-          "Swanage Town Council (STC)"
-        ],
-        "Severity": "Medium",
-        "Notes": "An unspecified 'indiscretion' where information regarding David Hollister was inappropriately left public by the council."
-      },
-      {
-        "Transgression Summary": "Unilateral change of survey review timeline",
-        "Perpetrator (Person)": [
-          "Tony Powell"
-        ],
-        "Perpetrator (Org)": [
-          "Dorset Coast Forum (DCF)"
-        ],
-        "Severity": "Medium",
-        "Notes": "The timeline for reviewing survey data was changed from the initially stated 6 weeks to 3 months without clear justification, delaying the process."
-      },
-      {
-        "Transgression Summary": "Implementation of a 'Tier 4' Captcha leading to poisoned data",
-        "Perpetrator (Org)": [
-          "Dorset Coast Forum (DCF)",
-          "Swanage Town Council (STC)"
-        ],
-        "Severity": "High",
-        "Notes": "On the recommendation of 'Engagement HQ', a highly restrictive Captcha was added to the survey. This action is believed to have skewed the demographics of respondents, creating two distinct and incompatible datasets (pre and post-Captcha) and disenfranchising parts of the community."
-      },
-      {
-        "Transgression Summary": "Paper survey chain of custody breach",
-        "Perpetrator (Person)": [
-          "Colvin Milmer"
-        ],
-        "Perpetrator (Org)": [
-          "Swanage Town Council (STC)"
-        ],
-        "Date of Transgression": "Date of the St Aldhelm's Court event",
-        "Severity": "High",
-        "Notes": "Following a private presentation, paper survey forms were left unaccounted for and without a secure chain of custody for a week."
-      },
-      {
-        "Transgression Summary": "David Hollister public information 'indiscretion'",
-        "Perpetrator (Person)": [
-          "Phil Eades"
-        ],
-        "Perpetrator (Org)": [
-          "Swanage Town Council (STC)"
-        ],
-        "Severity": "Medium",
-        "Notes": "An unspecified 'indiscretion' where information regarding David Hollister was inappropriately left public by the council."
-      }
-    ]
+    {
+      "Transgression Summary": "Mid-survey implementation of CAPTCHA to suppress survey participation",
+      "Perpetrator (Person)": [
+        "Tony Powell"
+      ],
+      "Perpetrator (Org)": [
+        "Dorset Coast Forum",
+        "Granicus"
+      ],
+      "Date of Transgression": "2024-06-26",
+      "Evidence": [
+        "Email from Tony Powell to Sarah Streams"
+      ],
+      "Severity": "Critical"
+    },
+    {
+      "Date of Transgression": "2025-06-29",
+      "Reported By": [
+        {
+          "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+          "name": "Pete Mitchell"
+        }
+      ],
+      "Severity": "High",
+      "Transgression Summary": "Gemini 2.5 Pro Analysis: No Significant Prompt-Eng"
+    }
   ]
 }

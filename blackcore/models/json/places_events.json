@@ -63,28 +63,6 @@
       ]
     },
     {
-      "Organization Name": "Dorset Coast Forum (DCF)",
-      "Category": "Antagonist"
-    },
-    {
-      "Organization Name": "Swanage Town Council (STC)",
-      "Category": "Antagonist"
-    },
-    {
-      "Organization Name": "Dorset Highways",
-      "Category": "Antagonist"
-    },
-    {
-      "Organization Name": "Engagement HQ / Granicus",
-      "Category": "Lever of Power",
-      "Notes": "The company that provided the survey portal and recommended the use of a Captcha, which led to a poisoned dataset. The speaker believes Engagement HQ is a front or subsidiary of Granicus."
-    },
-    {
-      "Organization Name": "North Swanage Traffic Concern Group (NSTCG)",
-      "Category": "Weapon",
-      "Notes": "The primary operational group for the campaign."
-    },
-    {
       "Event / Place Name": "Council Meeting (Organized by Angelo)",
       "Type": "Pivotal Event",
       "Date of Event": "The 21st of the month (inferred)",
@@ -110,6 +88,13 @@
       "Event / Place Name": "Old Wells Road",
       "Type": "Key Location",
       "Description": "Residential street where key ally Colin Bright lives."
+    },
+    {
+      "Date of Event": "2025-07-21",
+      "Event / Place Name": "Council Meeting organised Angelo"
+    },
+    {
+      "Event / Place Name": "Swanage Matters Facebook Group"
     }
   ]
 }

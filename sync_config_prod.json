@@ -1,0 +1,76 @@
+{
+  "notion": {
+    "api_key": "***REMOVED***",
+    "databases": {
+      "people": {
+        "id": "21f4753d-608e-8173-b6dc-fc6302804e69",
+        "name": "People & Contacts",
+        "mappings": {
+          "name": "Full Name",
+          "role": "Role", 
+          "status": "Status",
+          "organization": "Organization",
+          "email": "Email",
+          "phone": "Phone",
+          "notes": "Notes"
+        }
+      },
+      "organizations": {
+        "id": "21f4753d-608e-81a9-8822-f40d30259853",
+        "name": "Organizations & Bodies",
+        "mappings": {
+          "name": "Organization Name",
+          "type": "Organization Type",
+          "website": "Website",
+          "notes": "Notes"
+        }
+      },
+      "tasks": {
+        "id": "21f4753d-608e-81ef-998f-ccc26b440542",
+        "name": "Actionable Tasks",
+        "mappings": {
+          "name": "Task Name",
+          "assignee": "Assignee",
+          "status": "Status",
+          "due_date": "Due Date",
+          "priority": "Priority"
+        }
+      },
+      "transcripts": {
+        "id": "21f4753d-608e-81ea-9c50-fc5b78162374",
+        "name": "Intelligence & Transcripts",
+        "mappings": {
+          "title": "Entry Title",
+          "date": "Date Recorded",
+          "source": "Source",
+          "content": "Raw Transcript/Note",
+          "summary": "AI Summary",
+          "entities": "Tagged Entities",
+          "status": "Processing Status"
+        }
+      },
+      "transgressions": {
+        "id": "21f4753d-608e-8140-861f-f536b3c9262b",
+        "name": "Identified Transgressions",
+        "mappings": {
+          "name": "Transgression Name",
+          "summary": "Transgression Summary",
+          "perpetrator_person": "Perpetrator (Person)",
+          "perpetrator_org": "Perpetrator (Org)",
+          "date": "Date/Period",
+          "severity": "Severity"
+        }
+      }
+    }
+  },
+  "ai": {
+    "provider": "anthropic",
+    "api_key": "sk-ant-api03-0123456789abcdef0123456789abcdef"
+  },
+  "processing": {
+    "dry_run": false,
+    "verbose": true,
+    "batch_size": 10,
+    "cache_ttl": 3600
+  }
+}

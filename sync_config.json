@@ -1,0 +1,35 @@
+{
+  "notion": {
+    "api_key": "dummy-api-key-for-dry-run",
+    "databases": {
+      "people": {
+        "id": "21f4753d-608e-8173-b6dc-fc6302804e69",
+        "name": "People & Contacts"
+      },
+      "organizations": {
+        "id": "21f4753d-608e-81a9-8822-f40d30259853",
+        "name": "Organizations & Bodies"
+      },
+      "tasks": {
+        "id": "21f4753d-608e-81ef-998f-ccc26b440542",
+        "name": "Actionable Tasks"
+      },
+      "transcripts": {
+        "id": "21f4753d-608e-81ea-9c50-fc5b78162374",
+        "name": "Intelligence & Transcripts"
+      },
+      "transgressions": {
+        "id": "21f4753d-608e-8140-861f-f536b3c9262b",
+        "name": "Identified Transgressions"
+      }
+    }
+  },
+  "ai": {
+    "provider": "anthropic",
+    "api_key": "dummy-key"
+  },
+  "processing": {
+    "dry_run": true,
+    "verbose": true
+  }
+}

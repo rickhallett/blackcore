@@ -1,7 +1,7 @@
 {
     "Key Places & Events": {
         "id": "21f4753d-608e-812b-a22e-c805303cb28d",
-        "local_json_path": "blackcore/models/json/key_places_events.json",
+        "local_json_path": "blackcore/models/json/places_events.json",
         "json_data_key": "Key Places & Events",
         "title_property": "Event / Place Name",
         "list_properties": [
@@ -145,7 +145,7 @@
     },
     "People & Contacts": {
         "id": "21f4753d-608e-8173-b6dc-fc6302804e69",
-        "local_json_path": "blackcore/models/json/people_contacts.json",
+        "local_json_path": "blackcore/models/json/people_places.json",
         "json_data_key": "People & Contacts",
         "title_property": "Full Name",
         "list_properties": [

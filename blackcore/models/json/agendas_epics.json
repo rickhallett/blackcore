@@ -1,5 +1,5 @@
 {
-  "Agendas and Epics": [
+  "Agendas & Epics": [
     {
       "Agenda Title": "Phase 1: Evidence Documentation & Intelligence Gathering",
       "Status": "Completed",
@@ -95,6 +95,102 @@
       "Status": "Planning",
       "Phase": "Phase 3: Endgame",
       "Objective Summary": "This phase follows the councillors' vote. Phase 3A (if we win) will focus on pursuing a judicial review and lodging complaints with the Local Government Ombudsman to hold STC accountable and prevent future transgressions. Phase 3B (if we lose) involves handing over the campaign intelligence and evidence to more powerful partners to continue the fight during the formal planning and consultation stages."
+    },
+    {
+      "Owner": [
+        {
+          "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+          "name": "Pete Mitchell"
+        },
+        {
+          "id": "213d872b-594c-81d3-8ce1-000266bb9533",
+          "name": "Blake Compton"
+        }
+      ],
+      "MoSCoW": "Must Have",
+      "Status": "Active Development",
+      "Phase": "Phase 2: Pressure",
+      "Agenda Title": "“Swanage Matters” - Social Media Engagement"
+    },
+    {
+      "Owner": [
+        {
+          "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+          "name": "Pete Mitchell"
+        }
+      ],
+      "MoSCoW": "Must Have",
+      "Status": "Active Development",
+      "Actionable Tasks": [
+        {
+          "id": "2254753d-608e-808f-b53f-d2364655a234"
+        }
+      ],
+      "Phase": "Phase 2: Pressure",
+      "Agenda Title": "Blackcore: Initial Data Integration"
+    },
+    {
+      "Actionable Tasks": [
+        {
+          "id": "2254753d-608e-807e-b69b-e432b26c9a7e"
+        }
+      ],
+      "Agenda Title": "Workspace Administration"
+    },
+    {
+      "Agenda Title": "Blackcore: Ongoing Data Integration"
+    },
+    {
+      "Owner": [
+        {
+          "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+          "name": "Pete Mitchell"
+        },
+        {
+          "id": "213d872b-594c-81d3-8ce1-000266bb9533",
+          "name": "Blake Compton"
+        }
+      ],
+      "MoSCoW": "Should Have",
+      "Status": "Planning",
+      "Phase": "Phase 2: Pressure",
+      "Agenda Title": "Post Registration Email Campaign"
+    },
+    {
+      "Owner": [
+        {
+          "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+          "name": "Pete Mitchell"
+        },
+        {
+          "id": "213d872b-594c-81d3-8ce1-000266bb9533",
+          "name": "Blake Compton"
+        }
+      ],
+      "MoSCoW": "Should Have",
+      "Status": "Planning",
+      "Phase": "Phase 2: Pressure",
+      "Agenda Title": "nstcg.org"
+    },
+    {
+      "Owner": [
+        {
+          "id": "213d872b-594c-8163-8ba0-0002982dda7f",
+          "name": "Pete Mitchell"
+        },
+        {
+          "id": "213d872b-594c-81d3-8ce1-000266bb9533",
+          "name": "Blake Compton"
+        }
+      ],
+      "MoSCoW": "Must Have",
+      "Status": "Planning",
+      "Phase": "Phase 2: Pressure",
+      "Agenda Title": "Core Documents"
+    },
+    {
+      "MoSCoW": "Must Have",
+      "Agenda Title": "Granicus Comms"
     }
   ]
 }

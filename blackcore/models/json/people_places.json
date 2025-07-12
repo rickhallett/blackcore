@@ -214,6 +214,166 @@
       "Role": "Ally",
       "Status": "Active Engagement",
       "Notes": "Organizing a council meeting on the 21st with the goal of packing the hall with supporters to ask targeted questions."
+    },
+    {
+      "Full Name": "Battlemead",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Battlemead Road",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Dorset Coast Forum",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Dorset Highways",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Election Day (July 24th)",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Engagement HQ",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Graham Heather",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Granicus",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "North Swanage",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Phillippe Eed",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Reuben",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Shore Road",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Swanage",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Swanage News",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "Swanage Town Council",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Full Name": "UK Statistics Authority",
+      "Role": "",
+      "Status": "",
+      "Organization": [],
+      "Notes": ""
+    },
+    {
+      "Email": "34crbright@gmail.com",
+      "Role": "Ally",
+      "Notes": "Ex-town councillor, knows his shit, spanner in the works against STC and DCF",
+      "Full Name": "Collin Bright"
+    },
+    {
+      "Related to Organizations & Bodies (Key People)": [
+        {
+          "id": "21f4753d-608e-806a-afd3-fff3b6612d6e"
+        }
+      ],
+      "Email": "kai@oceanheart.ai",
+      "Status": "Active Engagement",
+      "Role": "Internal Team",
+      "Organization": [
+        {
+          "id": "21f4753d-608e-806a-afd3-fff3b6612d6e"
+        }
+      ],
+      "Full Name": "Richard Hallett"
+    },
+    {
+      "Related to Organizations & Bodies (Key People)": [
+        {
+          "id": "2294753d-608e-8053-b9bf-cea9a93fbfaa"
+        }
+      ],
+      "Email": "toni.powell@dorsetcouncil.gov.uk",
+      "Organization": [
+        {
+          "id": "2294753d-608e-8053-b9bf-cea9a93fbfaa"
+        }
+      ],
+      "Full Name": "Toni Powell"
+    },
+    {
+      "Motive": "Sonic boom email level, self motivated. Will write to PE.",
+      "Email": "karenlayland25@gmail.com",
+      "Notes": "Soliticor",
+      "Full Name": "Karen Layland"
+    },
+    {
+      "Status": "Active Engagement",
+      "Role": "Ally",
+      "Notes": "Test notes for debugging",
+      "Full Name": "Test Person Debug"
     }
   ]
 }

@@ -1,15 +1,7 @@
 {
-  "Documents and Evidence": [
+  "Documents & Evidence": [
     {
-      "Document Name": {
-        "title": [
-          {
-            "text": {
-              "content": "Email from Tony Powell confirming mid-survey CAPTCHA addition"
-            }
-          }
-        ]
-      },
+      "Document Name": "Email from Tony Powell confirming mid-survey CAPTCHA addition",
       "File": {
         "files": []
       },
@@ -32,15 +24,7 @@
       }
     },
     {
-      "Document Name": {
-        "title": [
-          {
-            "text": {
-              "content": "Gemini AI Analysis of Survey Bias"
-            }
-          }
-        ]
-      },
+      "Document Name": "Gemini AI Analysis of Survey Bias",
       "File": {
         "files": []
       },
@@ -63,15 +47,7 @@
       }
     },
     {
-      "Document Name": {
-        "title": [
-          {
-            "text": {
-              "content": "Draft: Initial Outreach to Granicus re: Data Access"
-            }
-          }
-        ]
-      },
+      "Document Name": "Draft: Initial Outreach to Granicus re: Data Access",
       "File": {
         "files": []
       },
@@ -94,15 +70,7 @@
       }
     },
     {
-      "Document Name": {
-        "title": [
-          {
-            "text": {
-              "content": "Draft: Formal Complaint to UK Statistics Authority"
-            }
-          }
-        ]
-      },
+      "Document Name": "Draft: Formal Complaint to UK Statistics Authority",
       "File": {
         "files": []
       },
@@ -125,15 +93,7 @@
       }
     },
     {
-      "Document Name": {
-        "title": [
-          {
-            "text": {
-              "content": "Evidence: David Hollister's Pro-Conservative Comment on STC Facebook Page during Purdah"
-            }
-          }
-        ]
-      },
+      "Document Name": "Evidence: David Hollister's Pro-Conservative Comment on STC Facebook Page during Purdah",
       "File": {
         "files": []
       },
@@ -159,6 +119,21 @@
       "Document Name": "Technical Document for UKSA/OSR",
       "Document Type": "Our Output",
       "Description": "A planned document that will analyze and compare the DCF/STC survey methodology against the official UK Statistics Authority's Code of Practice to expose its flaws and biases."
+    },
+    {
+      "Related to Organizations & Bodies (Linked Documents)": [
+        {
+          "id": "2294753d-608e-8053-b9bf-cea9a93fbfaa"
+        }
+      ],
+      "Checkbox": false,
+      "Source Organization": [
+        {
+          "id": "2294753d-608e-8053-b9bf-cea9a93fbfaa"
+        }
+      ],
+      "Document Type": "Email",
+      "Document Name": "Sarah Streams vs Toni Powell"
     }
   ]
 }
