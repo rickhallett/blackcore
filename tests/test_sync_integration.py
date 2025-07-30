@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch, mock_open
 import json
 
 from blackcore.notion.client import NotionClient
-from scripts.notion_sync import SyncEngine
+from scripts.sync.notion_sync import SyncEngine
 
 
 class TestFullSyncScenarios:
@@ -154,7 +154,7 @@ class TestFullSyncScenarios:
         assert create_actions[1]["data"]["Name"] == "Item 4"
 
     @patch("blackcore.notion.client.NotionClient")
-    @patch("scripts.notion_sync.load_config_from_file")
+    @patch("scripts.sync.notion_sync.load_config_from_file")
     @patch("pathlib.Path.exists")
     @patch("builtins.open", new_callable=mock_open)
     def test_sync_with_relations(

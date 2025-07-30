@@ -1,5 +1,6 @@
 """Integration tests for full transcript processing workflow."""
 
+from unittest.mock import Mock
 import json
 import time
 from datetime import datetime
@@ -252,19 +253,19 @@ class TestDatabaseInteractions:
         )
 
         # Modify AI response to include all entity types
-        env["ai_client"].messages.create.return_value.content[0].text = json.dumps(
-            {
-                "entities": [
-                    {"name": "John Doe", "type": "person"},
-                    {"name": "Acme Corp", "type": "organization"},
-                    {"name": "Handle project", "type": "task"},
-                    {"name": "Annual Conference", "type": "event"},
-                    {"name": "NYC Office", "type": "place"},
-                    {"name": "Security Breach", "type": "transgression"},
-                ],
-                "relationships": [],
-            }
-        )
+        mock_response = Mock()
+        mock_response.content = [Mock(text=json.dumps({
+            "entities": [
+                {"name": "John Doe", "type": "person"},
+                {"name": "Acme Corp", "type": "organization"},
+                {"name": "Handle project", "type": "task"},
+                {"name": "Annual Conference", "type": "event"},
+                {"name": "NYC Office", "type": "place"},
+                {"name": "Security Breach", "type": "transgression"},
+            ],
+            "relationships": [],
+        }))]
+        env["ai_client"].messages.create.return_value = mock_response
 
         processor = TranscriptProcessor(config=env["config"])
         result = processor.process_transcript(transcript)
@@ -416,9 +417,9 @@ class TestEdgeCasesIntegration:
         )
 
         # Configure AI to return no entities
-        env["ai_client"].messages.create.return_value.content[0].text = json.dumps(
-            {"entities": [], "relationships": []}
-        )
+        mock_response = Mock()
+        mock_response.content = [Mock(text=json.dumps({"entities": [], "relationships": []}))]
+        env["ai_client"].messages.create.return_value = mock_response
 
         processor = TranscriptProcessor(config=env["config"])
         result = processor.process_transcript(transcript)
@@ -433,7 +434,9 @@ class TestEdgeCasesIntegration:
         env = integration_test_env
 
         # Make AI return invalid JSON
-        env["ai_client"].messages.create.return_value.content[0].text = "{ invalid json"
+        mock_response = Mock()
+        mock_response.content = [Mock(text="{ invalid json")]
+        env["ai_client"].messages.create.return_value = mock_response
 
         transcript = TranscriptInput(
             title="Malformed Response Test", content="Test content", date=datetime.now()

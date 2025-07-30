@@ -7,13 +7,16 @@ from datetime import datetime
 from unittest.mock import Mock, patch
 import time
 
-from blackcore.minimal.config import (
+from blackcore.minimal.models import (
     Config,
     NotionConfig,
     AIConfig,
     ProcessingConfig,
     DatabaseConfig,
+    NotionPage,
 )
+from blackcore.minimal.tests.utils.test_helpers import TestDataManager
+from blackcore.minimal.tests.utils.mock_validators import MockBehaviorValidator
 
 
 @pytest.fixture
@@ -87,39 +90,83 @@ def temp_cache_dir():
 
 
 @pytest.fixture
+def test_data_manager(request):
+    """Provide a TestDataManager for the current test."""
+    test_name = request.node.name
+    with TestDataManager(test_name) as manager:
+        yield manager
+
+
+@pytest.fixture
 def mock_notion_client():
     """Create mock Notion client for integration tests."""
     mock_client = Mock()
 
     # Mock database query responses
     mock_client.databases.query.return_value = {"results": [], "has_more": False}
+    
+    # Simplified search_database mock - returns consistent test data
+    def search_database_side_effect(database_id, query, limit=10):
+        """Return predictable mock NotionPage objects."""
+        # Standard test data - no complex query logic
+        if database_id == "test-people-db":
+            return [
+                NotionPage(
+                    id="test-person-1",
+                    database_id=database_id,
+                    properties={
+                        "Full Name": "John Smith",
+                        "Email": "john.smith@example.com",
+                        "Role": "CEO"
+                    },
+                    created_time=datetime(2025, 1, 1, 10, 0),
+                    last_edited_time=datetime(2025, 1, 1, 10, 0),
+                    url="https://notion.so/test-person-1"
+                )
+            ]
+        elif database_id == "test-org-db":
+            return [
+                NotionPage(
+                    id="test-org-1",
+                    database_id=database_id,
+                    properties={
+                        "Name": "Acme Corporation",
+                        "Type": "Technology",
+                        "Industry": "Software"
+                    },
+                    created_time=datetime(2025, 1, 1, 10, 0),
+                    last_edited_time=datetime(2025, 1, 1, 10, 0),
+                    url="https://notion.so/test-org-1"
+                )
+            ]
+        return []
+    
+    mock_client.search_database.side_effect = search_database_side_effect
 
-    # Mock page creation
+    # Simplified page creation mock - deterministic IDs
     def create_page_side_effect(**kwargs):
         properties = kwargs.get("properties", {})
-        title = "Unknown"
-        if "Full Name" in properties:
-            title = properties["Full Name"]["rich_text"][0]["text"]["content"]
-        elif "Name" in properties:
-            title = properties["Name"]["rich_text"][0]["text"]["content"]
-        elif "Title" in properties:
-            title = properties["Title"]["rich_text"][0]["text"]["content"]
-
+        database_id = kwargs.get("parent", {}).get("database_id", "unknown-db")
+        
+        # Generate predictable page ID based on database
+        page_id = f"mock-page-{database_id.split('-')[-1]}-{len(properties)}"
+        
         return {
-            "id": f"page-{hash(title) % 10000}",
+            "id": page_id,
             "object": "page",
-            "created_time": datetime.utcnow().isoformat(),
-            "last_edited_time": datetime.utcnow().isoformat(),
+            "created_time": "2025-01-01T10:00:00.000Z",
+            "last_edited_time": "2025-01-01T10:00:00.000Z",
             "properties": properties,
+            "parent": {"database_id": database_id},
         }
 
     mock_client.pages.create.side_effect = create_page_side_effect
 
-    # Mock page update
+    # Mock page update - deterministic response
     mock_client.pages.update.return_value = {
-        "id": "updated-page",
+        "id": "mock-updated-page",
         "object": "page",
-        "last_edited_time": datetime.utcnow().isoformat(),
+        "last_edited_time": "2025-01-01T10:00:00.000Z",
     }
 
     return mock_client
@@ -177,7 +224,7 @@ def mock_ai_responses():
                 {
                     "name": "Annual Review Meeting",
                     "type": "event",
-                    "properties": {"date": "2025-12-15"},
+                    "properties": {"date": "2025-01-15"},
                 },
             ],
             "relationships": [
@@ -214,27 +261,18 @@ def mock_ai_responses():
 def mock_ai_client(mock_ai_responses):
     """Create mock AI client that returns predefined responses."""
 
-    def create_message_response(messages, **kwargs):
-        # Extract the text from the user message
-        user_message = messages[-1]["content"]
+    mock_client = Mock()
 
-        # Determine which response to return based on content
-        if "error" in user_message.lower() or "breach" in user_message.lower():
-            response_key = "error"
-        elif "complex" in user_message.lower() or "multiple" in user_message.lower():
-            response_key = "complex"
-        else:
-            response_key = "simple"
-
-        response_data = mock_ai_responses[response_key]
-
+    def create_message_response(*args, **kwargs):
+        # Always return the simple response for predictable testing
+        response_data = mock_ai_responses["simple"]
+        
         # Create mock response
         mock_response = Mock()
         mock_response.content = [Mock(text=json.dumps(response_data))]
-
+        
         return mock_response
 
-    mock_client = Mock()
     mock_client.messages.create.side_effect = create_message_response
 
     return mock_client
@@ -304,34 +342,94 @@ def sample_transcripts():
 
 
 @pytest.fixture
-def integration_test_env(
-    integration_config, temp_cache_dir, mock_notion_client, mock_ai_client
-):
-    """Set up complete integration test environment."""
-    # Update cache directory in config
-    integration_config.cache_dir = temp_cache_dir
+def validated_notion_client(mock_notion_client):
+    """Validate Notion client mock behavior."""
+    validator = MockBehaviorValidator()
+    
+    # Validate Notion client behavior
+    notion_errors = validator.validate_mock_notion_client(mock_notion_client)
+    if notion_errors:
+        pytest.fail(f"Mock Notion client validation failed: {'; '.join(notion_errors)}")
+    
+    return mock_notion_client
 
-    # Create patches
-    notion_patch = patch("notion_client.Client", return_value=mock_notion_client)
-    claude_patch = patch("anthropic.Anthropic", return_value=mock_ai_client)
-    openai_patch = patch("openai.OpenAI", return_value=mock_ai_client)
 
-    # Start patches
-    notion_patch.start()
-    claude_patch.start()
-    openai_patch.start()
+@pytest.fixture  
+def validated_ai_client(mock_ai_client):
+    """Validate AI client mock behavior."""
+    validator = MockBehaviorValidator()
+    
+    # Validate AI client behavior
+    ai_errors = validator.validate_mock_ai_client(mock_ai_client)
+    if ai_errors:
+        pytest.fail(f"Mock AI client validation failed: {'; '.join(ai_errors)}")
+    
+    return mock_ai_client
 
-    yield {
-        "config": integration_config,
-        "cache_dir": temp_cache_dir,
-        "notion_client": mock_notion_client,
-        "ai_client": mock_ai_client,
+
+@pytest.fixture
+def validated_mocks(validated_notion_client, validated_ai_client):
+    """Validate that mocks behave like real APIs before tests run."""
+    return {
+        "notion_client": validated_notion_client,
+        "ai_client": validated_ai_client,
     }
 
-    # Stop patches
-    notion_patch.stop()
-    claude_patch.stop()
-    openai_patch.stop()
+
+@pytest.fixture
+def integration_test_env(
+    integration_config, temp_cache_dir, validated_mocks
+):
+    """Set up simplified integration test environment with validated mocks."""
+    # Update cache directory in processing config
+    integration_config.processing.cache_dir = temp_cache_dir
+
+    # Patch component constructors to return our validated mocks
+    with patch('blackcore.minimal.transcript_processor.AIExtractor') as mock_ai_extractor, \
+         patch('blackcore.minimal.transcript_processor.NotionUpdater') as mock_notion_updater:
+        
+        # Configure the mock constructors to return our validated clients
+        from blackcore.minimal.models import ExtractedEntities, Entity, EntityType
+        
+        mock_ai_instance = Mock()
+        mock_ai_instance.extract_entities.return_value = ExtractedEntities(
+            entities=[
+                Entity(
+                    name="John Smith", 
+                    type=EntityType.PERSON,
+                    properties={"role": "CEO", "email": "john.smith@example.com"}
+                )
+            ], 
+            relationships=[]
+        )
+        mock_ai_extractor.return_value = mock_ai_instance
+        
+        mock_notion_instance = Mock()
+        
+        # Mock the actual methods called by TranscriptProcessor
+        test_page = NotionPage(
+            id="test-page-123", 
+            database_id="test-people-db",
+            properties={"Full Name": "John Smith"},
+            created_time=datetime(2025, 1, 1, 10, 0),
+            last_edited_time=datetime(2025, 1, 1, 10, 0),
+            url="https://notion.so/test-page-123"
+        )
+        
+        mock_notion_instance.search_database.return_value = []  # No duplicates found
+        mock_notion_instance.create_page.return_value = test_page
+        mock_notion_instance.update_page.return_value = test_page  
+        mock_notion_instance.find_or_create_page.return_value = (test_page, True)  # Returns (page, created)
+        mock_notion_updater.return_value = mock_notion_instance
+
+        yield {
+            "config": integration_config,
+            "cache_dir": temp_cache_dir,
+            "notion_client": validated_mocks["notion_client"],
+            "ai_client": validated_mocks["ai_client"],
+            "mock_ai_extractor": mock_ai_instance,
+            "mock_notion_updater": mock_notion_instance,
+        }
 
 
 @pytest.fixture

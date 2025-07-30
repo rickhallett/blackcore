@@ -195,6 +195,7 @@ class ProcessingConfig(BaseModel):
 
     batch_size: int = 10
     cache_ttl: int = 3600
+    cache_dir: Optional[str] = ".cache"
     dry_run: bool = False
     verbose: bool = False
     enable_deduplication: bool = True

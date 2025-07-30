@@ -477,3 +477,8 @@ python scripts/sync/notion_sync.py --database "People & Contacts"
 ```bash
 python scripts/setup/verify_databases.py --detailed
 ```
+
+## Development Memories
+
+### Naming Conventions
+- File names should always be lower cased

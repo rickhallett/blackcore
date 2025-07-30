@@ -1,0 +1,19 @@
+{
+  "timestamp": 1753901334.9562309,
+  "value": {
+    "entities": [
+      {
+        "name": "John Smith",
+        "type": "person",
+        "properties": {
+          "role": "CEO"
+        },
+        "context": null,
+        "confidence": 1.0
+      }
+    ],
+    "relationships": [],
+    "summary": null,
+    "key_points": []
+  }
+}

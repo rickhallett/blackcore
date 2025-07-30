@@ -19,7 +19,7 @@ from blackcore.minimal.notion_updater import RateLimiter
 from blackcore.minimal.cache import SimpleCache
 from blackcore.minimal.property_handlers import PropertyHandlerFactory
 
-from ..utils import create_test_config
+from blackcore.minimal.tests.utils.test_helpers import create_test_config
 
 
 class TestLargeDataHandling:
@@ -408,7 +408,7 @@ class TestAPILimits:
         # Create content that would exceed block limit
         huge_content = "\n".join([f"Line {i}" for i in range(3000)])
 
-        handler = PropertyHandlerFactory().create_handler("text")
+        handler = PropertyHandlerFactory.create("text")
 
         # Should truncate to fit within limits
         formatted = handler.format_for_api(huge_content)

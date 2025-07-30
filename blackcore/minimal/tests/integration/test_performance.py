@@ -5,6 +5,7 @@ import threading
 import json
 from datetime import datetime
 import statistics
+from unittest.mock import Mock
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.models import TranscriptInput
@@ -200,9 +201,9 @@ class TestRateLimitingPerformance:
 
         # Mock AI to return many entities
         entities = [{"name": f"Person {i}", "type": "person"} for i in range(10)]
-        env["ai_client"].messages.create.return_value.content[0].text = json.dumps(
-            {"entities": entities, "relationships": []}
-        )
+        mock_response = Mock()
+        mock_response.content = [Mock(text=json.dumps({"entities": entities, "relationships": []}))]
+        env["ai_client"].messages.create.return_value = mock_response
 
         # Track API calls
         api_call_times = []
@@ -315,15 +316,15 @@ class TestAPICallOptimization:
         )
 
         # Mock AI to return duplicate entities
-        env["ai_client"].messages.create.return_value.content[0].text = json.dumps(
-            {
-                "entities": [
-                    {"name": "John Smith", "type": "person"},
-                    {"name": "John Smith", "type": "person"},  # Duplicate
-                ],
-                "relationships": [],
-            }
-        )
+        mock_response = Mock()
+        mock_response.content = [Mock(text=json.dumps({
+            "entities": [
+                {"name": "John Smith", "type": "person"},
+                {"name": "John Smith", "type": "person"},  # Duplicate
+            ],
+            "relationships": [],
+        }))]
+        env["ai_client"].messages.create.return_value = mock_response
 
         processor = TranscriptProcessor(config=env["config"])
         result = processor.process_transcript(transcript)

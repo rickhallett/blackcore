@@ -1,0 +1,26 @@
+{
+  "timestamp": 1753893536.986159,
+  "value": {
+    "entities": [
+      {
+        "name": "Tony Smith",
+        "type": "person",
+        "properties": {
+          "organization": "Nassau Council"
+        },
+        "context": null,
+        "confidence": 1.0
+      },
+      {
+        "name": "Nassau Council",
+        "type": "organization",
+        "properties": {},
+        "context": null,
+        "confidence": 1.0
+      }
+    ],
+    "relationships": [],
+    "summary": "Meeting discussion",
+    "key_points": []
+  }
+}

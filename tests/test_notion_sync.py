@@ -6,7 +6,7 @@ import time
 import json
 
 from blackcore.notion.client import NotionClient, RateLimiter
-from scripts.notion_sync import SyncEngine
+from scripts.sync.notion_sync import SyncEngine
 
 
 class TestPagination:
@@ -323,7 +323,7 @@ class TestSyncEngine:
         )
 
         # Mock config loading
-        with patch("scripts.notion_sync.load_config_from_file") as mock_load_config:
+        with patch("scripts.sync.notion_sync.load_config_from_file") as mock_load_config:
             mock_load_config.return_value = {
                 "People & Contacts": {"title_property": "Full Name"}
             }

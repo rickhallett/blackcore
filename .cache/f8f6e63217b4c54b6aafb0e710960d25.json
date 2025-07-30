@@ -1,0 +1,20 @@
+{
+  "timestamp": 1753894041.54446,
+  "value": {
+    "entities": [
+      {
+        "name": "Data Breach",
+        "type": "transgression",
+        "properties": {
+          "severity": "High",
+          "date": "2025-01-01"
+        },
+        "context": null,
+        "confidence": 1.0
+      }
+    ],
+    "relationships": [],
+    "summary": null,
+    "key_points": []
+  }
+}

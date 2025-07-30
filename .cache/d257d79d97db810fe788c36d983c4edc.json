@@ -1,0 +1,72 @@
+{
+  "timestamp": 1753893174.2525299,
+  "value": {
+    "entities": [
+      {
+        "name": "Sarah Johnson",
+        "type": "person",
+        "properties": {
+          "role": "VP Sales"
+        },
+        "context": null,
+        "confidence": 1.0
+      },
+      {
+        "name": "Mike Chen",
+        "type": "person",
+        "properties": {
+          "role": "Engineer"
+        },
+        "context": null,
+        "confidence": 1.0
+      },
+      {
+        "name": "TechCorp",
+        "type": "organization",
+        "properties": {
+          "type": "Startup"
+        },
+        "context": null,
+        "confidence": 1.0
+      },
+      {
+        "name": "Q4 Planning",
+        "type": "task",
+        "properties": {
+          "status": "In Progress"
+        },
+        "context": null,
+        "confidence": 1.0
+      },
+      {
+        "name": "Annual Review Meeting",
+        "type": "event",
+        "properties": {
+          "date": "2025-12-15"
+        },
+        "context": null,
+        "confidence": 1.0
+      }
+    ],
+    "relationships": [
+      {
+        "source_entity": "Sarah Johnson",
+        "source_type": "person",
+        "target_entity": "TechCorp",
+        "target_type": "organization",
+        "relationship_type": "works_for",
+        "context": null
+      },
+      {
+        "source_entity": "Mike Chen",
+        "source_type": "person",
+        "target_entity": "TechCorp",
+        "target_type": "organization",
+        "relationship_type": "works_for",
+        "context": null
+      }
+    ],
+    "summary": null,
+    "key_points": []
+  }
+}

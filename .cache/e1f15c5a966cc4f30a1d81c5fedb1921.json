@@ -1,0 +1,39 @@
+{
+  "timestamp": 1753893212.060162,
+  "value": {
+    "entities": [
+      {
+        "name": "John Smith",
+        "type": "person",
+        "properties": {
+          "role": "CEO",
+          "email": "john.smith@example.com"
+        },
+        "context": null,
+        "confidence": 1.0
+      },
+      {
+        "name": "Acme Corporation",
+        "type": "organization",
+        "properties": {
+          "type": "Technology",
+          "industry": "Software"
+        },
+        "context": null,
+        "confidence": 1.0
+      }
+    ],
+    "relationships": [
+      {
+        "source_entity": "John Smith",
+        "source_type": "person",
+        "target_entity": "Acme Corporation",
+        "target_type": "organization",
+        "relationship_type": "works_for",
+        "context": null
+      }
+    ],
+    "summary": null,
+    "key_points": []
+  }
+}

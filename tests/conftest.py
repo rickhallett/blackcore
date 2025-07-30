@@ -256,3 +256,60 @@ class MockAPIResponseError(Exception):
         self.code = code
         self.message = message
         super().__init__(message)
+
+
+@pytest.fixture
+def sample_people_data():
+    """Provide sample people data with known duplicates."""
+    return [
+        {
+            "id": "person-1",
+            "Full Name": "John Smith",
+            "Email": "john.smith@example.com",
+            "Phone": "555-0123",
+            "Organization": "Acme Corp",
+        },
+        {
+            "id": "person-2",
+            "Full Name": "John Smith",  # Exact duplicate
+            "Email": "john.smith@example.com",
+            "Phone": "555-0123",
+            "Organization": "Acme Corp",
+        },
+        {
+            "id": "person-3",
+            "Full Name": "John Doe",
+            "Email": "john.doe@example.com",
+            "Phone": "555-0456",
+            "Organization": "Beta Inc",
+        },
+        {
+            "id": "person-4",
+            "Full Name": "Jon Smith",  # Similar to John Smith
+            "Email": "j.smith@acme.com",
+            "Phone": "555-0123",
+            "Organization": "Acme Corp",
+        },
+        {
+            "id": "person-5",
+            "Full Name": "Jane Doe",
+            "Email": "jane.doe@example.com",
+            "Phone": "555-0789",
+            "Organization": "Gamma LLC",
+        },
+        {
+            "id": "person-6",
+            "Full Name": "Tony Powell",
+            "Email": ["tony.powell@example.com", "tpowell@org.com"],  # List value
+            "Phone": "555-1111",
+            "Organization": ["ABC Org", "XYZ Corp"],  # List value
+        },
+        {
+            "id": "person-7",
+            "Full Name": "Tony Powell",  # Similar with some differences
+            "Email": "tony.powell@example.com",
+            "Phone": "555-1111",
+            "Organization": "ABC Org",
+            "Title": "Director",
+        },
+    ]

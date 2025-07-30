@@ -8,7 +8,7 @@ from typing import Dict, Any, Optional
 from unittest.mock import Mock, MagicMock
 from datetime import datetime
 
-from blackcore.minimal.config import Config, NotionConfig, AIConfig, DatabaseConfig
+from blackcore.minimal.models import Config, NotionConfig, AIConfig, DatabaseConfig
 from blackcore.minimal.models import NotionPage
 
 
@@ -128,6 +128,58 @@ def cleanup_temp_dir(path: str):
     """Clean up a temporary directory."""
     if Path(path).exists():
         shutil.rmtree(path)
+
+
+class TestDataManager:
+    """Manages test data lifecycle for consistent cleanup."""
+    
+    def __init__(self, test_name: str):
+        self.test_name = test_name
+        self.created_files = []
+        self.created_dirs = []
+        
+    def create_temp_file(self, content: str = "", suffix: str = ".txt") -> str:
+        """Create a temporary file and track it for cleanup."""
+        with tempfile.NamedTemporaryFile(
+            mode='w', 
+            suffix=suffix, 
+            prefix=f"test_{self.test_name}_",
+            delete=False
+        ) as f:
+            f.write(content)
+            self.created_files.append(f.name)
+            return f.name
+    
+    def create_temp_dir(self) -> str:
+        """Create a temporary directory and track it for cleanup."""
+        temp_dir = tempfile.mkdtemp(prefix=f"test_{self.test_name}_")
+        self.created_dirs.append(temp_dir)
+        return temp_dir
+    
+    def cleanup(self):
+        """Clean up all created files and directories."""
+        for file_path in self.created_files:
+            try:
+                if Path(file_path).exists():
+                    Path(file_path).unlink()
+            except Exception:
+                pass  # Ignore cleanup errors
+                
+        for dir_path in self.created_dirs:
+            try:
+                if Path(dir_path).exists():
+                    shutil.rmtree(dir_path)
+            except Exception:
+                pass  # Ignore cleanup errors
+        
+        self.created_files.clear()
+        self.created_dirs.clear()
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.cleanup()
 
 
 class MockResponse:

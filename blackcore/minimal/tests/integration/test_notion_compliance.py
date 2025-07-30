@@ -60,7 +60,7 @@ class TestNotionAPICompliance:
 
     def test_text_content_limits(self):
         """Test handling of Notion's text content limits."""
-        handler = PropertyHandlerFactory().create_handler("text")
+        handler = PropertyHandlerFactory.create("text")
 
         # Test with content at various sizes
         small_text = "Small content"
@@ -83,7 +83,7 @@ class TestNotionAPICompliance:
         # Notion limits: max 100 properties per page
         properties = {}
 
-        handler = PropertyHandlerFactory().create_handler("text")
+        handler = PropertyHandlerFactory.create("text")
 
         # Create 100 properties (at limit)
         for i in range(100):
@@ -114,7 +114,7 @@ class TestNotionAPICompliance:
             {"results": page2_results, "has_more": False},
         ]
 
-        updater = NotionUpdater(env["notion_client"], env["config"].notion)
+        updater = NotionUpdater(env["notion_client"], env["config"].notion.rate_limit)
 
         # Query should handle pagination
         with patch.object(updater, "_search_database") as mock_search:
@@ -188,18 +188,18 @@ class TestNotionAPICompliance:
         )
 
         # Configure AI to extract entity with special chars
-        env["ai_client"].messages.create.return_value.content[0].text = json.dumps(
-            {
-                "entities": [
-                    {
-                        "name": "Café résumé €100",
-                        "type": "organization",
-                        "properties": {"description": "Company with émojis 🚀"},
-                    }
-                ],
-                "relationships": [],
-            }
-        )
+        mock_response = Mock()
+        mock_response.content = [Mock(text=json.dumps({
+            "entities": [
+                {
+                    "name": "Café résumé €100",
+                    "type": "organization",
+                    "properties": {"description": "Company with émojis 🚀"},
+                }
+            ],
+            "relationships": [],
+        }))]
+        env["ai_client"].messages.create.return_value = mock_response
 
         processor = TranscriptProcessor(config=env["config"])
         result = processor.process_transcript(transcript)
@@ -218,7 +218,7 @@ class TestNotionAPICompliance:
 
     def test_date_format_compliance(self):
         """Test date formatting for Notion API."""
-        handler = PropertyHandlerFactory().create_handler("date")
+        handler = PropertyHandlerFactory.create("date")
 
         # Test various date formats
         test_dates = [
@@ -236,7 +236,7 @@ class TestNotionAPICompliance:
 
     def test_relation_property_format(self):
         """Test relation property formatting for Notion API."""
-        handler = PropertyHandlerFactory().create_handler("relation")
+        handler = PropertyHandlerFactory.create("relation")
 
         # Single relation
         single_relation = "page_123"
@@ -254,7 +254,7 @@ class TestNotionAPICompliance:
 
     def test_select_property_validation(self):
         """Test select property validation and formatting."""
-        handler = PropertyHandlerFactory().create_handler("select")
+        handler = PropertyHandlerFactory.create("select")
 
         # Valid select options
         valid_options = ["Option 1", "Status: Active", "Priority-High"]
@@ -270,7 +270,7 @@ class TestNotionAPICompliance:
 
     def test_multi_select_property_format(self):
         """Test multi-select property formatting."""
-        handler = PropertyHandlerFactory().create_handler("multi_select")
+        handler = PropertyHandlerFactory.create("multi_select")
 
         # Test various inputs
         tags = ["Tag1", "Tag2", "Tag3"]
@@ -310,7 +310,7 @@ class TestNotionWorkspaceInteraction:
             ]
         }
 
-        updater = NotionUpdater(env["notion_client"], env["config"].notion)
+        updater = NotionUpdater(env["notion_client"], env["config"].notion.rate_limit)
 
         # Test list databases functionality
         databases = updater.list_databases()
@@ -335,7 +335,7 @@ class TestNotionWorkspaceInteraction:
             "has_more": False,
         }
 
-        updater = NotionUpdater(env["notion_client"], env["config"].notion)
+        updater = NotionUpdater(env["notion_client"], env["config"].notion.rate_limit)
 
         # Try to create duplicate
         page, created = updater.find_or_create_page(
@@ -363,7 +363,7 @@ class TestNotionWorkspaceInteraction:
 
         env["notion_client"].databases.query.side_effect = permission_error
 
-        updater = NotionUpdater(env["notion_client"], env["config"].notion)
+        updater = NotionUpdater(env["notion_client"], env["config"].notion.rate_limit)
 
         # Should handle permission error gracefully
         with pytest.raises(Exception) as exc_info:

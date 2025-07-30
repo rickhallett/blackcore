@@ -14,13 +14,13 @@ from blackcore.minimal.models import (
     Relationship,
     NotionPage,
 )
-from blackcore.minimal.config import DatabaseConfig
+from blackcore.minimal.models import DatabaseConfig
 
-from ..fixtures import (
+from blackcore.minimal.tests.fixtures.transcript_fixtures import (
     SIMPLE_TRANSCRIPT,
     BATCH_TRANSCRIPTS,
 )
-from ..utils import create_test_config
+from blackcore.minimal.tests.utils.test_helpers import create_test_config
 
 
 class TestTranscriptProcessorInit:
@@ -81,9 +81,9 @@ class TestTranscriptProcessorInit:
     def test_validate_config_warnings(self, capsys):
         """Test configuration validation warnings."""
         config = create_test_config()
-        # Remove some database IDs to trigger warnings
-        config.notion.databases["people"].id = None
-        config.notion.databases["organizations"] = DatabaseConfig(id=None, name="Orgs")
+        # Remove some databases to trigger warnings
+        del config.notion.databases["people"]
+        del config.notion.databases["organizations"]
 
         with (
             patch("blackcore.minimal.transcript_processor.AIExtractor"),

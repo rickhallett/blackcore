@@ -221,7 +221,7 @@ class NotionUpdater:
 
             pages = []
             for page_data in response.get("results", []):
-                pages.append(self._parse_notion_page(page_data))
+                pages.append(self._parse_page_response(page_data))
 
             return pages
         except Exception:
@@ -237,7 +237,7 @@ class NotionUpdater:
                 pages = []
                 query_lower = query.lower()
                 for page_data in response.get("results", []):
-                    page = self._parse_notion_page(page_data)
+                    page = self._parse_page_response(page_data)
                     # Check if query matches any text property
                     for prop_value in page.properties.values():
                         if (

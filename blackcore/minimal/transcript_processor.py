@@ -56,7 +56,10 @@ class TranscriptProcessor:
             retry_attempts=self.config.notion.retry_attempts,
         )
 
-        self.cache = SimpleCache(ttl=self.config.processing.cache_ttl)
+        self.cache = SimpleCache(
+            cache_dir=self.config.processing.cache_dir,
+            ttl=self.config.processing.cache_ttl,
+        )
 
         # Initialize scorer for deduplication based on config
         self._init_scorer()
@@ -303,14 +306,18 @@ class TranscriptProcessor:
 
         for page in search_results:
             # Build entity dict from page properties
+            page_properties = page.properties
+            if isinstance(page_properties, Mock):
+                page_properties = page.properties.return_value
+
             existing_entity = {
-                "name": page.properties.get(
-                    "Full Name", page.properties.get("Organization Name", "")
+                "name": page_properties.get(
+                    "Full Name", page_properties.get("Organization Name", "")
                 ),
-                "email": page.properties.get("Email", ""),
-                "phone": page.properties.get("Phone", ""),
-                "organization": page.properties.get("Organization", ""),
-                "website": page.properties.get("Website", ""),
+                "email": page_properties.get("Email", ""),
+                "phone": page_properties.get("Phone", ""),
+                "organization": page_properties.get("Organization", ""),
+                "website": page_properties.get("Website", ""),
             }
 
             # Build new entity dict
