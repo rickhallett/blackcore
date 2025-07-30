@@ -49,7 +49,7 @@ class TestClaudeProvider:
             yield mock_client
     
     @pytest.fixture
-    async def claude_provider(self, mock_anthropic):
+    def claude_provider(self, mock_anthropic):
         """Create Claude provider instance."""
         from blackcore.intelligence.llm.providers import ClaudeProvider
         return ClaudeProvider(api_key="test-key", model="claude-3-opus-20240229")
@@ -170,7 +170,7 @@ class TestOpenAIProvider:
             yield mock_client
     
     @pytest.fixture
-    async def openai_provider(self, mock_openai):
+    def openai_provider(self, mock_openai):
         """Create OpenAI provider instance."""
         from blackcore.intelligence.llm.providers import OpenAIProvider
         return OpenAIProvider(api_key="test-key", model="gpt-4")
@@ -231,15 +231,15 @@ class TestOpenAIProvider:
     async def test_openai_complete_with_functions(self, openai_provider, mock_openai):
         """Test OpenAI native function calling."""
         # Setup mock response with function call
+        mock_function_call = Mock()
+        mock_function_call.name = "get_weather"
+        mock_function_call.arguments = '{"location": "New York"}'
+        
+        mock_message = Mock()
+        mock_message.function_call = mock_function_call
+        
         mock_response = Mock()
-        mock_response.choices = [Mock(
-            message=Mock(
-                function_call=Mock(
-                    name="get_weather",
-                    arguments='{"location": "New York"}'
-                )
-            )
-        )]
+        mock_response.choices = [Mock(message=mock_message)]
         mock_openai.chat.completions.create = AsyncMock(return_value=mock_response)
         
         functions = [{
@@ -282,11 +282,11 @@ class TestLiteLLMProvider:
     @pytest.fixture
     def mock_litellm(self):
         """Mock litellm module."""
-        with patch('blackcore.intelligence.llm.providers.acompletion') as mock_acomp:
+        with patch('blackcore.intelligence.llm.providers.acompletion', new_callable=AsyncMock) as mock_acomp:
             yield mock_acomp
     
     @pytest.fixture
-    async def litellm_provider(self):
+    def litellm_provider(self):
         """Create LiteLLM provider instance."""
         from blackcore.intelligence.llm.providers import LiteLLMProvider
         return LiteLLMProvider(model="gpt-3.5-turbo", api_base="http://localhost:8000")
@@ -377,15 +377,18 @@ class TestProviderErrorHandling:
     """Tests for provider error handling."""
     
     @pytest.fixture
-    async def failing_provider(self):
+    def failing_provider(self):
         """Create a provider that fails."""
         from blackcore.intelligence.llm.providers import ClaudeProvider
-        provider = ClaudeProvider(api_key="test-key")
-        # Mock to raise exception
-        provider.client.messages.create = AsyncMock(
-            side_effect=Exception("API Error")
-        )
-        return provider
+        with patch('blackcore.intelligence.llm.providers.anthropic') as mock:
+            mock_client = AsyncMock()
+            mock.AsyncAnthropic.return_value = mock_client
+            provider = ClaudeProvider(api_key="test-key")
+            # Mock to raise exception
+            provider.client.messages.create = AsyncMock(
+                side_effect=Exception("API Error")
+            )
+            return provider
     
     async def test_completion_error_handling(self, failing_provider):
         """Test error handling in completion."""
@@ -397,20 +400,25 @@ class TestProviderErrorHandling:
         """Test retry logic for transient errors."""
         from blackcore.intelligence.llm.providers import ClaudeProvider
         
-        provider = ClaudeProvider(api_key="test-key")
-        
-        # Mock to fail twice then succeed
-        call_count = 0
-        async def mock_create(*args, **kwargs):
-            nonlocal call_count
-            call_count += 1
-            if call_count < 3:
-                raise Exception("Transient error")
-            return Mock(content=[Mock(text="Success")])
-        
-        provider.client.messages.create = mock_create
-        
-        # Should succeed after retries
-        result = await provider.complete("Test", max_retries=3)
-        assert result == "Success"
-        assert call_count == 3
+        with patch('blackcore.intelligence.llm.providers.anthropic') as mock:
+            mock_client = AsyncMock()
+            mock.AsyncAnthropic.return_value = mock_client
+            
+            provider = ClaudeProvider(api_key="test-key")
+            provider.max_retries = 3  # Set max retries
+            
+            # Mock to fail twice then succeed
+            call_count = 0
+            async def mock_create(*args, **kwargs):
+                nonlocal call_count
+                call_count += 1
+                if call_count < 3:
+                    raise Exception("Transient error")
+                return Mock(content=[Mock(text="Success")])
+            
+            provider.client.messages.create = mock_create
+            
+            # Should succeed after retries
+            result = await provider.complete("Test")
+            assert result == "Success"
+            assert call_count == 3
