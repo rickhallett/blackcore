@@ -47,6 +47,17 @@ This codebase is built to:
 *   **Response Validation:** Pydantic models for type-safe API responses
 *   **Pagination Support:** Automatic handling of large result sets
 
+### The Minimal Module (MVP)
+The `blackcore.minimal` module represents the current MVP implementation focused on core intelligence processing:
+
+*   **Transcript Processing:** Ingests audio/text transcripts and extracts structured data
+*   **Entity Identification:** Automatically identifies new unique database entries (People, Organizations, Places, Core Documents, etc.)
+*   **Workspace Synchronization:** Maintains a local mapping of the current Notion workspace for efficient querying
+*   **Relationship Management:** Identifies and creates schema-defined relationships (e.g., "Gary Suttle" as member of "Swanage Town Council")
+*   **Bidirectional Sync:** Supports both Notion-to-JSON and JSON-to-Notion synchronization
+*   **Query Engine Foundation:** Developing a comprehensive query system to retrieve blocks of information for intelligence creation
+*   **Intelligence Pipeline Architecture:** Designed to support configurable data analysis pipelines with structured prompt templates
+
 ## 4. The Intelligence Workflow
 
 The workflow enabled by Blackcore is designed to be a continuous, cyclical process:
@@ -57,6 +68,23 @@ The workflow enabled by Blackcore is designed to be a continuous, cyclical proce
 4.  **Enrich:** The AI's output is then programmatically written back into Notion, enriching our knowledge graph with new insights, summaries, and actionable tasks.
 
 This loop ensures we are constantly refining our intelligence and adapting our strategy based on the most current information available.
+
+### Intelligence Engine Vision
+
+The Minimal module is evolving into a comprehensive intelligence engine that automates much of the repetitive prompt engineering work:
+
+*   **Automated Analysis Pipelines:** Eliminating manual Chain of Experts, LLM vs LLM, and multishot prompting through configurable pipelines
+*   **Structured Prompt Templates:** Different types of data analysis with structure defined in reusable templates
+*   **Pipeline Configuration:** Preconfigured pipelines specified in config files that define:
+    - Which prompts are called
+    - What information is provided to each prompt
+    - The sequence and timing of prompt execution
+*   **Custom Pipeline Support:** Ability to create ad-hoc pipelines for specific analysis needs
+*   **Intelligence Products:** Automated generation of:
+    - Important changes over time reports
+    - Undiscovered data relationship analysis
+    - Document production workflows
+    - Strategic intelligence briefings
 
 ## 5. Installation & Setup
 
@@ -76,10 +104,14 @@ uv sync  # or: pip install -e .
 # Set up environment variables
 cp .env.example .env
 # Edit .env with your API keys:
+# - BLACKCORE_MASTER_KEY (REQUIRED - see security docs)
 # - NOTION_API_KEY
 # - NOTION_PARENT_PAGE_ID
 # - ANTHROPIC_API_KEY (optional)
 # - GOOGLE_API_KEY (optional)
+
+# Generate secure master key
+python scripts/generate_master_key.py --save
 
 # Run tests to verify installation
 pytest
@@ -92,6 +124,21 @@ python scripts/setup_databases.py
 
 # Verify configuration
 python scripts/verify_databases.py
+```
+
+### Minimal Module Quick Start
+```bash
+# Process a single transcript
+python -m blackcore.minimal process transcript.json
+
+# Batch process transcripts
+python -m blackcore.minimal process-batch ./transcripts/
+
+# Sync JSON data to Notion
+python -m blackcore.minimal sync-json
+
+# Run in dry-run mode to preview changes
+python -m blackcore.minimal process transcript.json --dry-run
 ```
 
 ## 6. Development
@@ -136,11 +183,34 @@ ruff check --fix .
 - Repository pattern with full CRUD support
 - 112/112 tests passing
 
+### Minimal Module (MVP) Status
+- **Transcript Processing:** Fully functional with JSON/text support
+- **Entity Extraction:** Working with Claude and OpenAI APIs
+- **Notion Integration:** All property types supported
+- **Relationship Management:** One-way relationships implemented
+- **JSON Sync:** Bidirectional sync operational
+- **Test Coverage:** 90%+ coverage achieved
+- **CLI Interface:** Complete with batch processing
+
+### Query Engine (In Development)
+- **Workspace Mapping:** Local JSON cache of all Notion data
+- **Query Interface:** Foundation for retrieving information blocks
+- **Relationship Traversal:** Navigate connected entities
+- **Data Aggregation:** Combine related information for analysis
+
+### Intelligence Pipeline (Planned)
+- **Prompt Template System:** Structured templates for different analyses
+- **Pipeline Configuration:** YAML/JSON-based pipeline definitions
+- **Execution Engine:** Sequential and parallel prompt execution
+- **Result Aggregation:** Combine outputs from multiple prompts
+- **Custom Pipelines:** User-defined analysis workflows
+
 ### Next Steps (Phase 1)
-- Implement ingestion engine for Google Drive
-- Add AI integration layer (Claude/Gemini)
-- Build relational linking system
-- Create automated reporting modules
+- Complete query engine implementation
+- Build intelligence pipeline infrastructure
+- Create preconfigured analysis pipelines
+- Implement temporal analysis capabilities
+- Add document generation workflows
 
 ## 8. Security Considerations
 

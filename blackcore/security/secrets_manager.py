@@ -34,11 +34,46 @@ class SecretsManager:
         key_file.parent.mkdir(exist_ok=True, mode=0o700, parents=True)
 
         if key_file.exists():
-            with open(key_file, "rb") as f:
-                return f.read()
+            try:
+                # Try to read as JSON (new format)
+                with open(key_file, "r") as f:
+                    key_data = json.load(f)
+                    if isinstance(key_data, dict) and "key" in key_data:
+                        return key_data["key"].encode()
+                    else:
+                        # Invalid format, regenerate
+                        os.remove(key_file)
+            except (json.JSONDecodeError, KeyError):
+                # Try to read as raw bytes (old format)
+                try:
+                    with open(key_file, "rb") as f:
+                        key_bytes = f.read()
+                        # Validate it's a valid Fernet key
+                        if len(key_bytes) == 44:  # Base64 encoded 32-byte key
+                            return key_bytes
+                        else:
+                            # Invalid key, regenerate
+                            os.remove(key_file)
+                except Exception:
+                    # Any error, remove and regenerate
+                    os.remove(key_file)
         else:
             # Generate a new key
-            password = os.getenv("BLACKCORE_MASTER_KEY", "default-dev-key").encode()
+            password = os.getenv("BLACKCORE_MASTER_KEY")
+            if not password:
+                raise ValueError(
+                    "BLACKCORE_MASTER_KEY environment variable must be set. "
+                    "Generate a secure key using: python -c \"import secrets; print(secrets.token_urlsafe(32))\""
+                )
+            
+            # Validate key strength (minimum 16 characters)
+            if len(password) < 16:
+                raise ValueError(
+                    "BLACKCORE_MASTER_KEY must be at least 16 characters long for security. "
+                    "Current length: {}".format(len(password))
+                )
+            
+            password_bytes = password.encode()
             salt = os.urandom(16)
             kdf = PBKDF2HMAC(
                 algorithm=hashes.SHA256(),
@@ -46,14 +81,22 @@ class SecretsManager:
                 salt=salt,
                 iterations=100000,
             )
-            key = base64.urlsafe_b64encode(kdf.derive(password))
+            key = base64.urlsafe_b64encode(kdf.derive(password_bytes))
 
+            # Save salt with key for future derivation
+            key_data = {
+                "salt": base64.b64encode(salt).decode(),
+                "key": key.decode(),
+                "version": 1,
+                "created": datetime.utcnow().isoformat()
+            }
+            
             # Save key securely
-            with open(key_file, "wb") as f:
-                f.write(key)
+            with open(key_file, "w") as f:
+                json.dump(key_data, f)
             os.chmod(key_file, 0o600)
 
-            return key
+            return key.encode()
 
     def get_secret(self, key: str, version: str = "latest") -> str:
         """Retrieve a secret value.

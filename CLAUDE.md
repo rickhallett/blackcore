@@ -19,6 +19,10 @@ pip install -e .
 # Set up environment variables
 cp .env.example .env
 # Edit .env with required API keys
+
+# Generate secure master key (REQUIRED)
+python scripts/generate_master_key.py
+# Or manually: python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
 ### Testing
@@ -43,6 +47,14 @@ pytest -k "test_pattern"
 
 # Run async tests (automatically handled by pytest-asyncio)
 pytest tests/test_async.py
+
+# Run minimal module tests
+cd blackcore/minimal && make test
+# Or specific minimal tests:
+make test-unit
+make test-integration
+make test-coverage
+make test-performance
 ```
 
 ### Code Quality
@@ -58,39 +70,71 @@ ruff check --fix .
 
 # Check specific files/directories
 ruff check blackcore/security/
+
+# Lint and format in one command
+ruff format . && ruff check --fix .
 ```
 
 ### Main Scripts
+
+#### Database Management
 ```bash
 # Initialize Notion databases
-python scripts/setup_databases.py
+python scripts/setup/setup_databases.py
 # Or using uv script alias:
 uv run setup-databases
 
 # Verify database configuration
-python scripts/verify_databases.py
+python scripts/setup/verify_databases.py
 # Or:
 uv run verify-databases
 
+# Discover and configure Notion workspace
+python scripts/setup/discover_and_configure.py
+```
+
+#### Data Processing
+```bash
 # Process new intelligence
 python scripts/process_intelligence.py
 # Or:
 uv run process-intelligence
 
-# Discover and configure Notion workspace
-python scripts/discover_and_configure.py
-
-# Sync data between local JSON and Notion
-python scripts/notion_sync.py
+# Ingest new intelligence data
+python scripts/data_processing/ingest_intelligence.py
 
 # Analyze database relationships
-python scripts/analyse_relations.py
-
-# Ingest new intelligence data
-python scripts/ingest_intelligence.py
+python scripts/data_processing/analyse_relations.py
 
 # Run minimal transcript processor
 python -m blackcore.minimal
+```
+
+#### Synchronization
+```bash
+# Sync data between local JSON and Notion
+python scripts/sync/notion_sync.py
+
+# Production sync with staging
+python scripts/sync/sync_production_staged.py
+
+# Verify sync completion
+python scripts/sync/verify_sync_completion.py
+```
+
+#### Deduplication
+```bash
+# Run interactive deduplication CLI
+python scripts/deduplication/dedupe_cli.py
+
+# Or use the launcher script:
+./scripts/utilities/run_interactive_dedupe.sh
+
+# Run with specific mode
+python scripts/deduplication/dedupe_cli.py --mode standard
+
+# Test deduplication system
+python scripts/deduplication/test_deduplication_system.py
 ```
 
 ## Architecture
@@ -133,6 +177,13 @@ python -m blackcore.minimal
    - Configurable limits per endpoint
    - Automatic backoff handling
 
+8. **Deduplication System** (`blackcore/deduplication/`)
+   - Interactive CLI with multiple modes (simple, standard, expert)
+   - AI-powered similarity scoring with LLM analysis
+   - Graph-based relationship analysis
+   - Audit system with SQLite persistence
+   - Real-time progress tracking and match review
+
 ### Database Schema
 
 The system manages 14 interconnected Notion databases:
@@ -167,12 +218,14 @@ A self-contained transcript processing implementation at `blackcore/minimal/`:
 ### Environment Variables
 
 Required in `.env`:
+- `BLACKCORE_MASTER_KEY` - **REQUIRED**: Master encryption key (see [Security Configuration Guide](docs/security-configuration.md))
 - `NOTION_API_KEY` - Notion integration token
 - `NOTION_PARENT_PAGE_ID` - Parent page for database creation
 - `ANTHROPIC_API_KEY` - Claude API key (optional)
 - `GOOGLE_API_KEY` - Gemini API key (optional)
 - `GOOGLE_DRIVE_FOLDER_ID` - Source folder for intelligence data
 - `OPENAI_API_KEY` - OpenAI API key (optional)
+- `REDIS_URL` - Redis connection for distributed rate limiting (optional)
 
 ### Key Architectural Patterns
 
@@ -203,6 +256,12 @@ Each Notion property type has a dedicated handler:
 - **Mock Strategy**: Notion client mocking to avoid API calls
 - **Performance Tests**: Scalability testing included
 - **Coverage Target**: 94%+ for critical paths
+- **Test Categories**:
+  - Unit tests: `tests/test_*.py`
+  - Integration tests: `tests/integration/`
+  - Performance tests: `tests/performance/`
+  - Regression tests: `tests/regression/`
+  - Workflow tests: `tests/workflows/`
 
 ### Current Development Phase
 
@@ -318,5 +377,103 @@ facts = await mcp__graphiti__search_facts(
 )
 ```
 
-Development Rules
-- ALWAYS QQQ   Q  Q  
+## Deduplication CLI
+
+The deduplication system provides an interactive CLI for identifying and merging duplicate records:
+
+### Quick Start
+```bash
+# Run interactive CLI
+python scripts/deduplication/dedupe_cli.py
+
+# The CLI will guide you through:
+# 1. Database selection
+# 2. Threshold configuration (auto-merge: 90%, review: 70%)
+# 3. AI settings (optional but recommended)
+# 4. Analysis and review of matches
+```
+
+### Features
+- **Safety Mode**: No automatic changes without approval
+- **AI-Powered**: Optional LLM analysis for complex matches
+- **Graph Analysis**: Understands relationships between entities
+- **Audit Trail**: SQLite database tracks all operations
+- **Interactive Review**: Approve/reject each match
+
+### Deduplication Workflow
+1. Select databases to analyze
+2. Configure similarity thresholds
+3. Run analysis (with optional AI enhancement)
+4. Review proposed matches
+5. Execute approved merges
+
+## Debugging Scripts
+
+Located in `scripts/debug/`:
+- `debug_database_loading.py` - Troubleshoot database connection issues
+- `debug_property_formatting.py` - Analyze property formatting problems
+- `fix_property_formatting.py` - Repair property formatting issues
+
+## Data Remediation
+
+Tools for data cleanup and migration in `scripts/data_processing/`:
+- `data_remediation.py` - Fix data inconsistencies
+- `export_complete_notion.py` - Export all Notion data to JSON
+
+## Project File Locations
+
+- **Configuration**: `blackcore/config/notion_config.json`
+- **Local Data**: `blackcore/models/json/` (database JSON files)
+- **Test Data**: `testing/exports/`
+- **Logs**: `logs/` (sync reports, debug logs)
+- **Documentation**: `docs/` and `specs/`
+- **Scripts**: `scripts/` (organized by function)
+
+## Development Patterns
+
+### Adding New Features
+1. Create feature branch: `git checkout -b feature/your-feature`
+2. Write tests first (TDD approach)
+3. Implement feature
+4. Ensure all tests pass
+5. Run linting and formatting
+6. Create PR to main branch
+
+### Working with Notion Properties
+1. Check existing handlers in `blackcore/handlers/`
+2. Use property mappings from `blackcore/minimal/property_mappings.json`
+3. Test with real Notion data using integration tests
+
+### Async Operations
+- Use `asyncio` for concurrent Notion API calls
+- Implement proper rate limiting
+- Handle network errors with retries
+
+## Common Development Tasks
+
+### Running a Single Test
+```bash
+pytest tests/test_specific.py::test_function_name -v
+```
+
+### Checking Test Coverage for a Module
+```bash
+pytest tests/test_module.py --cov=blackcore.module --cov-report=term-missing
+```
+
+### Running Deduplication Without AI
+```bash
+# Set empty API key to disable AI
+ANTHROPIC_API_KEY="" python scripts/deduplication/dedupe_cli.py
+```
+
+### Syncing Specific Database
+```bash
+# Use the sync scripts with database filtering
+python scripts/sync/notion_sync.py --database "People & Contacts"
+```
+
+### Validating Database Schema
+```bash
+python scripts/setup/verify_databases.py --detailed
+```

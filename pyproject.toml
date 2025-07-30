@@ -19,6 +19,7 @@ dependencies = [
     "openai>=1.97.1",
     "pyttsx3>=2.99",
     "elevenlabs>=2.8.1",
+    "pytest>=8.4.1",
 ]
 
 [project.optional-dependencies]
