@@ -95,6 +95,13 @@ Format as JSON."""
             "verbose": False,
             "enable_deduplication": True,
             "deduplication_threshold": 90.0,
+            "deduplication_scorer": "simple",  # Use "llm" for Claude-based scoring
+            "llm_scorer_config": {
+                "model": "claude-3-5-haiku-20241022",
+                "temperature": 0.1,
+                "cache_ttl": 3600,
+                "batch_size": 5
+            }
         },
     }
 
