@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "features": {
+    "pre_commit_validation": {
+      "enabled": true,
+      "run_tests": true,
+      "run_linting": true,
+      "run_type_check": true,
+      "run_security_scan": true,
+      "block_on_failure": true
+    },
+    "code_review": {
+      "enabled": true,
+      "auto_review_threshold": 50,
+      "use_zen_mcp": true,
+      "review_model": "gemini-2.5-pro"
+    },
+    "auto_documentation": {
+      "enabled": true,
+      "update_on_save": true,
+      "generate_tests": true
+    },
+    "git_workflows": {
+      "enabled": true,
+      "auto_stage_fixes": true,
+      "commit_message_template": true,
+      "pr_description_ai": true
+    },
+    "performance_monitoring": {
+      "enabled": false,
+      "profile_on_request": true,
+      "alert_threshold_ms": 1000
+    },
+    "security_scanning": {
+      "enabled": true,
+      "scan_dependencies": true,
+      "check_secrets": true,
+      "owasp_checks": true
+    },
+    "task_management": {
+      "enabled": true,
+      "auto_create_todos": true,
+      "track_progress": true
+    },
+    "debug_assistance": {
+      "enabled": true,
+      "auto_trace_errors": true,
+      "suggest_fixes": true
+    },
+    "refactoring": {
+      "enabled": true,
+      "suggest_improvements": true,
+      "auto_apply_safe": false
+    },
+    "testing": {
+      "enabled": true,
+      "generate_edge_cases": true,
+      "coverage_target": 80
+    }
+  },
+  "zen_mcp": {
+    "server_url": "http://localhost:3000",
+    "api_key": "${ZEN_MCP_API_KEY}",
+    "timeout": 30000,
+    "models": {
+      "fast": "gemini-2.5-flash",
+      "balanced": "gemini-2.5-pro",
+      "powerful": "o3"
+    }
+  },
+  "hooks": {
+    "pre_tool_use": {
+      "bash": ["validate_command", "check_permissions"],
+      "edit": ["backup_file", "validate_syntax"],
+      "write": ["check_overwrite", "validate_path"]
+    },
+    "post_tool_use": {
+      "edit": ["run_formatter", "update_tests"],
+      "write": ["add_to_git", "update_docs"]
+    },
+    "session_hooks": {
+      "start": ["load_context", "check_dependencies"],
+      "end": ["save_learnings", "update_claude_md"]
+    }
+  },
+  "custom_commands": {
+    "prefix": "/",
+    "commands": [
+      "review",
+      "test",
+      "refactor",
+      "security",
+      "performance",
+      "debug",
+      "document",
+      "commit",
+      "pr",
+      "deploy"
+    ]
+  },
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "file": ".claude/logs/hooks.log",
+    "rotate": true,
+    "max_size_mb": 10
+  }
+}
