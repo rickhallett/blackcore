@@ -4,7 +4,7 @@ import os
 import json
 from pathlib import Path
 from typing import Optional, Dict, Any
-from .models import Config, NotionConfig, AIConfig, ProcessingConfig, DatabaseConfig
+from .models import Config
 
 
 class ConfigManager:
@@ -88,7 +88,14 @@ Also provide:
 
 Format as JSON."""
         },
-        "processing": {"batch_size": 10, "cache_ttl": 3600, "dry_run": False, "verbose": False},
+        "processing": {
+            "batch_size": 10,
+            "cache_ttl": 3600,
+            "dry_run": False,
+            "verbose": False,
+            "enable_deduplication": True,
+            "deduplication_threshold": 90.0,
+        },
     }
 
     def __init__(self, config_path: Optional[str] = None):

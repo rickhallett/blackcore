@@ -3,8 +3,6 @@
 import sys
 import json
 import argparse
-from pathlib import Path
-from typing import Optional
 
 from .transcript_processor import TranscriptProcessor
 from .config import ConfigManager
@@ -15,7 +13,6 @@ from .utils import (
     create_sample_transcript,
     create_sample_config,
 )
-from .models import TranscriptInput
 
 
 def process_single_transcript(args):
@@ -81,7 +78,7 @@ def process_batch(args):
     batch_result = processor.process_batch(transcripts)
 
     # Print summary
-    print(f"\n✅ Batch processing complete:")
+    print("\n✅ Batch processing complete:")
     print(f"   Success rate: {batch_result.success_rate:.1%}")
     print(f"   Time: {batch_result.processing_time:.2f}s" if batch_result.processing_time else "")
 
@@ -172,7 +169,7 @@ def sync_json(args):
 
     # Print summary
     if result.success:
-        print(f"\n✅ Sync completed successfully!")
+        print("\n✅ Sync completed successfully!")
         print(f"   Created: {result.created_count} pages")
         print(f"   Updated: {result.updated_count} pages")
         print(f"   Skipped: {result.skipped_count} pages")
@@ -212,8 +209,10 @@ Examples:
 
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
-    # Process single transcript
-    process_parser = subparsers.add_parser("process", help="Process a single transcript")
+    # Process single transcript (with sync-transcript alias for MVP)
+    process_parser = subparsers.add_parser(
+        "process", aliases=["sync-transcript"], help="Process a single transcript"
+    )
     process_parser.add_argument("transcript", help="Path to transcript file (JSON or text)")
     process_parser.add_argument("-c", "--config", help="Path to configuration file")
     process_parser.add_argument("-o", "--output", help="Save results to file")
@@ -250,7 +249,9 @@ Examples:
     cache_parser.add_argument("--clear", action="store_true", help="Clear all cache")
 
     # JSON sync
-    sync_parser = subparsers.add_parser("sync-json", help="Sync local JSON files to Notion databases")
+    sync_parser = subparsers.add_parser(
+        "sync-json", help="Sync local JSON files to Notion databases"
+    )
     sync_parser.add_argument("-c", "--config", help="Path to configuration file")
     sync_parser.add_argument("-d", "--database", help="Specific database to sync (default: all)")
     sync_parser.add_argument(
@@ -267,7 +268,7 @@ Examples:
 
     # Execute command
     try:
-        if args.command == "process":
+        if args.command in ["process", "sync-transcript"]:
             return process_single_transcript(args)
         elif args.command == "process-batch":
             return process_batch(args)

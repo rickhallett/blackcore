@@ -1,9 +1,8 @@
 """Main orchestrator for transcript processing pipeline."""
 
 import time
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 from datetime import datetime
-from pathlib import Path
 
 from .models import (
     TranscriptInput,
@@ -18,6 +17,8 @@ from .config import ConfigManager, Config
 from .ai_extractor import AIExtractor
 from .notion_updater import NotionUpdater
 from .cache import SimpleCache
+from .simple_scorer import SimpleScorer
+from .llm_scorer import LLMScorer, LLMScorerWithFallback
 
 
 class TranscriptProcessor:
@@ -55,8 +56,49 @@ class TranscriptProcessor:
 
         self.cache = SimpleCache(ttl=self.config.processing.cache_ttl)
 
+        # Initialize scorer for deduplication based on config
+        self._init_scorer()
+
         # Track database schemas
         self._schemas: Dict[str, Dict[str, str]] = {}
+    
+    def _init_scorer(self):
+        """Initialize the appropriate scorer based on configuration."""
+        scorer_type = getattr(self.config.processing, "deduplication_scorer", "simple")
+        
+        if scorer_type == "llm":
+            # Use LLM scorer with fallback
+            try:
+                # Get LLM config
+                llm_config = getattr(self.config.processing, "llm_scorer_config", {})
+                model = llm_config.get("model", "claude-3-5-haiku-20241022")
+                temperature = llm_config.get("temperature", 0.1)
+                cache_ttl = llm_config.get("cache_ttl", 3600)
+                
+                # Create simple scorer as fallback
+                simple_scorer = SimpleScorer()
+                
+                # Create LLM scorer with fallback
+                self.scorer = LLMScorerWithFallback(
+                    api_key=self.config.ai.api_key,
+                    model=model,
+                    temperature=temperature,
+                    cache_ttl=cache_ttl,
+                    fallback_scorer=simple_scorer
+                )
+                
+                if self.config.processing.verbose:
+                    print("Using LLM scorer (Claude 3.5 Haiku) with simple scorer fallback")
+                    
+            except Exception as e:
+                print(f"Failed to initialize LLM scorer: {e}")
+                print("Falling back to simple scorer")
+                self.scorer = SimpleScorer()
+        else:
+            # Use simple scorer
+            self.scorer = SimpleScorer()
+            if self.config.processing.verbose:
+                print("Using simple rule-based scorer")
 
     def process_transcript(self, transcript: TranscriptInput) -> ProcessingResult:
         """Process a single transcript through the entire pipeline.
@@ -70,6 +112,9 @@ class TranscriptProcessor:
         start_time = time.time()
         result = ProcessingResult()
 
+        # Store transcript title for context
+        self._current_transcript_title = transcript.title
+        
         try:
             # Step 1: Extract entities using AI
             if self.config.processing.verbose:
@@ -215,12 +260,144 @@ class TranscriptProcessor:
 
         return extracted
 
+    def _find_existing_entity(
+        self, entity: Entity, database_id: str, entity_type: str
+    ) -> Optional[NotionPage]:
+        """Find an existing entity with high confidence match.
+
+        Args:
+            entity: Entity to match
+            database_id: Database to search
+            entity_type: Type of entity (person, organization)
+
+        Returns:
+            Existing NotionPage if high-confidence match found, None otherwise
+        """
+        # Get deduplication threshold from config, default to 90.0
+        threshold = getattr(self.config.processing, "deduplication_threshold", 90.0)
+
+        # Search for potential matches by name
+        search_results = self.notion_updater.search_database(
+            database_id=database_id,
+            query=entity.name,
+            limit=10,  # Check top 10 potential matches
+        )
+
+        if not search_results:
+            return None
+
+        # Score each potential match
+        best_match = None
+        best_score = 0.0
+        best_reason = ""
+
+        for page in search_results:
+            # Build entity dict from page properties
+            existing_entity = {
+                "name": page.properties.get(
+                    "Full Name", page.properties.get("Organization Name", "")
+                ),
+                "email": page.properties.get("Email", ""),
+                "phone": page.properties.get("Phone", ""),
+                "organization": page.properties.get("Organization", ""),
+                "website": page.properties.get("Website", ""),
+            }
+
+            # Build new entity dict
+            new_entity = {
+                "name": entity.name,
+                "email": entity.properties.get("email", ""),
+                "phone": entity.properties.get("phone", ""),
+                "organization": entity.properties.get("organization", ""),
+                "website": entity.properties.get("website", ""),
+            }
+
+            # Calculate similarity score
+            # Check if scorer supports context (LLM scorer)
+            if hasattr(self.scorer, 'score_entities') and 'context' in self.scorer.score_entities.__code__.co_varnames:
+                # LLM scorer with context
+                score_result = self.scorer.score_entities(
+                    existing_entity, new_entity, entity_type,
+                    context={
+                        "source_documents": [f"Transcript: {getattr(self, '_current_transcript_title', 'Unknown')}"]
+                    }
+                )
+                # Handle both tuple formats
+                if len(score_result) == 3:
+                    score, reason, _ = score_result
+                else:
+                    score, reason = score_result
+            else:
+                # Simple scorer
+                score, reason = self.scorer.score_entities(existing_entity, new_entity, entity_type)
+
+            if score > best_score:
+                best_score = score
+                best_match = page
+                best_reason = reason
+
+        # Return match if above threshold
+        if best_score >= threshold:
+            if self.config.processing.verbose:
+                print(
+                    f"  Found duplicate: '{entity.name}' matches existing entity (score: {best_score:.1f}, reason: {best_reason})"
+                )
+            return best_match
+
+        return None
+
     def _process_person(self, person: Entity) -> Tuple[Optional[NotionPage], bool]:
         """Process a person entity."""
         db_config = self.config.notion.databases.get("people")
         if not db_config or not db_config.id:
             return None, False
 
+        # Check for existing entity with deduplication
+        if getattr(self.config.processing, "enable_deduplication", True):
+            existing = self._find_existing_entity(person, db_config.id, "person")
+            if existing:
+                # Update existing entity
+                properties = {}
+
+                # Only update properties that have values
+                if "role" in person.properties and person.properties["role"]:
+                    properties[db_config.mappings.get("role", "Role")] = person.properties["role"]
+
+                if "organization" in person.properties and person.properties["organization"]:
+                    properties[db_config.mappings.get("organization", "Organization")] = (
+                        person.properties["organization"]
+                    )
+
+                if "email" in person.properties and person.properties["email"]:
+                    properties[db_config.mappings.get("email", "Email")] = person.properties[
+                        "email"
+                    ]
+
+                if "phone" in person.properties and person.properties["phone"]:
+                    properties[db_config.mappings.get("phone", "Phone")] = person.properties[
+                        "phone"
+                    ]
+
+                if person.context:
+                    # Append context to existing notes
+                    existing_notes = existing.properties.get(
+                        db_config.mappings.get("notes", "Notes"), ""
+                    )
+                    if existing_notes:
+                        properties[db_config.mappings.get("notes", "Notes")] = (
+                            f"{existing_notes}\n\n{person.context}"
+                        )
+                    else:
+                        properties[db_config.mappings.get("notes", "Notes")] = person.context
+
+                # Update if we have new properties
+                if properties:
+                    updated_page = self.notion_updater.update_page(existing.id, properties)
+                    return updated_page, False  # False = not created, was updated
+                else:
+                    return existing, False  # No updates needed
+
+        # No existing entity found or deduplication disabled - create new
         properties = {db_config.mappings.get("name", "Full Name"): person.name}
 
         # Add additional properties
@@ -241,12 +418,9 @@ class TranscriptProcessor:
         if person.context:
             properties[db_config.mappings.get("notes", "Notes")] = person.context
 
-        # Find or create
-        return self.notion_updater.find_or_create_page(
-            database_id=db_config.id,
-            properties=properties,
-            match_property=db_config.mappings.get("name", "Full Name"),
-        )
+        # Create new page
+        page = self.notion_updater.create_page(db_config.id, properties)
+        return page, True  # True = created new
 
     def _process_organization(self, org: Entity) -> Tuple[Optional[NotionPage], bool]:
         """Process an organization entity."""
@@ -254,6 +428,44 @@ class TranscriptProcessor:
         if not db_config or not db_config.id:
             return None, False
 
+        # Check for existing entity with deduplication
+        if getattr(self.config.processing, "enable_deduplication", True):
+            existing = self._find_existing_entity(org, db_config.id, "organization")
+            if existing:
+                # Update existing entity
+                properties = {}
+
+                # Only update properties that have values
+                if "category" in org.properties and org.properties["category"]:
+                    properties[db_config.mappings.get("category", "Category")] = org.properties[
+                        "category"
+                    ]
+
+                if "website" in org.properties and org.properties["website"]:
+                    properties[db_config.mappings.get("website", "Website")] = org.properties[
+                        "website"
+                    ]
+
+                if org.context:
+                    # Append context to existing notes
+                    existing_notes = existing.properties.get(
+                        db_config.mappings.get("notes", "Notes"), ""
+                    )
+                    if existing_notes:
+                        properties[db_config.mappings.get("notes", "Notes")] = (
+                            f"{existing_notes}\n\n{org.context}"
+                        )
+                    else:
+                        properties[db_config.mappings.get("notes", "Notes")] = org.context
+
+                # Update if we have new properties
+                if properties:
+                    updated_page = self.notion_updater.update_page(existing.id, properties)
+                    return updated_page, False  # False = not created, was updated
+                else:
+                    return existing, False  # No updates needed
+
+        # No existing entity found or deduplication disabled - create new
         properties = {db_config.mappings.get("name", "Organization Name"): org.name}
 
         if "category" in org.properties:
@@ -262,11 +474,9 @@ class TranscriptProcessor:
         if "website" in org.properties:
             properties[db_config.mappings.get("website", "Website")] = org.properties["website"]
 
-        return self.notion_updater.find_or_create_page(
-            database_id=db_config.id,
-            properties=properties,
-            match_property=db_config.mappings.get("name", "Organization Name"),
-        )
+        # Create new page
+        page = self.notion_updater.create_page(db_config.id, properties)
+        return page, True  # True = created new
 
     def _process_task(self, task: Entity) -> Tuple[Optional[NotionPage], bool]:
         """Process a task entity."""
@@ -424,7 +634,7 @@ class TranscriptProcessor:
 
     def _print_batch_summary(self, batch_result: BatchResult):
         """Print batch processing summary."""
-        print(f"\nBatch processing complete:")
+        print("\nBatch processing complete:")
         print(f"  Total: {batch_result.total_transcripts} transcripts")
         print(f"  Successful: {batch_result.successful}")
         print(f"  Failed: {batch_result.failed}")

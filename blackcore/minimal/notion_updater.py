@@ -177,6 +177,69 @@ class NotionUpdater:
         # Update the page
         return self.update_page(page_id, {relation_property: all_relations})
 
+    def search_database(
+        self, database_id: str, query: str, limit: int = 10
+    ) -> List[NotionPage]:
+        """Search for pages in a database.
+        
+        Args:
+            database_id: The database ID to search
+            query: Search query text
+            limit: Maximum number of results
+            
+        Returns:
+            List of NotionPage objects matching the query
+        """
+        # Apply rate limiting
+        self.rate_limiter.wait_if_needed()
+        
+        # Use database query with title contains filter
+        filter_params = {
+            "filter": {
+                "or": [
+                    {"property": "Full Name", "title": {"contains": query}},
+                    {"property": "Organization Name", "title": {"contains": query}},
+                    {"property": "Task Name", "title": {"contains": query}},
+                    {"property": "Name", "title": {"contains": query}},
+                    {"property": "Title", "title": {"contains": query}},
+                ]
+            },
+            "page_size": limit,
+        }
+        
+        try:
+            response = self._execute_with_retry(
+                lambda: self.client.databases.query(database_id=database_id, **filter_params)
+            )
+            
+            pages = []
+            for page_data in response.get("results", []):
+                pages.append(self._parse_notion_page(page_data))
+                
+            return pages
+        except Exception as e:
+            # If filter fails, try without filter (some databases may have different schemas)
+            try:
+                response = self._execute_with_retry(
+                    lambda: self.client.databases.query(database_id=database_id, page_size=limit)
+                )
+                
+                # Filter results manually
+                pages = []
+                query_lower = query.lower()
+                for page_data in response.get("results", []):
+                    page = self._parse_notion_page(page_data)
+                    # Check if query matches any text property
+                    for prop_value in page.properties.values():
+                        if isinstance(prop_value, str) and query_lower in prop_value.lower():
+                            pages.append(page)
+                            break
+                            
+                return pages[:limit]
+            except Exception:
+                # Return empty list if all search attempts fail
+                return []
+
     def get_database_schema(self, database_id: str) -> Dict[str, str]:
         """Get the property schema for a database.
 

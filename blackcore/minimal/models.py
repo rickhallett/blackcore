@@ -193,6 +193,8 @@ class ProcessingConfig(BaseModel):
     cache_ttl: int = 3600
     dry_run: bool = False
     verbose: bool = False
+    enable_deduplication: bool = True
+    deduplication_threshold: float = 90.0
 
 
 class Config(BaseModel):
