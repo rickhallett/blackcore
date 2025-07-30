@@ -7,6 +7,7 @@ import json
 import sys
 import re
 from pathlib import Path
+from utils.constants import ensure_session_log_dir
 
 
 def is_dangerous_rm_command(command):
@@ -115,10 +116,16 @@ def main():
                 )
                 sys.exit(2)  # Exit code 2 blocks tool call and shows error to Claude
 
-        # Ensure log directory exists
-        log_dir = Path.cwd() / "logs"
-        log_dir.mkdir(parents=True, exist_ok=True)
-        log_path = log_dir / "pre_tool_use.json"
+        # Extract session_id and ensure session log directory exists (prefer session-specific logging)
+        session_id = input_data.get("session_id", "unknown")
+        try:
+            log_dir = ensure_session_log_dir(session_id)
+            log_path = log_dir / "pre_tool_use.json"
+        except Exception:
+            # Fallback to old-style logging if session logging fails
+            log_dir = Path.cwd() / "logs"
+            log_dir.mkdir(parents=True, exist_ok=True)
+            log_path = log_dir / "pre_tool_use.json"
 
         # Read existing log data or initialize empty list
         if log_path.exists():

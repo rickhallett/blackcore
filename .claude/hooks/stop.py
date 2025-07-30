@@ -13,11 +13,17 @@ import sys
 import random
 import subprocess
 from pathlib import Path
-from datetime import datetime
 
 try:
     from dotenv import load_dotenv
+except ImportError:
+    pass  # dotenv is optional
 
+from datetime import datetime
+from utils.constants import ensure_session_log_dir
+
+
+try:
     load_dotenv()
 except ImportError:
     pass  # dotenv is optional
@@ -141,7 +147,9 @@ def main():
     try:
         # Parse command line arguments
         parser = argparse.ArgumentParser()
-        parser.add_argument("--chat", action="store_true", help="Copy transcript to chat.json")
+        parser.add_argument(
+            "--chat", action="store_true", help="Copy transcript to chat.json"
+        )
         args = parser.parse_args()
 
         # Read JSON input from stdin
@@ -151,13 +159,18 @@ def main():
         session_id = input_data.get("session_id", "")
         stop_hook_active = input_data.get("stop_hook_active", False)
 
-        # Ensure log directory exists
-        log_dir = os.path.join(os.getcwd(), "logs")
-        os.makedirs(log_dir, exist_ok=True)
-        log_path = os.path.join(log_dir, "stop.json")
+        # Ensure session log directory exists (prefer session-specific logging)
+        try:
+            log_dir = ensure_session_log_dir(session_id)
+            log_path = log_dir / "stop.json"
+        except Exception:
+            # Fallback to old-style logging if session logging fails
+            log_dir = Path.cwd() / "logs"
+            log_dir.mkdir(parents=True, exist_ok=True)
+            log_path = log_dir / "stop.json"
 
         # Read existing log data or initialize empty list
-        if os.path.exists(log_path):
+        if log_path.exists():
             with open(log_path, "r") as f:
                 try:
                     log_data = json.load(f)
@@ -190,7 +203,7 @@ def main():
                                     pass  # Skip invalid lines
 
                     # Write to logs/chat.json
-                    chat_file = os.path.join(log_dir, "chat.json")
+                    chat_file = log_dir / "chat.json"
                     with open(chat_file, "w") as f:
                         json.dump(chat_data, f, indent=2)
                 except Exception:

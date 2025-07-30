@@ -4,9 +4,17 @@
 # ///
 
 import json
-import os
 import sys
+import os
 from pathlib import Path
+
+# Import from utils.constants (if available)
+try:
+    from utils.constants import ensure_session_log_dir
+
+    HAS_UTILS = True
+except ImportError:
+    HAS_UTILS = False
 
 
 def main():
@@ -14,9 +22,22 @@ def main():
         # Read JSON input from stdin
         input_data = json.load(sys.stdin)
 
-        # Ensure log directory exists
-        log_dir = Path.cwd() / "logs"
-        log_dir.mkdir(parents=True, exist_ok=True)
+        # Extract session_id
+        session_id = input_data.get("session_id", "unknown")
+
+        # Ensure session log directory exists (prefer session-specific logging)
+        if HAS_UTILS:
+            try:
+                log_dir = ensure_session_log_dir(session_id)
+            except Exception:
+                # Fallback if session logging fails
+                log_dir = Path.cwd() / "logs"
+                log_dir.mkdir(parents=True, exist_ok=True)
+        else:
+            # Fallback if utils not available
+            log_dir = Path.cwd() / "logs"
+            log_dir.mkdir(parents=True, exist_ok=True)
+
         log_path = log_dir / "post_tool_use.json"
 
         # Read existing log data or initialize empty list
