@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Test deduplication with detailed debugging."""
 
-import asyncio
 import sys
 from pathlib import Path
 
@@ -35,14 +34,14 @@ def test_analysis_sync():
         "safety_mode": True
     })
     
-    print(f"\nConfiguration:")
+    print("\nConfiguration:")
     print(f"  Auto-merge threshold: {engine.config['auto_merge_threshold']}%")
     print(f"  Review threshold: {engine.config['human_review_threshold']}%")
     
     print("\nRunning analysis...")
     result = engine.analyze_database("People & Contacts", test_data, enable_ai=False)
     
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total entities: {result.total_entities}")
     print(f"  Potential duplicates: {result.potential_duplicates}")
     print(f"  High confidence: {len(result.high_confidence_matches)}")
@@ -52,7 +51,7 @@ def test_analysis_sync():
     # Check if processor is working
     processor = engine.processors.get("People & Contacts")
     if processor:
-        print(f"\nProcessor check:")
+        print("\nProcessor check:")
         print(f"  Processor type: {type(processor).__name__}")
         
         # Test direct comparison
@@ -64,7 +63,7 @@ def test_analysis_sync():
             test_data[0], test_data[1], 
             processor.get_comparison_fields()
         )
-        print(f"\n  Similarity scores:")
+        print("\n  Similarity scores:")
         for field, score in scores.items():
             if isinstance(score, dict):
                 print(f"    {field}: {score.get('composite', 0):.1f}%")
@@ -81,7 +80,7 @@ def test_analysis_sync():
     )
     
     if all_matches:
-        print(f"\nAll matches found:")
+        print("\nAll matches found:")
         for match in all_matches:
             e1 = match["entity_a"]["Full Name"]
             e2 = match["entity_b"]["Full Name"]

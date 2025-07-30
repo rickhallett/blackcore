@@ -40,13 +40,13 @@ def test_engine_without_ai():
     # Run analysis
     result = engine.analyze_database("People & Contacts", test_data, enable_ai=False)
 
-    print(f"\nAnalysis complete:")
+    print("\nAnalysis complete:")
     print(f"  Total entities: {result.total_entities}")
     print(f"  Duplicates found: {result.potential_duplicates}")
 
     if result.high_confidence_matches:
         match = result.high_confidence_matches[0]
-        print(f"\nFound match:")
+        print("\nFound match:")
         print(
             f"  {match['entity_a']['Full Name']} <-> {match['entity_b']['Full Name']}"
         )
