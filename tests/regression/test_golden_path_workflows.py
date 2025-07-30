@@ -1,7 +1,7 @@
 """Golden path workflow tests that must never break."""
 
 import pytest
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import Mock, patch
 from datetime import datetime
 
 

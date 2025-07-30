@@ -1,7 +1,7 @@
 """Unit tests for error handling functionality."""
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from datetime import datetime
 
 from blackcore.errors.handlers import (

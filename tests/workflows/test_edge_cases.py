@@ -2,9 +2,7 @@
 
 import pytest
 import asyncio
-import json
 from unittest.mock import Mock, AsyncMock, patch
-from pathlib import Path
 
 
 class TestEdgeCases:

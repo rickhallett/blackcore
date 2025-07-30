@@ -143,7 +143,7 @@ class NotionToLocalMerger:
             if backup_path and backup_path.exists():
                 local_path = self.base_path / self.notion_config[db_name]["local_json_path"]
                 shutil.copy2(backup_path, local_path)
-                logger.info(f"   🔄 Restored backup")
+                logger.info("   🔄 Restored backup")
                 
             return False
             

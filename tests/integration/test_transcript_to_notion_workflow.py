@@ -1,9 +1,7 @@
 """Integration tests for the complete transcript to Notion workflow."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-from datetime import datetime
-from typing import Dict, List, Any
+from unittest.mock import Mock
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.models import TranscriptInput, ProcessingResult

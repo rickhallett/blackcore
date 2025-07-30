@@ -43,7 +43,7 @@ def main():
     result = engine.analyze_database("People & Contacts", people_data, enable_ai=False)
     
     # Show results
-    console.print(f"\nAnalysis Results:")
+    console.print("\nAnalysis Results:")
     console.print(f"• High confidence: {len(result.high_confidence_matches)}")
     console.print(f"• Medium confidence: {len(result.medium_confidence_matches)}")
     console.print(f"• Low confidence: {len(result.low_confidence_matches)}")

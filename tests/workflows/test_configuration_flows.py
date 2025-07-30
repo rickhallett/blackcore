@@ -2,8 +2,7 @@
 
 import pytest
 import os
-from unittest.mock import Mock, patch, AsyncMock
-from pathlib import Path
+from unittest.mock import patch
 
 
 class TestConfigurationFlows:

@@ -9,7 +9,7 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from blackcore.deduplication.merge_proposals import MergeExecutor, MergeProposal
+from blackcore.deduplication.merge_proposals import MergeExecutor
 
 
 def test_merge_with_list_values():

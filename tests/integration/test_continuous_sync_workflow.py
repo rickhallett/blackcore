@@ -1,13 +1,11 @@
 """Tests for continuous data synchronization workflows."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock
 from datetime import datetime, timedelta
-from pathlib import Path
 import json
-from typing import Dict, List, Any
 
-from blackcore.minimal.json_sync import JSONSyncProcessor, SyncResult
+from blackcore.minimal.json_sync import JSONSyncProcessor
 from blackcore.minimal.models import TranscriptInput, ProcessingResult
 
 

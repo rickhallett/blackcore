@@ -6,7 +6,6 @@ Comprehensive test and demonstration of the sophisticated deduplication system
 with AI/LLM integration, graph analysis, and human review workflows.
 """
 
-import json
 import logging
 import sys
 from pathlib import Path
@@ -144,7 +143,7 @@ def run_comprehensive_test():
     
     # Create test data
     test_data = create_test_data()
-    logger.info(f"📊 Created test data:")
+    logger.info("📊 Created test data:")
     for db_name, records in test_data.items():
         logger.info(f"   {db_name}: {len(records)} records")
     
@@ -179,7 +178,7 @@ def run_comprehensive_test():
         
         # Show specific matches found
         if result.high_confidence_matches:
-            logger.info(f"      High confidence matches found:")
+            logger.info("      High confidence matches found:")
             for match in result.high_confidence_matches:
                 entity_a = match["entity_a"]
                 entity_b = match["entity_b"]
@@ -197,7 +196,7 @@ def run_comprehensive_test():
     total_entities = sum(r.total_entities for r in comprehensive_results.values())
     total_duplicates = sum(r.potential_duplicates for r in comprehensive_results.values())
     
-    logger.info(f"\n📊 Comprehensive Analysis Summary:")
+    logger.info("\n📊 Comprehensive Analysis Summary:")
     logger.info(f"   Total entities across all databases: {total_entities}")
     logger.info(f"   Total potential duplicates found: {total_duplicates}")
     
@@ -219,14 +218,14 @@ def run_comprehensive_test():
     if entity_pairs:
         graph_results = graph_analyzer.analyze_for_disambiguation(entity_pairs)
         
-        logger.info(f"   🌐 Graph Analysis Results:")
+        logger.info("   🌐 Graph Analysis Results:")
         logger.info(f"      Network nodes: {graph_results.network_metrics['total_nodes']}")
         logger.info(f"      Network edges: {graph_results.network_metrics['total_edges']}")
         logger.info(f"      Entity clusters: {len(graph_results.entity_clusters)}")
         logger.info(f"      Disambiguation suggestions: {len(graph_results.disambiguation_suggestions)}")
         
         if graph_results.disambiguation_suggestions:
-            logger.info(f"      Graph-based recommendations:")
+            logger.info("      Graph-based recommendations:")
             for suggestion in graph_results.disambiguation_suggestions[:3]:  # Show top 3
                 confidence = suggestion.get("confidence", 0) * 100
                 evidence = suggestion.get("evidence", [])
@@ -271,17 +270,17 @@ def run_comprehensive_test():
     graph_stats = graph_analyzer.get_statistics()
     review_stats = review_interface.get_statistics()
     
-    logger.info(f"   📊 Engine Statistics:")
+    logger.info("   📊 Engine Statistics:")
     logger.info(f"      Total comparisons: {engine_stats['engine_stats']['total_comparisons']}")
     logger.info(f"      AI analyses performed: {engine_stats['engine_stats']['ai_analyses_performed']}")
     logger.info(f"      Human reviews created: {engine_stats['engine_stats']['human_reviews_created']}")
     
-    logger.info(f"   🌐 Graph Statistics:")
+    logger.info("   🌐 Graph Statistics:")
     logger.info(f"      Nodes processed: {graph_stats['nodes_processed']}")
     logger.info(f"      Relationships identified: {graph_stats['relationships_identified']}")
     logger.info(f"      Clusters formed: {graph_stats['clusters_formed']}")
     
-    logger.info(f"   👥 Review Statistics:")
+    logger.info("   👥 Review Statistics:")
     logger.info(f"      Reviews completed: {review_stats['interface_stats']['reviews_completed']}")
     logger.info(f"      Average review time: {review_stats['interface_stats']['average_review_time']:.1f}s")
     
@@ -327,12 +326,12 @@ def run_comprehensive_test():
     logger.info("\n🎉 Test Summary")
     logger.info("=" * 80)
     logger.info("✅ Deduplication System Integration Test Complete")
-    logger.info(f"📊 Overall Results:")
+    logger.info("📊 Overall Results:")
     logger.info(f"   • Processed {total_entities} entities across {len(test_data)} databases")
     logger.info(f"   • Found {total_duplicates} potential duplicates")
     logger.info(f"   • Achieved {detection_rate:.1f}% detection accuracy on known duplicates")
     logger.info(f"   • Graph analysis identified {graph_stats['relationships_identified']} relationships")
-    logger.info(f"   • System ready for production use with human oversight")
+    logger.info("   • System ready for production use with human oversight")
     
     if detection_rate >= 80:
         logger.info("🎯 PASS: High accuracy deduplication system successfully implemented")
@@ -354,7 +353,7 @@ def run_comprehensive_test():
 if __name__ == "__main__":
     try:
         results = run_comprehensive_test()
-        print(f"\n📋 Test completed successfully!")
+        print("\n📋 Test completed successfully!")
         print(f"Detection accuracy: {results['detection_accuracy']:.1f}%")
         
     except Exception as e:

@@ -1,9 +1,7 @@
 """Test automated CLI interactions and user interface behavior."""
 
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
-from io import StringIO
+from unittest.mock import Mock, AsyncMock, patch
 
 
 class MockInputStream:
@@ -188,7 +186,7 @@ class TestCLIInteraction:
                     decision = {
                         "match": test_match,
                         "decision": "merge",
-                        "reasoning": f"User approved merge"
+                        "reasoning": "User approved merge"
                     }
                     assert decision["decision"] == test["expected_decision"]
                     

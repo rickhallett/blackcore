@@ -12,10 +12,9 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from blackcore.deduplication.cli import StandardModeCLI, AsyncDeduplicationEngine
+from blackcore.deduplication.cli import AsyncDeduplicationEngine
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
 
 
 async def demo_programmatic_usage():
@@ -74,7 +73,7 @@ async def demo_programmatic_usage():
         console.print(f"   Potential duplicates: {result.potential_duplicates}")
         
         if result.high_confidence_matches:
-            console.print(f"\n   [green]High Confidence Matches:[/green]")
+            console.print("\n   [green]High Confidence Matches:[/green]")
             for match in result.high_confidence_matches:
                 name_a = match["entity_a"].get("Full Name", "Unknown")
                 name_b = match["entity_b"].get("Full Name", "Unknown")
@@ -82,7 +81,7 @@ async def demo_programmatic_usage():
                 console.print(f"      • {name_a} ↔ {name_b} ({confidence:.1f}%)")
         
         if result.medium_confidence_matches:
-            console.print(f"\n   [yellow]Medium Confidence Matches:[/yellow]")
+            console.print("\n   [yellow]Medium Confidence Matches:[/yellow]")
             for match in result.medium_confidence_matches:
                 name_a = match["entity_a"].get("Full Name", "Unknown")
                 name_b = match["entity_b"].get("Full Name", "Unknown")

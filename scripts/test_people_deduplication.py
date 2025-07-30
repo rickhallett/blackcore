@@ -83,14 +83,14 @@ def main():
     console.print(
         f"  • AI analysis: {'Enabled' if engine.config['enable_ai_analysis'] else 'Disabled'}"
     )
-    console.print(f"  • [green]Safety mode: ON[/green] (no automatic changes)")
+    console.print("  • [green]Safety mode: ON[/green] (no automatic changes)")
 
     # Run analysis
     console.print("\n[bold]Running deduplication analysis...[/bold]")
     result = engine.analyze_database("People & Contacts", people_data, enable_ai=False)
 
     # Display results
-    console.print(f"\n[bold]Analysis Results:[/bold]")
+    console.print("\n[bold]Analysis Results:[/bold]")
     console.print(f"  • Total entities analyzed: {result.total_entities}")
     console.print(f"  • Potential duplicates found: {result.potential_duplicates}")
     console.print(
@@ -181,7 +181,7 @@ def main():
 
         # Show detailed view of top matches
         if result.high_confidence_matches:
-            console.print(f"\n[bold]Detailed view of HIGH confidence matches:[/bold]")
+            console.print("\n[bold]Detailed view of HIGH confidence matches:[/bold]")
 
             for i, match in enumerate(result.high_confidence_matches[:3], 1):
                 entity_a = match["entity_a"]

@@ -5,7 +5,7 @@ import time
 import asyncio
 import psutil
 import gc
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import Mock, patch
 from typing import List, Dict, Any
 
 

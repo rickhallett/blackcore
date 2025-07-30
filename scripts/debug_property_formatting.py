@@ -11,7 +11,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any
 from dataclasses import dataclass
 
 # Set environment variable
@@ -21,8 +21,6 @@ os.environ['NOTION_API_KEY'] = '***REMOVED***'
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from blackcore.minimal.staged_json_sync import StagedJSONSyncProcessor
-from blackcore.minimal.data_transformer import DataTransformer, load_property_mappings, load_notion_schemas
-from blackcore.minimal.notion_schema_inspector import NotionSchemaInspector
 from notion_client import Client
 
 # Set up logging
@@ -107,12 +105,12 @@ class PropertyFormattingDebugger:
         }
         
         # Step 1: Show original record
-        logger.info(f"\n🔸 STEP 1: Original Record")
+        logger.info("\n🔸 STEP 1: Original Record")
         self._log_record_structure(test_record, "Original")
         debug_info["steps"]["1_original"] = test_record
         
         # Step 2: Apply transformations
-        logger.info(f"\n🔸 STEP 2: Data Transformation")
+        logger.info("\n🔸 STEP 2: Data Transformation")
         mapping_config = self.processor.property_mappings.get(database_name, {})
         transformed_record = self.processor.transformer.transform_record(
             test_record, mapping_config, database_name, stage=1
@@ -121,25 +119,25 @@ class PropertyFormattingDebugger:
         debug_info["steps"]["2_transformed"] = transformed_record
         
         # Step 3: Prepare properties (sync processor way)
-        logger.info(f"\n🔸 STEP 3: Sync Processor Property Preparation")
+        logger.info("\n🔸 STEP 3: Sync Processor Property Preparation")
         sync_properties = self.processor._prepare_properties(transformed_record, db_config)
         self._log_properties_format(sync_properties, "Sync Processor")
         debug_info["steps"]["3_sync_properties"] = sync_properties
         
         # Step 4: Manual property preparation (test script way)
-        logger.info(f"\n🔸 STEP 4: Manual Property Preparation (Test Script Style)")
+        logger.info("\n🔸 STEP 4: Manual Property Preparation (Test Script Style)")
         manual_properties = self._prepare_properties_manual(transformed_record, database_name)
         self._log_properties_format(manual_properties, "Manual/Test Script")
         debug_info["steps"]["4_manual_properties"] = manual_properties
         
         # Step 5: Compare formats
-        logger.info(f"\n🔸 STEP 5: Format Comparison")
+        logger.info("\n🔸 STEP 5: Format Comparison")
         comparison = self._compare_property_formats(sync_properties, manual_properties)
         self._log_comparison(comparison)
         debug_info["final_comparison"] = comparison
         
         # Step 6: Test API calls
-        logger.info(f"\n🔸 STEP 6: API Call Testing")
+        logger.info("\n🔸 STEP 6: API Call Testing")
         api_results = self._test_api_calls(database_id, sync_properties, manual_properties)
         debug_info["api_test_results"] = api_results
         

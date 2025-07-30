@@ -53,7 +53,7 @@ def main():
         data = json.load(f)
         
     people_data = data.get("People & Contacts", [])
-    console.print(f"\n[bold]📊 Initial State:[/bold]")
+    console.print("\n[bold]📊 Initial State:[/bold]")
     console.print(f"  • Total people loaded: {len(people_data)}")
     
     # Initialize deduplication engine
@@ -73,8 +73,8 @@ def main():
     console.print("Configuration:")
     console.print(f"  • Auto-merge threshold: {engine.config['auto_merge_threshold']}%")
     console.print(f"  • Review threshold: {engine.config['human_review_threshold']}%")
-    console.print(f"  • AI analysis: [green]Enabled[/green]")
-    console.print(f"  • Safety mode: [green]ON[/green]")
+    console.print("  • AI analysis: [green]Enabled[/green]")
+    console.print("  • Safety mode: [green]ON[/green]")
     
     # Run analysis
     console.print("\n[bold]🔍 Running deduplication analysis...[/bold]")
@@ -90,7 +90,7 @@ def main():
         progress.update(task, completed=len(people_data))
     
     # Display analysis results
-    console.print(f"\n[bold]📊 Analysis Results:[/bold]")
+    console.print("\n[bold]📊 Analysis Results:[/bold]")
     console.print(f"  • Total entities analyzed: {result.total_entities}")
     console.print(f"  • Potential duplicates found: {result.potential_duplicates}")
     console.print(f"  • High confidence matches (>90%): [green]{len(result.high_confidence_matches)}[/green]")
@@ -215,7 +215,7 @@ def main():
             progress.update(task, advance=1)
     
     # Display results
-    console.print(f"\n[bold]📊 Merge Results:[/bold]")
+    console.print("\n[bold]📊 Merge Results:[/bold]")
     console.print(f"  • Total merges attempted: {len(review_decisions)}")
     console.print(f"  • [green]Successful merges: {success_count}[/green]")
     console.print(f"  • [red]Failed merges: {error_count}[/red]")
@@ -223,7 +223,7 @@ def main():
     
     # Show error details if any
     if error_details:
-        console.print(f"\n[bold red]❌ Merge Failures:[/bold red]")
+        console.print("\n[bold red]❌ Merge Failures:[/bold red]")
         error_table = Table(show_header=True, header_style="bold red")
         error_table.add_column("Primary Entity", style="cyan")
         error_table.add_column("Secondary Entity", style="cyan")
@@ -245,14 +245,14 @@ def main():
     
     # Show sample successful merges
     if successful_merges:
-        console.print(f"\n[bold green]✅ Sample Successful Merges:[/bold green]")
+        console.print("\n[bold green]✅ Sample Successful Merges:[/bold green]")
         
         for i, merge_info in enumerate(successful_merges[:3]):
             merged = merge_info["merged"]
             console.print(f"\n[bold]Merge {i+1}:[/bold]")
             console.print(f"  Primary: {merge_info['primary_name']} (Entity {merge_info['primary_was']})")
             console.print(f"  Secondary: {merge_info['secondary_name']}")
-            console.print(f"  Merged result:")
+            console.print("  Merged result:")
             
             # Show key fields
             for field in ["Full Name", "Email", "Phone", "Organization"]:
@@ -266,12 +266,12 @@ def main():
             if "_merge_info" in merged:
                 merge_info_data = merged["_merge_info"]
                 if merge_info_data.get("conflicts"):
-                    console.print(f"    • [yellow]Conflicts detected:[/yellow]")
+                    console.print("    • [yellow]Conflicts detected:[/yellow]")
                     for field, conflict in list(merge_info_data["conflicts"].items())[:2]:
                         console.print(f"      - {field}: kept '{conflict['primary']}', had '{conflict['secondary']}'")
     
     # Verify results
-    console.print(f"\n[bold]🔍 Verification:[/bold]")
+    console.print("\n[bold]🔍 Verification:[/bold]")
     
     # Check that primary IDs are preserved
     id_preserved_count = 0
@@ -300,7 +300,7 @@ def main():
     console.print(f"  • Merges with recorded conflicts: {conflicts_recorded_count}")
     
     # Final summary
-    console.print(f"\n[bold]📋 Final Summary:[/bold]")
+    console.print("\n[bold]📋 Final Summary:[/bold]")
     console.print(f"  • Started with: {len(people_data)} people")
     console.print(f"  • Found: {len(all_matches)} duplicate pairs")
     console.print(f"  • Successfully merged: {success_count} pairs")
@@ -309,12 +309,12 @@ def main():
     
     # Get merge statistics
     merge_stats = merge_executor.get_statistics()
-    console.print(f"\n[bold]🔧 Merge Executor Statistics:[/bold]")
+    console.print("\n[bold]🔧 Merge Executor Statistics:[/bold]")
     console.print(f"  • Total proposals created: {merge_stats['total_proposals']}")
     console.print(f"  • Safety blocks: {merge_stats['safety_blocks']}")
     console.print(f"  • Success rate: {merge_stats['success_rate']:.1f}%")
     
-    console.print(f"\n[bold green]✅ Test completed successfully![/bold green]")
+    console.print("\n[bold green]✅ Test completed successfully![/bold green]")
     
     return 0
 

@@ -1,10 +1,9 @@
 """Unit tests for Notion sync functionality."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 import time
 import json
-from pathlib import Path
 
 from blackcore.notion.client import NotionClient, RateLimiter
 from scripts.notion_sync import SyncEngine

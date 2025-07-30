@@ -1,11 +1,8 @@
 """Tests for entity resolution during the ingestion process."""
 
 import pytest
-from unittest.mock import Mock, patch
-from typing import Dict, List, Any
+from typing import Dict, List
 
-from blackcore.minimal.models import ProcessingResult
-from blackcore.minimal.ai_extractor import AIExtractor
 
 
 class TestEntityResolutionDuringIngestion:
@@ -145,7 +142,7 @@ class TestEntityResolutionDuringIngestion:
                             
                             if matching_parts > 0:
                                 confidence = 70 + (matching_parts * 10)
-                                reasoning.append(f"Partial name match with organization context")
+                                reasoning.append("Partial name match with organization context")
                                 
                 if confidence > 0:
                     matches.append({
@@ -298,7 +295,7 @@ class TestEntityResolutionDuringIngestion:
                                 matches.append({
                                     "person": person,
                                     "confidence": 90,
-                                    "reasoning": f"Last name + organization match"
+                                    "reasoning": "Last name + organization match"
                                 })
                                 
             # Handle department references
@@ -313,7 +310,7 @@ class TestEntityResolutionDuringIngestion:
                                 matches.append({
                                     "person": person,
                                     "confidence": 88,
-                                    "reasoning": f"Name + department match"
+                                    "reasoning": "Name + department match"
                                 })
                                 
             # Sort by confidence and return best match

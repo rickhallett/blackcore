@@ -6,7 +6,6 @@ Analyzes similarity scores and helps tune the deduplication system
 for better accuracy on known duplicate pairs.
 """
 
-import json
 import sys
 from pathlib import Path
 
@@ -14,7 +13,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from blackcore.deduplication import (
-    DeduplicationEngine,
     SimilarityScorer,
     PersonProcessor,
     OrganizationProcessor,
@@ -122,7 +120,7 @@ def analyze_similarity_scores():
             entity_a, entity_b, comparison_fields
         )
         
-        print(f"\n📈 Similarity Scores:")
+        print("\n📈 Similarity Scores:")
         for field, scores in similarity_scores.items():
             if field != "overall" and isinstance(scores, dict):
                 composite = scores.get("composite", 0)
@@ -140,7 +138,7 @@ def analyze_similarity_scores():
             is_abbrev = processor._could_be_abbreviation(org_a, org_b)
             print(f"  Debug: Abbreviation check for '{org_a}' vs '{org_b}': {is_abbrev}")
         
-        print(f"\n🎯 Final Scores:")
+        print("\n🎯 Final Scores:")
         print(f"  Overall similarity: {overall_score:5.1f}%")
         print(f"  Processor confidence: {processor_confidence:5.1f}%")
         
@@ -150,7 +148,7 @@ def analyze_similarity_scores():
         
         # Show key differences if scores are low
         if processor_confidence < 70:
-            print(f"\n⚠️  Low confidence analysis:")
+            print("\n⚠️  Low confidence analysis:")
             
             # Check exact matches
             exact_matches = []
@@ -161,10 +159,10 @@ def analyze_similarity_scores():
             if exact_matches:
                 print(f"    Exact matches: {exact_matches}")
             else:
-                print(f"    No exact field matches found")
+                print("    No exact field matches found")
             
             # Show field values for comparison
-            print(f"    Field value comparison:")
+            print("    Field value comparison:")
             for field in processor.get_primary_fields():
                 val_a = entity_a.get(field, "")
                 val_b = entity_b.get(field, "")
@@ -176,28 +174,28 @@ def analyze_similarity_scores():
 def suggest_improvements():
     """Suggest improvements to the deduplication system."""
     
-    print(f"\n💡 Improvement Suggestions")
+    print("\n💡 Improvement Suggestions")
     print("=" * 60)
     
-    print(f"1. Lower Thresholds:")
-    print(f"   - Current auto-merge threshold: 90%")
-    print(f"   - Current human review threshold: 70%") 
-    print(f"   - Consider lowering to 85% and 60% respectively")
+    print("1. Lower Thresholds:")
+    print("   - Current auto-merge threshold: 90%")
+    print("   - Current human review threshold: 70%") 
+    print("   - Consider lowering to 85% and 60% respectively")
     
-    print(f"\n2. Field Weighting:")
-    print(f"   - Email exact matches should have very high weight")
-    print(f"   - Phone number normalization needs improvement")
-    print(f"   - Organization abbreviation detection needs enhancement")
+    print("\n2. Field Weighting:")
+    print("   - Email exact matches should have very high weight")
+    print("   - Phone number normalization needs improvement")
+    print("   - Organization abbreviation detection needs enhancement")
     
-    print(f"\n3. Preprocessing:")
-    print(f"   - Implement better name normalization")
-    print(f"   - Add nickname/abbreviation dictionaries")
-    print(f"   - Improve website URL normalization")
+    print("\n3. Preprocessing:")
+    print("   - Implement better name normalization")
+    print("   - Add nickname/abbreviation dictionaries")
+    print("   - Improve website URL normalization")
     
-    print(f"\n4. Algorithm Tuning:")
-    print(f"   - Adjust composite score calculations")
-    print(f"   - Add domain-specific bonus scores")
-    print(f"   - Implement fuzzy date matching")
+    print("\n4. Algorithm Tuning:")
+    print("   - Adjust composite score calculations")
+    print("   - Add domain-specific bonus scores")
+    print("   - Implement fuzzy date matching")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 """Test interactive review workflows and decision making."""
 
 import pytest
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import Mock, patch
 from datetime import datetime
 
 

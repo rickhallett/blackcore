@@ -1,8 +1,7 @@
 """Unit tests for repository pattern."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-from datetime import datetime
+from unittest.mock import Mock
 
 from blackcore.repositories import (
     PageRepository,
@@ -10,8 +9,7 @@ from blackcore.repositories import (
     SearchRepository,
     RepositoryError,
 )
-from blackcore.models.responses import NotionPage, NotionDatabase, ObjectType
-from blackcore.models.properties import PropertyType
+from blackcore.models.responses import NotionPage, NotionDatabase
 
 
 class TestPageRepository:

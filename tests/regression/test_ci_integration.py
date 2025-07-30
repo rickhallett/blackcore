@@ -3,7 +3,7 @@
 import pytest
 import os
 import time
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from pathlib import Path
 
 

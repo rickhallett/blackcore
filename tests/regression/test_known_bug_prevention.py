@@ -1,8 +1,7 @@
 """Regression tests to prevent known bugs from reoccurring."""
 
 import pytest
-from unittest.mock import Mock, AsyncMock, patch
-from typing import Dict, List, Any
+from unittest.mock import Mock, patch
 
 
 class TestKnownBugPrevention:

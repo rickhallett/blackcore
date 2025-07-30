@@ -1,11 +1,9 @@
 """Test configuration and fixtures for Notion sync tests."""
 
 import pytest
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
 from typing import Dict, Any, List
-import json
 import time
-from pathlib import Path
 
 # Mock the notion_client module to prevent import errors during testing
 from notion_client.errors import APIResponseError

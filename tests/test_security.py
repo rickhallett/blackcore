@@ -1,11 +1,8 @@
 """Unit tests for security components."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-import os
-from pathlib import Path
+from unittest.mock import Mock, patch
 import json
-import base64
 
 from blackcore.security.secrets_manager import SecretsManager
 from blackcore.security.validators import URLValidator, validate_email, validate_url, InputSanitizer

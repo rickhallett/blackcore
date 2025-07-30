@@ -1,10 +1,7 @@
 """Integration tests for the intelligence ingestion pipeline."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-from pathlib import Path
-import json
-from typing import Dict, List, Any
+from unittest.mock import Mock
 
 from blackcore.notion.client import NotionClient
 

@@ -1,10 +1,8 @@
 """Integration tests for Notion sync scenarios."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock, mock_open
+from unittest.mock import Mock, patch, mock_open
 import json
-from pathlib import Path
-import tempfile
 
 from blackcore.notion.client import NotionClient
 from scripts.notion_sync import SyncEngine

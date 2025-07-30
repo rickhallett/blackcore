@@ -1,10 +1,9 @@
 """Tests for real-world transcript patterns and edge cases."""
 
 import pytest
-from unittest.mock import Mock, patch
-from typing import Dict, List, Any
+from unittest.mock import Mock
 
-from blackcore.minimal.models import TranscriptInput, ProcessingResult
+from blackcore.minimal.models import TranscriptInput
 from blackcore.minimal.ai_extractor import AIExtractor
 
 
@@ -629,7 +628,6 @@ class TestRealTranscriptPatterns:
             """Resolve relative temporal references to absolute dates."""
             
             from datetime import datetime, timedelta
-            import calendar
             
             # Current date from transcript
             current_date = datetime.strptime(transcript.date, "%Y-%m-%d")

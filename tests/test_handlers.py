@@ -6,18 +6,12 @@ from datetime import datetime, date
 from blackcore.handlers.base import PropertyHandlerRegistry, property_handler_registry
 from blackcore.handlers.text import TitleHandler, RichTextHandler
 from blackcore.handlers.number import NumberHandler
-from blackcore.handlers.select import SelectHandler, MultiSelectHandler, StatusHandler
+from blackcore.handlers.select import SelectHandler, MultiSelectHandler
 from blackcore.handlers.date import DateHandler
 from blackcore.handlers.people import PeopleHandler
 from blackcore.models.properties import (
     PropertyType,
     TitleProperty,
-    RichTextProperty,
-    NumberProperty,
-    SelectProperty,
-    MultiSelectProperty,
-    DateProperty,
-    PeopleProperty,
 )
 from blackcore.errors.handlers import ValidationError
 
