@@ -65,7 +65,17 @@ class DeduplicationEngine:
         # Initialize components
         self.similarity_scorer = SimilarityScorer()
         self.confidence_thresholds = ConfidenceThresholds()
-        self.llm_analyzer = LLMEntityAnalyzer()
+        
+        # Only initialize LLM analyzer if AI is enabled
+        self.llm_analyzer = None
+        if self.config.get("enable_ai_analysis", True):
+            try:
+                self.llm_analyzer = LLMEntityAnalyzer()
+            except Exception as e:
+                logger.warning(f"Failed to initialize LLM analyzer: {e}")
+                logger.warning("AI analysis will be disabled")
+                self.config["enable_ai_analysis"] = False
+                
         self.audit_system = DeduplicationAudit()
         self.merge_executor = MergeExecutor()
         
@@ -201,7 +211,8 @@ class DeduplicationEngine:
         # Layer 2: AI/LLM analysis for medium+ confidence matches
         if (enable_ai and 
             pair.confidence_score >= self.config["human_review_threshold"] and
-            self.config["enable_ai_analysis"]):
+            self.config["enable_ai_analysis"] and
+            self.llm_analyzer is not None):
             
             try:
                 pair.ai_analysis = self.llm_analyzer.analyze_entity_pair(

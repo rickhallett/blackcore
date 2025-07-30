@@ -76,7 +76,7 @@ class LLMEntityAnalyzer:
     def _load_default_config(self) -> Dict[str, Any]:
         """Load default configuration."""
         return {
-            "primary_model": "claude-3-5-sonnet-20241022",
+            "primary_model": "claude-3-7-sonnet-20250219",
             "fallback_model": "gpt-4",
             "max_requests_per_minute": 10,
             "enable_cross_validation": False,
@@ -89,12 +89,14 @@ class LLMEntityAnalyzer:
         """Initialize LLM API clients."""
         # Anthropic Claude
         anthropic_key = os.getenv('ANTHROPIC_API_KEY')
-        if ANTHROPIC_AVAILABLE and anthropic_key:
+        if ANTHROPIC_AVAILABLE and anthropic_key and anthropic_key != 'your_key_here':
             try:
+                # Test if the key is valid by creating client
                 self.clients['anthropic'] = anthropic.Anthropic(api_key=anthropic_key)
                 logger.info("✅ Anthropic Claude client initialized")
             except Exception as e:
                 logger.warning(f"Failed to initialize Anthropic client: {e}")
+                # Don't re-raise the exception, just skip this client
                 
         # OpenAI GPT
         openai_key = os.getenv('OPENAI_API_KEY')

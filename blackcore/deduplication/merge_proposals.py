@@ -142,13 +142,30 @@ class MergeExecutor:
         identifier_fields = ["Email", "Phone", "Website", "URL", "ID"]
         
         for field in identifier_fields:
-            val_a = primary.get(field, "").strip() if primary.get(field) else ""
-            val_b = secondary.get(field, "").strip() if secondary.get(field) else ""
+            val_a = primary.get(field, "")
+            val_b = secondary.get(field, "")
             
-            # If both have values and they're different, that's a conflict
-            if val_a and val_b and val_a.lower() != val_b.lower():
-                logger.warning(f"Identifier conflict in {field}: '{val_a}' vs '{val_b}'")
-                return True
+            # Normalize values for comparison
+            # Convert lists to sets for comparison
+            val_a_set = set()
+            val_b_set = set()
+            
+            if isinstance(val_a, list):
+                val_a_set = {str(v).strip().lower() for v in val_a if v}
+            elif val_a:
+                val_a_set = {str(val_a).strip().lower()}
+                
+            if isinstance(val_b, list):
+                val_b_set = {str(v).strip().lower() for v in val_b if v}
+            elif val_b:
+                val_b_set = {str(val_b).strip().lower()}
+            
+            # Check if there's any overlap - if so, not a conflict
+            if val_a_set and val_b_set:
+                if val_a_set.isdisjoint(val_b_set):
+                    # No overlap - this is a conflict
+                    logger.warning(f"Identifier conflict in {field}: {val_a_set} vs {val_b_set}")
+                    return True
                 
         return False
         
@@ -182,12 +199,28 @@ class MergeExecutor:
         org_fields = ["Organization", "Company", "Affiliation"]
         
         for field in org_fields:
-            org_a = primary.get(field, "").strip() if primary.get(field) else ""
-            org_b = secondary.get(field, "").strip() if secondary.get(field) else ""
+            org_a = primary.get(field, "")
+            org_b = secondary.get(field, "")
             
-            if org_a and org_b and org_a.lower() != org_b.lower():
-                # Different organizations might indicate different people
-                return True
+            # Normalize values for comparison
+            org_a_set = set()
+            org_b_set = set()
+            
+            if isinstance(org_a, list):
+                org_a_set = {str(v).strip().lower() for v in org_a if v}
+            elif org_a:
+                org_a_set = {str(org_a).strip().lower()}
+                
+            if isinstance(org_b, list):
+                org_b_set = {str(v).strip().lower() for v in org_b if v}
+            elif org_b:
+                org_b_set = {str(org_b).strip().lower()}
+            
+            # Check if there's any overlap
+            if org_a_set and org_b_set:
+                if org_a_set.isdisjoint(org_b_set):
+                    # No overlap - different organizations might indicate different people
+                    return True
                 
         return False
         
@@ -205,8 +238,19 @@ class MergeExecutor:
     def _has_suspicious_patterns(self, proposal: MergeProposal) -> bool:
         """Check for patterns that might indicate false positives."""
         # Check for very generic names
-        primary_name = proposal.primary_entity.get("Full Name", "").strip()
-        secondary_name = proposal.secondary_entity.get("Full Name", "").strip()
+        primary_name = proposal.primary_entity.get("Full Name", "")
+        secondary_name = proposal.secondary_entity.get("Full Name", "")
+        
+        # Convert to string if needed
+        if isinstance(primary_name, list):
+            primary_name = ", ".join(str(v) for v in primary_name)
+        else:
+            primary_name = str(primary_name).strip() if primary_name else ""
+            
+        if isinstance(secondary_name, list):
+            secondary_name = ", ".join(str(v) for v in secondary_name)
+        else:
+            secondary_name = str(secondary_name).strip() if secondary_name else ""
         
         generic_names = ["admin", "test", "user", "unknown", "n/a", "null"]
         
@@ -274,7 +318,7 @@ class MergeExecutor:
         try:
             # Create backup if enabled
             backup_info = {}
-            if self.config["backup_before_merge"]:
+            if self.config.get("backup_before_merge", True):
                 backup_info = self._create_backup(proposal)
                 
             # Execute the merge based on strategy
@@ -320,7 +364,7 @@ class MergeExecutor:
             return False
             
         # Safety checks failed
-        if self.config["enable_safety_checks"] and proposal.safety_checks:
+        if self.config.get("enable_safety_checks", True) and proposal.safety_checks:
             logger.warning(f"Safety checks failed for {proposal.proposal_id}: {proposal.safety_checks}")
             return False
             
@@ -330,7 +374,7 @@ class MergeExecutor:
             
         # Confidence too low for auto-merge
         if (not auto_approved and 
-            proposal.confidence_score < self.config["auto_approve_threshold"]):
+            proposal.confidence_score < self.config.get("auto_approve_threshold", 95.0)):
             return False
             
         return True
