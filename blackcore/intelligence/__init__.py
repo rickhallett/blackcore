@@ -16,6 +16,17 @@ from .interfaces import (
     IInvestigationPipeline,
 )
 
+from .engine import AnalysisEngine
+
+from .strategies import (
+    EntityExtractionStrategy,
+    RelationshipMappingStrategy,
+    CommunityDetectionStrategy,
+    AnomalyDetectionStrategy,
+    PathFindingStrategy,
+    CentralityAnalysisStrategy,
+)
+
 __all__ = [
     # Core models
     "Entity",
@@ -30,4 +41,15 @@ __all__ = [
     "IAnalysisStrategy",
     "ICache",
     "IInvestigationPipeline",
+    
+    # Engine
+    "AnalysisEngine",
+    
+    # Strategies
+    "EntityExtractionStrategy",
+    "RelationshipMappingStrategy",
+    "CommunityDetectionStrategy",
+    "AnomalyDetectionStrategy",
+    "PathFindingStrategy",
+    "CentralityAnalysisStrategy",
 ]

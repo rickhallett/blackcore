@@ -115,6 +115,30 @@ class AnalysisResult:
             "duration_ms": self.duration_ms,
             "timestamp": self.timestamp.isoformat()
         }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "AnalysisResult":
+        """Create AnalysisResult from dictionary representation."""
+        # Reconstruct the request
+        request = AnalysisRequest(
+            type=AnalysisType(data["request"]["type"]),
+            parameters=data["request"]["parameters"],
+            context=data["request"]["context"],
+            constraints=data["request"]["constraints"]
+        )
+        
+        # Parse timestamp
+        timestamp = datetime.fromisoformat(data["timestamp"])
+        
+        return cls(
+            request=request,
+            success=data["success"],
+            data=data["data"],
+            metadata=data.get("metadata", {}),
+            errors=data.get("errors", []),
+            duration_ms=data.get("duration_ms"),
+            timestamp=timestamp
+        )
 
 
 class ILLMProvider(ABC):
