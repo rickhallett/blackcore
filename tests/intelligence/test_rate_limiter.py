@@ -3,7 +3,7 @@
 import pytest
 import asyncio
 import time
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, AsyncMock, patch
 
 pytestmark = pytest.mark.asyncio
 
@@ -228,15 +228,15 @@ class TestRateLimiterIntegration:
         """Create a mock LLM provider."""
         provider = Mock()
         provider.estimate_tokens = Mock(return_value=100)
-        provider.complete = Mock(return_value="Test response")
+        provider.complete = AsyncMock(return_value="Test response")
         return provider
     
     @pytest.fixture
     def mock_cache(self):
         """Create a mock cache."""
         cache = Mock()
-        cache.get = Mock(return_value=None)
-        cache.set = Mock(return_value=True)
+        cache.get = AsyncMock(return_value=None)
+        cache.set = AsyncMock(return_value=True)
         return cache
     
     async def test_llm_client_with_rate_limiting(self, mock_provider, mock_cache):
