@@ -229,3 +229,91 @@ When implementing AI features:
 - Rate limiting prevents API throttling
 - Async support for concurrent operations
 - Connection pooling for database operations
+
+## Graphiti MCP Integration
+
+The repository integrates with the Graphiti MCP (Model Context Protocol) server for temporally-aware knowledge graph management. Graphiti provides persistent memory and contextual awareness across conversations.
+
+### What is Graphiti?
+
+Graphiti is a framework for building and querying temporally-aware knowledge graphs, specifically designed for AI agents operating in dynamic environments. Unlike traditional RAG methods, Graphiti continuously integrates user interactions, structured and unstructured data into a coherent, queryable graph.
+
+### Available MCP Tools
+
+The Graphiti MCP server provides the following tools for knowledge graph operations:
+
+**Episode Management:**
+```python
+# Add episodes to the knowledge graph
+mcp__graphiti__add_episode(name, episode_body, format="text")
+
+# Get recent episodes
+mcp__graphiti__get_episodes(group_id=None, last_n=10)
+
+# Delete episodes
+mcp__graphiti__delete_episode(uuid)
+```
+
+**Search Operations:**
+```python
+# Search for relevant node summaries
+mcp__graphiti__search_nodes(query, max_nodes=10)
+
+# Search for relevant facts
+mcp__graphiti__search_facts(query, max_facts=10)
+```
+
+**Entity Management:**
+```python
+# Get entity edge details
+mcp__graphiti__get_entity_edge(uuid)
+
+# Delete entity edges
+mcp__graphiti__delete_entity_edge(uuid)
+```
+
+**Graph Management:**
+```python
+# Clear entire graph (requires authorization)
+mcp__graphiti__clear_graph(auth=None)
+```
+
+### Integration with Blackcore Intelligence Processing
+
+Graphiti enhances Blackcore's intelligence processing workflow:
+
+1. **Capture Phase**: Raw intelligence (transcripts, documents) can be added as episodes
+2. **Structure Phase**: Entities and relationships are automatically extracted and stored
+3. **Analyze Phase**: Historical context from the knowledge graph informs AI analysis
+4. **Enrich Phase**: Insights are stored back into the graph for future reference
+
+### Best Practices
+
+- Use descriptive episode names for better searchability
+- Store intelligence transcripts as episodes with metadata
+- Leverage search functions to find related entities before creating new ones
+- Group related episodes using consistent group_id values
+- Use the knowledge graph to maintain context across processing sessions
+
+### Example Usage
+
+```python
+# Store a new intelligence transcript
+await mcp__graphiti__add_episode(
+    name="Intelligence Brief 2024-01-15",
+    episode_body="Meeting transcript content...",
+    format="text"
+)
+
+# Search for related entities
+results = await mcp__graphiti__search_nodes(
+    query="organization meeting participants",
+    max_nodes=5
+)
+
+# Find relevant historical context
+facts = await mcp__graphiti__search_facts(
+    query="similar meetings or organizations",
+    max_facts=10
+)
+```

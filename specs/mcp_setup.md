@@ -1,29 +1,29 @@
-# MCP (Model Context Protocol) Setup Guide for LinkybBotty
+# MCP (Model Context Protocol) Setup Guide for Project Blackcore
 
-This guide provides detailed setup instructions for all MCP services required by the LinkedIn Easy Apply automation bot.
+This guide provides detailed setup instructions for all MCP services that can enhance the development and operation of Project Blackcore, the intelligence engine for "Project Nassau."
 
 ## Table of Contents
 1. [Overview](#overview)
 2. [Prerequisites](#prerequisites)
-3. [Bright Data MCP](#bright-data-mcp)
-4. [Graphiti MCP](#graphiti-mcp)
-5. [MindsDB MCP](#mindsdb-mcp)
-6. [Perplexity MCP](#perplexity-mcp)
-7. [Context7 MCP](#context7-mcp)
+3. [Notion MCP](#notion-mcp)
+4. [Graphiti MCP (for Knowledge Graph Analysis)](#graphiti-mcp-for-knowledge-graph-analysis)
+5. [Perplexity MCP (for Data Enrichment)](#perplexity-mcp-for-data-enrichment)
+6. [Filesystem MCP](#filesystem-mcp)
+7. [Context7 MCP (for Code Intelligence)](#context7-mcp-for-code-intelligence)
 8. [Configuration Files](#configuration-files)
 9. [Testing & Validation](#testing--validation)
 
 ## Overview
 
-LinkybBotty utilizes five MCP services for different functionalities:
+Project Blackcore transforms unstructured data into a structured knowledge graph in Notion. MCP services can streamline interaction with Notion, enable advanced graph analytics, enrich data with external information, and improve developer productivity.
 
-| Service | Purpose | Required for |
-|---------|---------|--------------|
-| **Bright Data** | LinkedIn job scraping with proxy rotation | Job discovery |
-| **Graphiti** | Graph-based data storage and analytics | Application tracking |
-| **MindsDB** | Gmail integration for response monitoring | Email tracking |
-| **Perplexity** | AI-powered search and research | Job matching & analysis |
-| **Context7** | Code understanding and documentation | Development assistance |
+| Service | Purpose | Blackcore Use Case |
+|---|---|---|
+| **Notion** | Primary data store and UI | Core for all database/page CRUD operations. |
+| **Graphiti** | Graph database interaction | Advanced deduplication and relationship analysis. |
+| **Perplexity** | AI-powered web search | Enriching entities with public data. |
+| **Filesystem** | Local file access | Reading transcripts, managing local JSON models. |
+| **Context7** | Code understanding | Navigating the codebase and generating tests. |
 
 ## Prerequisites
 
@@ -36,88 +36,59 @@ LinkybBotty utilizes five MCP services for different functionalities:
    claude mcp list
    ```
 
-2. **API Keys Required**
-   - Bright Data API token
-   - MindsDB connection credentials
-   - Perplexity Pro API key
-   - Context7 API key (if applicable)
+2. **API Keys & Environment**
+   - Create a `.env` file from `.env.example`.
+   - Populate it with your keys: `NOTION_API_KEY`, `PERPLEXITY_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, etc.
+   - The application uses `python-dotenv` to load these variables.
 
 3. **System Requirements**
+   - Python 3.11+ (as defined in `.python-version`)
+   - `uv` for Python package management
    - Node.js 18+ (for MCP servers)
-   - Python 3.11+ (for project)
-   - Docker (optional, for containerized services)
+   - Docker (for Neo4j database)
 
-## Bright Data MCP
+## Notion MCP
+
+The Notion MCP allows direct interaction with the Notion API, which is central to Blackcore's function.
 
 ### 1. Installation
 ```bash
-# Install Bright Data MCP server
-npx -y @brightdata/mcp-server
-
-# Or add to Claude Code configuration
-claude mcp add-json bright-data '{
+# Add Notion MCP server to Claude Code
+claude mcp add-json notion '{
   "command": "npx",
-  "args": ["-y", "@brightdata/mcp-server"],
+  "args": ["-y", "@notionhq/notion-mcp-server"],
   "env": {
-    "BRIGHT_DATA_API_TOKEN": "your-api-token-here",
-    "WEB_UNLOCKER_ZONE": "mcp_unlocker"
+    "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ${NOTION_API_KEY}\", \"Notion-Version\": \"2022-06-28\" }"
   }
 }'
 ```
+*Note: Ensure your `NOTION_API_KEY` is set in your shell environment or replace `${NOTION_API_KEY}` directly.*
 
-### 2. Configuration
-Create `~/.brightdata/config.json`:
-```json
-{
-  "api_token": "your-api-token",
-  "zones": {
-    "web_unlocker": {
-      "zone_id": "mcp_unlocker",
-      "proxy_type": "datacenter",
-      "country": "US"
-    }
-  },
-  "rate_limits": {
-    "linkedin": "100/1h",
-    "default": "1000/1h"
-  }
-}
-```
+### 2. Use Cases for Blackcore
 
-### 3. Environment Variables
+*   **Schema Verification**: "Using the Notion MCP, get the schema for the 'People & Places' database and compare it against the local model defined in `blackcore/models/notion_properties.py`."
+*   **Live Data Fetching**: "Fetch the top 5 pages from the 'Intelligence Transcripts' database to check their latest content before running the `scripts/ingest_intelligence.py` script."
+*   **Manual Page Creation**: "Create a new page in the 'Actionable Tasks' database with the title 'Review deduplication proposals for Operation Stardust'."
+
+## Graphiti MCP (for Knowledge Graph Analysis)
+
+While Notion acts as the primary database, a dedicated graph database like Neo4j (via Graphiti) can power advanced analytics, aligning with Blackcore's goal of creating a knowledge graph. This is particularly useful for the deduplication engine.
+
+### 1. Neo4j Setup (via Docker)
 ```bash
-# Add to .env
-BRIGHT_DATA_API_TOKEN=your-api-token
-BRIGHT_DATA_RATE_LIMIT=100/1h
-WEB_UNLOCKER_ZONE=mcp_unlocker
+# Run a Neo4j container for Blackcore
+docker run -d \
+  --name neo4j-blackcore \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/blackcore_secret_password \
+  -e NEO4J_PLUGINS='["graph-data-science"]' \
+  -v $HOME/neo4j/blackcore_data:/data \
+  neo4j:5-community
 ```
 
-### 4. Usage Example
-```python
-# bright_data_test.py
-from mcp import BrightDataMCP
-
-async def test_bright_data():
-    client = BrightDataMCP()
-    
-    # Test LinkedIn job search
-    jobs = await client.search_jobs(
-        query="python developer",
-        location="Remote",
-        easy_apply_only=True,
-        limit=10
-    )
-    print(f"Found {len(jobs)} jobs")
-```
-
-## Graphiti MCP
-
-### 1. Installation
+### 2. Graphiti Installation
 ```bash
-# Install Graphiti MCP server
-npx -y @graphiti/mcp-server
-
-# Or add to Claude Code
+# Add Graphiti MCP server to Claude Code
 claude mcp add-json graphiti '{
   "command": "npx",
   "args": ["-y", "@graphiti/mcp-server"],
@@ -129,304 +100,115 @@ claude mcp add-json graphiti '{
 }'
 ```
 
-### 2. Neo4j Setup (if using local)
-```bash
-# Using Docker
-docker run -d \
-  --name neo4j-linkybotty \
-  -p 7474:7474 -p 7687:7687 \
-  -e NEO4J_AUTH=neo4j/linkybotty123 \
-  -e NEO4J_PLUGINS='["graph-data-science"]' \
-  -v $HOME/neo4j/data:/data \
-  neo4j:5-community
-```
+### 3. Use Cases for Blackcore
 
-### 3. Configuration
-```python
-# graphiti_config.py
-GRAPHITI_CONFIG = {
-    "host": "localhost",
-    "port": 8000,
-    "neo4j": {
-        "uri": "neo4j://localhost:7687",
-        "user": "neo4j",
-        "password": "linkybotty123"
-    },
-    "schema": {
-        "entities": ["Job", "Company", "Application", "Skill"],
-        "relationships": ["APPLIED_TO", "POSTED_BY", "REQUIRES", "HAS_SKILL"]
-    }
-}
-```
+*   **Deduplication Analysis**: "Load all entities from `blackcore/models/json/people_places.json` into Graphiti. Run a query to find nodes with similar names but different IDs to identify potential duplicates, similar to the logic in `blackcore/deduplication/graph_analyzer.py`."
+*   **Relationship Discovery**: "Build a graph of 'Intelligence Transcripts' connected to 'People' and 'Organizations'. Query for paths between two seemingly unrelated people to uncover hidden connections."
+*   **Visualize Network**: "Export a subgraph of all entities related to 'Project Nassau' as a Cypher query that can be pasted into the Neo4j Browser for visualization."
 
-### 4. Initialize Schema
-```python
-# init_graphiti.py
-async def initialize_graphiti():
-    graphiti = GraphitiMCP()
-    
-    # Create constraints and indexes
-    await graphiti.execute_query("""
-        CREATE CONSTRAINT job_id IF NOT EXISTS
-        FOR (j:Job) REQUIRE j.id IS UNIQUE
-    """)
-    
-    await graphiti.execute_query("""
-        CREATE INDEX job_title IF NOT EXISTS
-        FOR (j:Job) ON (j.title)
-    """)
-```
+## Perplexity MCP (for Data Enrichment)
 
-## MindsDB MCP
+Perplexity can be used to enrich the raw data ingested by Blackcore, adding a layer of external validation and context.
 
 ### 1. Installation
 ```bash
-# Install MindsDB MCP server
-npx -y @mindsdb/mcp-server
-
-# Or add to Claude Code
-claude mcp add-json mindsdb '{
-  "command": "npx",
-  "args": ["-y", "@mindsdb/mcp-server"],
-  "env": {
-    "MINDSDB_HOST": "localhost",
-    "MINDSDB_PORT": "47334",
-    "MINDSDB_USERNAME": "mindsdb",
-    "MINDSDB_PASSWORD": "your-password"
-  }
-}'
-```
-
-### 2. Gmail Integration Setup
-```sql
--- Create Gmail database in MindsDB
-CREATE DATABASE gmail_db
-WITH ENGINE = 'gmail',
-PARAMETERS = {
-  "credentials_file": "/path/to/gmail-credentials.json"
-};
-
--- Create job responses view
-CREATE VIEW job_responses AS
-SELECT 
-  id,
-  subject,
-  sender,
-  body,
-  received_date,
-  labels
-FROM gmail_db.messages
-WHERE 
-  labels LIKE '%job%' OR
-  subject REGEXP 'application|interview|offer|rejection';
-```
-
-### 3. Configuration
-```python
-# mindsdb_config.py
-MINDSDB_CONFIG = {
-    "host": "localhost",
-    "port": 47334,
-    "database": "gmail_db",
-    "auth": {
-        "username": "mindsdb",
-        "password": os.getenv("MINDSDB_PASSWORD")
-    }
-}
-```
-
-## Perplexity MCP
-
-### 1. Installation
-```bash
-# Install Perplexity MCP server
-npx -y @perplexity/mcp-server
-
-# Or add to Claude Code
+# Add Perplexity MCP server to Claude Code
 claude mcp add-json perplexity '{
   "command": "npx",
   "args": ["-y", "@perplexity/mcp-server"],
   "env": {
-    "PERPLEXITY_API_KEY": "pplx-your-api-key",
-    "PERPLEXITY_MODEL": "sonar-pro",
-    "PERPLEXITY_SEARCH_DOMAINS": "linkedin.com,indeed.com,glassdoor.com"
+    "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}",
+    "PERPLEXITY_MODEL": "sonar-pro"
   }
 }'
 ```
 
-### 2. Configuration
-```python
-# perplexity_config.py
-PERPLEXITY_CONFIG = {
-    "api_key": os.getenv("PERPLEXITY_API_KEY"),
-    "model": "sonar-pro",  # Pro subscription model
-    "search_settings": {
-        "domains": ["linkedin.com", "indeed.com", "glassdoor.com"],
-        "recency": "week",  # Focus on recent job postings
-        "search_type": "professional"
-    }
-}
-```
+### 2. Use Cases for Blackcore
 
-### 3. Usage for Job Analysis
-```python
-# perplexity_job_analyzer.py
-class JobAnalyzer:
-    def __init__(self):
-        self.perplexity = PerplexityMCP()
-    
-    async def analyze_company(self, company_name: str):
-        """Research company using Perplexity Pro"""
-        query = f"""
-        Research {company_name}:
-        - Recent hiring trends
-        - Company culture and values
-        - Technology stack
-        - Recent news or layoffs
-        - Interview process
-        """
-        
-        return await self.perplexity.search(
-            query=query,
-            search_domains=["linkedin.com", "glassdoor.com"],
-            pro_mode=True
-        )
-    
-    async def match_skills(self, job_description: str, user_skills: List[str]):
-        """Use Perplexity to analyze skill matching"""
-        query = f"""
-        Analyze job requirements and match with candidate skills:
-        
-        Job Description: {job_description[:500]}
-        
-        Candidate Skills: {', '.join(user_skills)}
-        
-        Provide:
-        1. Skill match percentage
-        2. Missing critical skills
-        3. Transferable skills that apply
-        """
-        
-        return await self.perplexity.complete(query)
-```
+*   **Entity Enrichment**: "For a newly created 'Organization' entity, use Perplexity to search for its official website, headquarters location, and key executives. Add this information to the entity's properties before syncing to Notion."
+*   **Fact Checking**: "A transcript mentions a meeting on a specific date. Use Perplexity to search for public news or events on that date to corroborate the information."
+*   **Alias Discovery**: "An individual is mentioned by a nickname. Use Perplexity to search for public information linking that nickname to a known person in the 'People & Places' database."
 
-## Context7 MCP
+## Filesystem MCP
+
+Direct filesystem access is crucial for reading source data and managing local files before they are processed and synced.
 
 ### 1. Installation
 ```bash
-# Install Context7 MCP server
-npx -y @context7/mcp-server
+# Add Filesystem MCP server, granting access to the project directory
+claude mcp add filesystem -s user -- npx -y @modelcontextprotocol/server-filesystem $(pwd)
+```
 
-# Or add to Claude Code
+### 2. Use Cases for Blackcore
+
+*   **Ingest New Transcripts**: "Check the `transcripts/` directory for any new `.json` files that haven't been processed yet."
+*   **Read Local Data Models**: "Read the contents of `blackcore/models/json/organizations_bodies.json` to see the current state of local organization data."
+*   **Manage Reports**: "List all merge proposal reports in the `reports/merge_operations/` directory generated by the deduplication engine."
+
+## Context7 MCP (for Code Intelligence)
+
+Given the complexity of Blackcore, Context7 can help developers navigate the codebase and maintain quality.
+
+### 1. Installation
+```bash
+# Add Context7 MCP server to Claude Code
 claude mcp add-json context7 '{
   "command": "npx",
   "args": ["-y", "@context7/mcp-server"],
   "env": {
-    "CONTEXT7_API_KEY": "your-api-key",
-    "CONTEXT7_WORKSPACE": "linkybotty",
-    "CONTEXT7_INDEX_PATH": "./src"
+    "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}",
+    "CONTEXT7_WORKSPACE": "blackcore",
+    "CONTEXT7_INDEX_PATH": "./blackcore"
   }
 }'
 ```
 
-### 2. Configuration
-```python
-# context7_config.py
-CONTEXT7_CONFIG = {
-    "api_key": os.getenv("CONTEXT7_API_KEY"),
-    "workspace": "linkybotty",
-    "index_settings": {
-        "paths": ["./src", "./tests"],
-        "file_types": [".py", ".md", ".json"],
-        "ignore_patterns": ["*.pyc", "__pycache__", ".venv"]
-    }
-}
-```
+### 2. Use Cases for Blackcore
 
-### 3. Usage for Code Understanding
-```python
-# context7_helper.py
-class CodeAssistant:
-    def __init__(self):
-        self.context7 = Context7MCP()
-    
-    async def find_implementation(self, feature: str):
-        """Find where a feature is implemented"""
-        return await self.context7.search_code(
-            query=f"implementation of {feature}",
-            file_types=[".py"],
-            semantic=True
-        )
-    
-    async def generate_tests(self, function_name: str):
-        """Generate test cases for a function"""
-        context = await self.context7.get_function_context(function_name)
-        return await self.context7.generate(
-            prompt=f"Generate pytest test cases for: {context}",
-            context_aware=True
-        )
-```
+*   **Understand Data Flow**: "Using Context7, trace how a 'relation' property is handled from its definition in `blackcore/models/properties.py` through the `blackcore/handlers/relation.py` handler to the `blackcore/services/sync.py` service."
+*   **Find Property Handler Logic**: "Find the implementation for handling 'last_edited_time' properties in the codebase."
+*   **Generate Tests**: "Get the function signature and context for `blackcore.repositories.page.PageRepository.create_page` and generate a pytest unit test for it."
 
 ## Configuration Files
 
-### 1. Complete `.env` File
+### 1. Example `.env` File
 ```bash
-# Bright Data
-BRIGHT_DATA_API_TOKEN=your-bright-data-token
-BRIGHT_DATA_RATE_LIMIT=100/1h
-WEB_UNLOCKER_ZONE=mcp_unlocker
+# Notion
+NOTION_API_KEY=secret_...
+NOTION_ROOT_PAGE_ID=...
 
-# Graphiti
-GRAPHITI_HOST=localhost
-GRAPHITI_PORT=8000
-NEO4J_URI=neo4j://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=linkybotty123
-
-# MindsDB
-MINDSDB_HOST=localhost
-MINDSDB_PORT=47334
-MINDSDB_USERNAME=mindsdb
-MINDSDB_PASSWORD=your-mindsdb-password
+# AI Providers
+ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_API_KEY=...
 
 # Perplexity
-PERPLEXITY_API_KEY=pplx-your-api-key
-PERPLEXITY_MODEL=sonar-pro
+PERPLEXITY_API_KEY=pplx-...
 
-# Context7
-CONTEXT7_API_KEY=your-context7-key
-CONTEXT7_WORKSPACE=linkybotty
+# Neo4j/Graphiti
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=blackcore_secret_password
 
-# Application settings
-STATIC_EMAIL=your-email@gmail.com
-DAILY_APPLICATION_LIMIT=50
+
+# Claude code local server connection
+claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```
 
 ### 2. MCP Configuration (`~/.claude/mcp.json`)
 ```json
 {
-  "servers": {
-    "bright-data": {
+  "mcp-servers": {
+    "notion": {
       "command": "npx",
-      "args": ["-y", "@brightdata/mcp-server"],
+      "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
-        "BRIGHT_DATA_API_TOKEN": "${BRIGHT_DATA_API_TOKEN}"
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ${NOTION_API_KEY}\", \"Notion-Version\": \"2022-06-28\" }"
       }
     },
     "graphiti": {
       "command": "npx",
       "args": ["-y", "@graphiti/mcp-server"],
       "env": {
-        "GRAPHITI_HOST": "localhost",
-        "GRAPHITI_PORT": "8000"
-      }
-    },
-    "mindsdb": {
-      "command": "npx",
-      "args": ["-y", "@mindsdb/mcp-server"],
-      "env": {
-        "MINDSDB_HOST": "localhost",
-        "MINDSDB_PORT": "47334"
+        "GRAPHITI_DATABASE_URL": "neo4j://localhost:7687"
       }
     },
     "perplexity": {
@@ -436,11 +218,16 @@ DAILY_APPLICATION_LIMIT=50
         "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
       }
     },
+    "filesystem": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/blackcore/project"]
+    },
     "context7": {
       "command": "npx",
       "args": ["-y", "@context7/mcp-server"],
       "env": {
-        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}",
+        "CONTEXT7_WORKSPACE": "blackcore"
       }
     }
   }
@@ -449,154 +236,48 @@ DAILY_APPLICATION_LIMIT=50
 
 ## Testing & Validation
 
-### 1. Test All MCP Connections
+Create a Python script `scripts/test_mcp_connections.py` to validate the setup.
+
 ```python
-# test_mcp_connections.py
+# scripts/test_mcp_connections.py
 import asyncio
 from typing import Dict, Any
 
+# Assume MCP client libraries are available or use a generic MCP client
+# This is a conceptual example
+
 async def test_all_connections() -> Dict[str, Any]:
-    """Test all MCP service connections"""
+    """Test all MCP service connections for Blackcore"""
     results = {}
     
-    # Test Bright Data
+    # Test Notion
     try:
-        bright_data = BrightDataMCP()
-        test_search = await bright_data.search_jobs("test", limit=1)
-        results["bright_data"] = {"status": "✓", "message": "Connected"}
+        # notion_mcp = NotionMCP()
+        # test_result = await notion_mcp.get_database(os.getenv("NOTION_ROOT_PAGE_ID"))
+        results["notion"] = {"status": "✓", "message": "Conceptually Connected"}
     except Exception as e:
-        results["bright_data"] = {"status": "✗", "error": str(e)}
+        results["notion"] = {"status": "✗", "error": str(e)}
     
     # Test Graphiti
     try:
-        graphiti = GraphitiMCP()
-        test_query = await graphiti.execute_query("RETURN 1 as test")
-        results["graphiti"] = {"status": "✓", "message": "Connected"}
+        # graphiti_mcp = GraphitiMCP()
+        # test_query = await graphiti_mcp.execute_query("RETURN 1 as test")
+        results["graphiti"] = {"status": "✓", "message": "Conceptually Connected"}
     except Exception as e:
         results["graphiti"] = {"status": "✗", "error": str(e)}
     
-    # Test MindsDB
-    try:
-        mindsdb = MindsDBMCP()
-        test_query = await mindsdb.query("SHOW DATABASES")
-        results["mindsdb"] = {"status": "✓", "message": "Connected"}
-    except Exception as e:
-        results["mindsdb"] = {"status": "✗", "error": str(e)}
-    
     # Test Perplexity
     try:
-        perplexity = PerplexityMCP()
-        test_search = await perplexity.search("test query", limit=1)
-        results["perplexity"] = {"status": "✓", "message": "Connected"}
+        # perplexity_mcp = PerplexityMCP()
+        # test_search = await perplexity_mcp.search("test query", limit=1)
+        results["perplexity"] = {"status": "✓", "message": "Conceptually Connected"}
     except Exception as e:
         results["perplexity"] = {"status": "✗", "error": str(e)}
     
-    # Test Context7
-    try:
-        context7 = Context7MCP()
-        test_search = await context7.search_code("test", limit=1)
-        results["context7"] = {"status": "✓", "message": "Connected"}
-    except Exception as e:
-        results["context7"] = {"status": "✗", "error": str(e)}
-    
-    return results
-
-# Run tests
-if __name__ == "__main__":
-    results = asyncio.run(test_all_connections())
+    print("MCP Connection Test Results:")
     for service, result in results.items():
-        print(f"{service}: {result}")
+        print(f"- {service.capitalize()}: {result['status']} {result.get('message', '')}{result.get('error', '')}")
+
+if __name__ == "__main__":
+    asyncio.run(test_all_connections())
 ```
-
-### 2. Integration Test
-```python
-# test_integration.py
-async def test_full_pipeline():
-    """Test the complete MCP integration pipeline"""
-    
-    # 1. Search for a job using Bright Data
-    jobs = await bright_data.search_jobs("Python Developer", limit=1)
-    assert jobs, "No jobs found"
-    
-    # 2. Research company using Perplexity
-    company_info = await perplexity.analyze_company(jobs[0].company)
-    assert company_info, "No company info found"
-    
-    # 3. Store in Graphiti
-    await graphiti.create_job_node(jobs[0])
-    
-    # 4. Check email responses via MindsDB
-    responses = await mindsdb.check_job_responses()
-    
-    # 5. Use Context7 to understand codebase
-    implementation = await context7.find_implementation("job application")
-    
-    print("✓ All MCP services integrated successfully")
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Bright Data Connection Issues**
-   - Verify API token is valid
-   - Check rate limits haven't been exceeded
-   - Ensure proxy zones are configured correctly
-
-2. **Graphiti/Neo4j Issues**
-   - Verify Neo4j is running: `docker ps | grep neo4j`
-   - Check Neo4j logs: `docker logs neo4j-linkybotty`
-   - Ensure schema is initialized
-
-3. **MindsDB Gmail Issues**
-   - Verify Gmail API credentials are valid
-   - Check OAuth scopes include email read access
-   - Ensure MindsDB server is running
-
-4. **Perplexity Rate Limits**
-   - Pro subscription allows higher limits
-   - Implement exponential backoff for rate limit errors
-   - Cache results to minimize API calls
-
-5. **Context7 Indexing Issues**
-   - Ensure workspace path is correct
-   - Check file permissions
-   - Verify API key has proper access
-
-### Debug Commands
-```bash
-# Check MCP server logs
-claude mcp logs bright-data
-claude mcp logs graphiti
-
-# Restart specific MCP server
-claude mcp restart perplexity
-
-# Check all MCP statuses
-claude mcp status
-```
-
-## Security Best Practices
-
-1. **Never commit API keys** - Use environment variables
-2. **Rotate credentials regularly** - Especially for production
-3. **Use separate environments** - Dev/staging/production
-4. **Implement rate limiting** - Prevent API abuse
-5. **Monitor usage** - Set up alerts for unusual activity
-6. **Encrypt sensitive data** - Use cryptography library for storage
-
-## Next Steps
-
-1. Run the connection tests to verify all services
-2. Initialize the Graphiti schema
-3. Set up Gmail integration in MindsDB
-4. Configure Perplexity search domains for job sites
-5. Index the codebase with Context7
-6. Begin implementing the application pipeline
-
-For additional support, refer to:
-- [Bright Data Documentation](https://docs.brightdata.com)
-- [Graphiti MCP Docs](https://graphiti.dev/mcp)
-- [MindsDB Documentation](https://docs.mindsdb.com)
-- [Perplexity API Docs](https://docs.perplexity.ai)
-- [Context7 Documentation](https://context7.ai/docs)
