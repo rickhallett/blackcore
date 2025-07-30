@@ -30,7 +30,8 @@ def mock_notion_client():
 
         if client.request_count > client.rate_limit_threshold:
             error = APIResponseError(
-                code="rate_limited", message="Rate limited. Please retry after 1 second."
+                code="rate_limited",
+                message="Rate limited. Please retry after 1 second.",
             )
             error.code = "rate_limited"
             raise error
@@ -56,9 +57,15 @@ def sample_page_data():
         "id": "test-page-id",
         "properties": {
             "Title": {"type": "title", "title": [{"plain_text": "Test Page Title"}]},
-            "Description": {"type": "rich_text", "rich_text": [{"plain_text": "Test description"}]},
+            "Description": {
+                "type": "rich_text",
+                "rich_text": [{"plain_text": "Test description"}],
+            },
             "Status": {"type": "select", "select": {"name": "Active"}},
-            "Tags": {"type": "multi_select", "multi_select": [{"name": "Tag1"}, {"name": "Tag2"}]},
+            "Tags": {
+                "type": "multi_select",
+                "multi_select": [{"name": "Tag1"}, {"name": "Tag2"}],
+            },
             "Priority": {"type": "number", "number": 5},
             "Is Active": {"type": "checkbox", "checkbox": True},
             "Due Date": {"type": "date", "date": {"start": "2025-07-15", "end": None}},
@@ -120,7 +127,10 @@ def sample_database_schema():
             "Email": {"type": "email", "email": {}},
             "Phone": {"type": "phone_number", "phone_number": {}},
             "Assignee": {"type": "people", "people": {}},
-            "Related Pages": {"type": "relation", "relation": {"database_id": "related-db-id"}},
+            "Related Pages": {
+                "type": "relation",
+                "relation": {"database_id": "related-db-id"},
+            },
             "Attachments": {"type": "files", "files": {}},
         },
     }
@@ -137,7 +147,9 @@ def test_data_generator():
             people.append(
                 {
                     "Full Name": f"Person {i}",
-                    "Role": ["Target", "Ally", "Neutral", "Adversary", "Unknown"][i % 5],
+                    "Role": ["Target", "Ally", "Neutral", "Adversary", "Unknown"][
+                        i % 5
+                    ],
                     "Email": f"person{i}@example.com",
                     "Phone": f"+1234567{i:03d}",
                     "Organization": f"Org {i // 10}",

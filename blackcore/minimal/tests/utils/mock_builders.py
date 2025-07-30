@@ -56,7 +56,9 @@ class MockNotionClientBuilder:
         def query_side_effect(database_id, **kwargs):
             if "query" in self._errors:
                 raise self._errors["query"]
-            return self._query_results.get(database_id, {"results": [], "has_more": False})
+            return self._query_results.get(
+                database_id, {"results": [], "has_more": False}
+            )
 
         self.client.databases.query.side_effect = query_side_effect
 
@@ -66,7 +68,8 @@ class MockNotionClientBuilder:
                 raise self._errors["create"]
             db_id = parent.get("database_id")
             return self._create_responses.get(
-                db_id, {"id": f"page-{datetime.now().timestamp()}", "properties": properties}
+                db_id,
+                {"id": f"page-{datetime.now().timestamp()}", "properties": properties},
             )
 
         self.client.pages.create.side_effect = create_side_effect
@@ -75,7 +78,9 @@ class MockNotionClientBuilder:
         def update_side_effect(page_id, properties):
             if "update" in self._errors:
                 raise self._errors["update"]
-            return self._update_responses.get(page_id, {"id": page_id, "properties": properties})
+            return self._update_responses.get(
+                page_id, {"id": page_id, "properties": properties}
+            )
 
         self.client.pages.update.side_effect = update_side_effect
 
@@ -83,7 +88,9 @@ class MockNotionClientBuilder:
         def retrieve_side_effect(database_id):
             if "retrieve" in self._errors:
                 raise self._errors["retrieve"]
-            return self._retrieve_responses.get(database_id, {"id": database_id, "properties": {}})
+            return self._retrieve_responses.get(
+                database_id, {"id": database_id, "properties": {}}
+            )
 
         self.client.databases.retrieve.side_effect = retrieve_side_effect
 
@@ -98,9 +105,13 @@ class MockAIProviderBuilder:
         self._responses = []
         self._error = None
 
-    def with_extraction(self, entities: List[Entity], relationships: List[Relationship] = None):
+    def with_extraction(
+        self, entities: List[Entity], relationships: List[Relationship] = None
+    ):
         """Add an extraction response."""
-        extracted = ExtractedEntities(entities=entities, relationships=relationships or [])
+        extracted = ExtractedEntities(
+            entities=entities, relationships=relationships or []
+        )
 
         response_text = json.dumps(extracted.dict())
 
@@ -146,7 +157,9 @@ class ProcessingScenarioBuilder:
         self.expected_pages = {}
         self.expected_errors = []
 
-    def add_transcript(self, transcript, entities: List[Entity], notion_pages: List[NotionPage]):
+    def add_transcript(
+        self, transcript, entities: List[Entity], notion_pages: List[NotionPage]
+    ):
         """Add a transcript with expected results."""
         self.transcripts.append(transcript)
         self.expected_entities[transcript.title] = entities

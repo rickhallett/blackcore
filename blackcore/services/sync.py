@@ -53,7 +53,9 @@ class SyncResult:
         return {
             "mode": self.mode.value,
             "started_at": self.started_at.isoformat(),
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None,
+            "completed_at": (
+                self.completed_at.isoformat() if self.completed_at else None
+            ),
             "total_items": self.total_items,
             "synced_items": self.synced_items,
             "failed_items": self.failed_items,
@@ -258,8 +260,12 @@ class NotionSyncService(BaseService):
                         self.logger.error(f"Failed to sync page: {e}")
 
                 result.completed_at = datetime.utcnow()
-                result.summary["updated"] = sum(1 for e in result.errors if "update" in str(e))
-                result.summary["created"] = result.synced_items - result.summary["updated"]
+                result.summary["updated"] = sum(
+                    1 for e in result.errors if "update" in str(e)
+                )
+                result.summary["created"] = (
+                    result.synced_items - result.summary["updated"]
+                )
 
                 self.log_operation(
                     "sync_from_json",
@@ -345,7 +351,9 @@ class NotionSyncService(BaseService):
             if include_pages:
                 pages = self.search_repo.search_pages("")
                 # Filter out pages that belong to databases
-                standalone_pages = [p for p in pages if p.parent.get("type") != "database_id"]
+                standalone_pages = [
+                    p for p in pages if p.parent.get("type") != "database_id"
+                ]
                 result.total_items += len(standalone_pages)
 
                 for page in standalone_pages:

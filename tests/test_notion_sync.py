@@ -166,7 +166,9 @@ class TestRetryLogic:
     @patch.dict("os.environ", {"NOTION_API_KEY": "test-key"})
     @patch("time.sleep")
     @patch("blackcore.notion.client.Client")
-    def test_retry_on_rate_limit_error(self, mock_client_class, mock_sleep, mock_notion_client):
+    def test_retry_on_rate_limit_error(
+        self, mock_client_class, mock_sleep, mock_notion_client
+    ):
         """Test that rate limit errors trigger retries."""
         from notion_client.errors import APIResponseError
 
@@ -174,8 +176,13 @@ class TestRetryLogic:
         # APIResponseError needs response, message, and code
         mock_response = Mock()
         mock_response.status_code = 429
-        mock_response.json.return_value = {"code": "rate_limited", "message": "Rate limited"}
-        rate_limit_error = APIResponseError(mock_response, "Rate limited", "rate_limited")
+        mock_response.json.return_value = {
+            "code": "rate_limited",
+            "message": "Rate limited",
+        }
+        rate_limit_error = APIResponseError(
+            mock_response, "Rate limited", "rate_limited"
+        )
 
         # Set up the mock client instance
         mock_client_instance = Mock()
@@ -208,8 +215,13 @@ class TestRetryLogic:
         # Create an invalid request error
         mock_response = Mock()
         mock_response.status_code = 400
-        mock_response.json.return_value = {"code": "invalid_request", "message": "Invalid request"}
-        invalid_error = APIResponseError(mock_response, "Invalid request", "invalid_request")
+        mock_response.json.return_value = {
+            "code": "invalid_request",
+            "message": "Invalid request",
+        }
+        invalid_error = APIResponseError(
+            mock_response, "Invalid request", "invalid_request"
+        )
 
         # Set up the mock client instance
         mock_client_instance = Mock()
@@ -229,15 +241,22 @@ class TestRetryLogic:
     @patch.dict("os.environ", {"NOTION_API_KEY": "test-key"})
     @patch("time.sleep")
     @patch("blackcore.notion.client.Client")
-    def test_exponential_backoff(self, mock_client_class, mock_sleep, mock_notion_client):
+    def test_exponential_backoff(
+        self, mock_client_class, mock_sleep, mock_notion_client
+    ):
         """Test that retry delays increase exponentially."""
         from notion_client.errors import APIResponseError
 
         # Create a rate limit error
         mock_response = Mock()
         mock_response.status_code = 429
-        mock_response.json.return_value = {"code": "rate_limited", "message": "Rate limited"}
-        rate_limit_error = APIResponseError(mock_response, "Rate limited", "rate_limited")
+        mock_response.json.return_value = {
+            "code": "rate_limited",
+            "message": "Rate limited",
+        }
+        rate_limit_error = APIResponseError(
+            mock_response, "Rate limited", "rate_limited"
+        )
 
         # Set up the mock client instance
         mock_client_instance = Mock()
@@ -299,11 +318,15 @@ class TestSyncEngine:
             {"Full Name": "John Doe", "notion_page_id": "john-id"},
             {"Full Name": "Jane Smith", "notion_page_id": "jane-id"},
         ]
-        mock_open.return_value.__enter__.return_value.read.return_value = json.dumps(cached_data)
+        mock_open.return_value.__enter__.return_value.read.return_value = json.dumps(
+            cached_data
+        )
 
         # Mock config loading
         with patch("scripts.notion_sync.load_config_from_file") as mock_load_config:
-            mock_load_config.return_value = {"People & Contacts": {"title_property": "Full Name"}}
+            mock_load_config.return_value = {
+                "People & Contacts": {"title_property": "Full Name"}
+            }
 
             config = {
                 "id": "test-db-id",

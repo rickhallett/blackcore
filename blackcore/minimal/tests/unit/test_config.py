@@ -109,7 +109,9 @@ class TestProcessingConfig:
 
     def test_processing_config_custom(self):
         """Test processing config with custom values."""
-        config = ProcessingConfig(batch_size=50, cache_ttl=7200, dry_run=True, verbose=True)
+        config = ProcessingConfig(
+            batch_size=50, cache_ttl=7200, dry_run=True, verbose=True
+        )
         assert config.batch_size == 50
         assert config.cache_ttl == 7200
         assert config.dry_run is True
@@ -153,7 +155,10 @@ class TestConfigManager:
     def test_load_from_dict(self):
         """Test loading config from dictionary."""
         config_dict = {
-            "notion": {"api_key": "test-key", "databases": {"people": {"id": "people-db"}}},
+            "notion": {
+                "api_key": "test-key",
+                "databases": {"people": {"id": "people-db"}},
+            },
             "ai": {"provider": "openai", "api_key": "ai-key"},
         }
 
@@ -247,19 +252,25 @@ class TestConfigManager:
 
     def test_validate_config_valid(self):
         """Test validating a valid config."""
-        config = Config(notion=NotionConfig(api_key="test-key"), ai=AIConfig(api_key="ai-key"))
+        config = Config(
+            notion=NotionConfig(api_key="test-key"), ai=AIConfig(api_key="ai-key")
+        )
         ConfigManager.validate_config(config)  # Should not raise
 
     def test_validate_config_missing_notion_key(self):
         """Test validating config with missing Notion API key."""
-        config = Config(notion=NotionConfig(api_key=None), ai=AIConfig(api_key="ai-key"))
+        config = Config(
+            notion=NotionConfig(api_key=None), ai=AIConfig(api_key="ai-key")
+        )
         with pytest.raises(ConfigurationError) as exc_info:
             ConfigManager.validate_config(config)
         assert "Notion API key" in str(exc_info.value)
 
     def test_validate_config_missing_ai_key(self):
         """Test validating config with missing AI API key."""
-        config = Config(notion=NotionConfig(api_key="test-key"), ai=AIConfig(api_key=None))
+        config = Config(
+            notion=NotionConfig(api_key="test-key"), ai=AIConfig(api_key=None)
+        )
         with pytest.raises(ConfigurationError) as exc_info:
             ConfigManager.validate_config(config)
         assert "API key not configured" in str(exc_info.value)
@@ -267,7 +278,8 @@ class TestConfigManager:
     def test_validate_config_invalid_ai_provider(self):
         """Test validating config with invalid AI provider."""
         config = Config(
-            notion=NotionConfig(api_key="test-key"), ai=AIConfig(provider="invalid", api_key="key")
+            notion=NotionConfig(api_key="test-key"),
+            ai=AIConfig(provider="invalid", api_key="key"),
         )
         with pytest.raises(ConfigurationError) as exc_info:
             ConfigManager.validate_config(config)
@@ -287,7 +299,8 @@ class TestConfigManager:
 
         try:
             with patch.dict(
-                os.environ, {"NOTION_API_KEY": "env-override-key", "BLACKCORE_DRY_RUN": "true"}
+                os.environ,
+                {"NOTION_API_KEY": "env-override-key", "BLACKCORE_DRY_RUN": "true"},
             ):
                 config = ConfigManager.load(config_path=temp_path)
                 # Environment should override file

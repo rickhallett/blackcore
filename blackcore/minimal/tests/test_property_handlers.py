@@ -153,7 +153,10 @@ class TestMultiSelectPropertyHandler:
         handler = MultiSelectPropertyHandler()
 
         api_value = {
-            "multi_select": [{"name": "Tag1", "color": "red"}, {"name": "Tag2", "color": "blue"}]
+            "multi_select": [
+                {"name": "Tag1", "color": "red"},
+                {"name": "Tag2", "color": "blue"},
+            ]
         }
         assert handler.parse_from_api(api_value) == ["Tag1", "Tag2"]
 

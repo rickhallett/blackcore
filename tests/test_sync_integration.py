@@ -14,7 +14,9 @@ class TestFullSyncScenarios:
     @patch("blackcore.notion.client.NotionClient")
     @patch("pathlib.Path.exists")
     @patch("builtins.open", new_callable=mock_open)
-    def test_initial_sync_empty_to_populated(self, mock_file, mock_exists, mock_client_class):
+    def test_initial_sync_empty_to_populated(
+        self, mock_file, mock_exists, mock_client_class
+    ):
         """Test syncing fresh data to an empty Notion database."""
         # Setup
         mock_exists.return_value = True
@@ -77,7 +79,9 @@ class TestFullSyncScenarios:
     @patch("blackcore.notion.client.NotionClient")
     @patch("pathlib.Path.exists")
     @patch("builtins.open", new_callable=mock_open)
-    def test_incremental_sync_with_existing_data(self, mock_file, mock_exists, mock_client_class):
+    def test_incremental_sync_with_existing_data(
+        self, mock_file, mock_exists, mock_client_class
+    ):
         """Test syncing when some data already exists in Notion."""
         # Setup
         mock_exists.return_value = True
@@ -87,11 +91,15 @@ class TestFullSyncScenarios:
         existing_pages = [
             {
                 "id": "page-1",
-                "properties": {"Name": {"type": "title", "title": [{"plain_text": "Item 1"}]}},
+                "properties": {
+                    "Name": {"type": "title", "title": [{"plain_text": "Item 1"}]}
+                },
             },
             {
                 "id": "page-2",
-                "properties": {"Name": {"type": "title", "title": [{"plain_text": "Item 2"}]}},
+                "properties": {
+                    "Name": {"type": "title", "title": [{"plain_text": "Item 2"}]}
+                },
             },
         ]
         mock_client.get_all_database_pages.return_value = existing_pages
@@ -149,7 +157,9 @@ class TestFullSyncScenarios:
     @patch("scripts.notion_sync.load_config_from_file")
     @patch("pathlib.Path.exists")
     @patch("builtins.open", new_callable=mock_open)
-    def test_sync_with_relations(self, mock_file, mock_exists, mock_load_config, mock_client_class):
+    def test_sync_with_relations(
+        self, mock_file, mock_exists, mock_load_config, mock_client_class
+    ):
         """Test syncing data with cross-database relations."""
         # Setup
         mock_exists.return_value = True
@@ -187,8 +197,16 @@ class TestFullSyncScenarios:
         # Local data with relations
         local_data = {
             "Actionable Tasks": [
-                {"Task Name": "Task 1", "Assignee": ["John Doe"], "Organization": ["Acme Corp"]},
-                {"Task Name": "Task 2", "Assignee": ["Jane Smith"], "Organization": ["Tech Inc"]},
+                {
+                    "Task Name": "Task 1",
+                    "Assignee": ["John Doe"],
+                    "Organization": ["Acme Corp"],
+                },
+                {
+                    "Task Name": "Task 2",
+                    "Assignee": ["Jane Smith"],
+                    "Organization": ["Tech Inc"],
+                },
             ]
         }
 
@@ -216,7 +234,9 @@ class TestFullSyncScenarios:
 
         def capture_payload(*args, **kwargs):
             payload_calls.append(args)
-            return {"Task Name": {"title": [{"text": {"content": args[1]["Task Name"]}}]}}
+            return {
+                "Task Name": {"title": [{"text": {"content": args[1]["Task Name"]}}]}
+            }
 
         mock_client.build_payload_properties.side_effect = capture_payload
         mock_client.simplify_page_properties = NotionClient.simplify_page_properties
@@ -386,7 +406,9 @@ class TestFullSyncScenarios:
         assert created_payload is not None
 
         # Check text truncation
-        assert len(created_payload["Long Text"]["rich_text"][0]["text"]["content"]) == 2000
+        assert (
+            len(created_payload["Long Text"]["rich_text"][0]["text"]["content"]) == 2000
+        )
 
         # Check all property types maintained correctly
         assert created_payload["Name"]["title"][0]["text"]["content"] == "Complex Item"

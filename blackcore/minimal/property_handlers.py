@@ -244,7 +244,10 @@ class FilesPropertyHandler(PropertyHandler):
         if isinstance(value, str):
             return value.startswith(("http://", "https://"))
         if isinstance(value, list):
-            return all(isinstance(v, str) and v.startswith(("http://", "https://")) for v in value)
+            return all(
+                isinstance(v, str) and v.startswith(("http://", "https://"))
+                for v in value
+            )
         return False
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
@@ -252,7 +255,8 @@ class FilesPropertyHandler(PropertyHandler):
             value = [value]
         return {
             "files": [
-                {"name": f"File {i + 1}", "external": {"url": url}} for i, url in enumerate(value)
+                {"name": f"File {i + 1}", "external": {"url": url}}
+                for i, url in enumerate(value)
             ]
         }
 

@@ -40,13 +40,23 @@ def run_integration_tests(verbose=False, specific_test=None, show_coverage=False
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Run integration tests for minimal module")
+    parser = argparse.ArgumentParser(
+        description="Run integration tests for minimal module"
+    )
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
-    parser.add_argument("-c", "--coverage", action="store_true", help="Show coverage report")
+    parser.add_argument(
+        "-c", "--coverage", action="store_true", help="Show coverage report"
+    )
     parser.add_argument("-t", "--test", help="Run specific test file or test")
-    parser.add_argument("--workflow", action="store_true", help="Run only workflow tests")
-    parser.add_argument("--compliance", action="store_true", help="Run only compliance tests")
-    parser.add_argument("--performance", action="store_true", help="Run only performance tests")
+    parser.add_argument(
+        "--workflow", action="store_true", help="Run only workflow tests"
+    )
+    parser.add_argument(
+        "--compliance", action="store_true", help="Run only compliance tests"
+    )
+    parser.add_argument(
+        "--performance", action="store_true", help="Run only performance tests"
+    )
 
     args = parser.parse_args()
 

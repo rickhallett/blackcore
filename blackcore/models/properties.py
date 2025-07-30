@@ -108,11 +108,17 @@ class TitleProperty(BasePropertyValue):
     @classmethod
     def from_text(cls, text: str) -> "TitleProperty":
         """Create from plain text."""
-        return cls(title=[RichTextElement(type="text", text={"content": text}, plain_text=text)])
+        return cls(
+            title=[
+                RichTextElement(type="text", text={"content": text}, plain_text=text)
+            ]
+        )
 
     def to_plain_text(self) -> str:
         """Convert to plain text."""
-        return "".join(elem.plain_text or elem.text.get("content", "") for elem in self.title)
+        return "".join(
+            elem.plain_text or elem.text.get("content", "") for elem in self.title
+        )
 
 
 class RichTextProperty(BasePropertyValue):
@@ -125,12 +131,16 @@ class RichTextProperty(BasePropertyValue):
     def from_text(cls, text: str) -> "RichTextProperty":
         """Create from plain text."""
         return cls(
-            rich_text=[RichTextElement(type="text", text={"content": text}, plain_text=text)]
+            rich_text=[
+                RichTextElement(type="text", text={"content": text}, plain_text=text)
+            ]
         )
 
     def to_plain_text(self) -> str:
         """Convert to plain text."""
-        return "".join(elem.plain_text or elem.text.get("content", "") for elem in self.rich_text)
+        return "".join(
+            elem.plain_text or elem.text.get("content", "") for elem in self.rich_text
+        )
 
 
 class NumberProperty(BasePropertyValue):
@@ -184,7 +194,9 @@ class DateProperty(BasePropertyValue):
 
     @classmethod
     def from_date(
-        cls, start: Union[str, date, datetime], end: Optional[Union[str, date, datetime]] = None
+        cls,
+        start: Union[str, date, datetime],
+        end: Optional[Union[str, date, datetime]] = None,
     ) -> "DateProperty":
         """Create from date values."""
         return cls(date=DateValue(start=start, end=end))
@@ -209,7 +221,9 @@ class FilesProperty(BasePropertyValue):
     files: List[Dict[str, Any]] = Field(default_factory=list)
 
     @classmethod
-    def from_urls(cls, urls: List[str], names: Optional[List[str]] = None) -> "FilesProperty":
+    def from_urls(
+        cls, urls: List[str], names: Optional[List[str]] = None
+    ) -> "FilesProperty":
         """Create from external URLs."""
         files = []
         for i, url in enumerate(urls):

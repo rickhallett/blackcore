@@ -94,7 +94,9 @@ class IntelligenceIngestor:
 
         print("\n✅ Ingestion complete!")
 
-    def _find_or_create_page(self, db_name: str, title: str, properties: Dict[str, Any]) -> str:
+    def _find_or_create_page(
+        self, db_name: str, title: str, properties: Dict[str, Any]
+    ) -> str:
         """Finds a page by title in a DB, or creates it if it doesn't exist."""
         if title in self.id_cache.get(db_name, {}):
             return self.id_cache[db_name][title]
@@ -157,7 +159,9 @@ class IntelligenceIngestor:
                 if prop_type == "select":
                     properties[notion_name] = {"select": {"name": value}}
                 elif prop_type == "rich_text":
-                    properties[notion_name] = {"rich_text": [{"text": {"content": value}}]}
+                    properties[notion_name] = {
+                        "rich_text": [{"text": {"content": value}}]
+                    }
                 elif prop_type == "email":
                     properties[notion_name] = {"email": value}
                 elif prop_type == "url":
@@ -183,7 +187,9 @@ class IntelligenceIngestor:
             for item in self.data.get(json_key, []):
                 title = item.get(title_key)
                 if not title:
-                    print(f"  [WARN] Skipping item in '{db_name}' with no '{title_key}'.")
+                    print(
+                        f"  [WARN] Skipping item in '{db_name}' with no '{title_key}'."
+                    )
                     continue
 
                 properties = self._build_properties(item, db_name)
@@ -219,19 +225,25 @@ class IntelligenceIngestor:
             print(f"\nLinking relations for '{db_name}'...")
             for item in self.data.get(json_key, []):
                 source_title = item.get(title_key)
-                if not source_title or source_title not in self.id_cache.get(db_name, {}):
+                if not source_title or source_title not in self.id_cache.get(
+                    db_name, {}
+                ):
                     continue
 
                 source_page_id = self.id_cache[db_name][source_title]
                 properties_to_update = {}
 
                 for json_field, notion_field in json_to_notion_field_map.items():
-                    if json_field in item and notion_field in RELATION_FIELD_MAP.get(db_name, {}):
+                    if json_field in item and notion_field in RELATION_FIELD_MAP.get(
+                        db_name, {}
+                    ):
                         target_db_name = RELATION_FIELD_MAP[db_name][notion_field]
                         target_titles = item[json_field]
 
                         if not isinstance(target_titles, list):
-                            target_titles = [target_titles]  # Handle single and multi-relations
+                            target_titles = [
+                                target_titles
+                            ]  # Handle single and multi-relations
 
                         relation_ids = []
                         for target_title in target_titles:
@@ -247,13 +259,21 @@ class IntelligenceIngestor:
                         if relation_ids:
                             # The property type for linking is "relation" for Relation fields
                             # and "people" for Person fields.
-                            prop_type = "people" if notion_field == "Owner" else "relation"
-                            properties_to_update[notion_field] = {prop_type: relation_ids}
+                            prop_type = (
+                                "people" if notion_field == "Owner" else "relation"
+                            )
+                            properties_to_update[notion_field] = {
+                                prop_type: relation_ids
+                            }
 
                 if properties_to_update:
-                    print(f"  [LINK] Updating relations for '{source_title}' in '{db_name}'.")
+                    print(
+                        f"  [LINK] Updating relations for '{source_title}' in '{db_name}'."
+                    )
                     if self.dry_run:
-                        print(f"    DRY RUN: Skipping update for page {source_page_id}.")
+                        print(
+                            f"    DRY RUN: Skipping update for page {source_page_id}."
+                        )
                         continue
 
                     self.client.client.pages.update(

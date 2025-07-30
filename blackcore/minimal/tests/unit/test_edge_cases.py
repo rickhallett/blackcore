@@ -41,7 +41,8 @@ class TestLargeDataHandling:
         # Setup mocks
         mock_extractor = Mock()
         mock_extractor.extract_entities.return_value = ExtractedEntities(
-            entities=[Entity(name="Test Entity", type=EntityType.PERSON)], relationships=[]
+            entities=[Entity(name="Test Entity", type=EntityType.PERSON)],
+            relationships=[],
         )
         mock_extractor_class.return_value = mock_extractor
 
@@ -66,15 +67,21 @@ class TestLargeDataHandling:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             # Create many entities
             entities = []
             for i in range(100):
                 entities.append(
-                    Entity(name=f"Person {i}", type=EntityType.PERSON, properties={"id": i})
+                    Entity(
+                        name=f"Person {i}", type=EntityType.PERSON, properties={"id": i}
+                    )
                 )
 
             mock_extractor = Mock()
@@ -197,7 +204,9 @@ class TestSpecialCharactersAndEncoding:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
             patch("blackcore.minimal.transcript_processor.NotionUpdater"),
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
@@ -252,8 +261,12 @@ class TestErrorRecovery:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             # Make extraction fail for specific transcripts
@@ -277,7 +290,8 @@ class TestErrorRecovery:
 
             # Process batch of 3
             transcripts = [
-                TranscriptInput(title=f"Test {i}", content=f"Content {i}") for i in range(3)
+                TranscriptInput(title=f"Test {i}", content=f"Content {i}")
+                for i in range(3)
             ]
 
             result = processor.process_batch(transcripts)
@@ -293,8 +307,12 @@ class TestErrorRecovery:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             # Setup successful extraction
@@ -415,7 +433,9 @@ class TestAPILimits:
         with patch("anthropic.Anthropic") as mock_claude:
             mock_client = Mock()
             mock_response = Mock()
-            mock_response.content = [Mock(text=json.dumps({"entities": [], "relationships": []}))]
+            mock_response.content = [
+                Mock(text=json.dumps({"entities": [], "relationships": []}))
+            ]
             mock_client.messages.create.return_value = mock_response
             mock_claude.return_value = mock_client
 
@@ -438,7 +458,9 @@ class TestDatabaseConfigurationEdgeCases:
         config.notion.databases = {}
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
             patch("blackcore.minimal.transcript_processor.NotionUpdater"),
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
@@ -469,8 +491,12 @@ class TestDatabaseConfigurationEdgeCases:
         config.notion.databases = {"people": config.notion.databases["people"]}
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             mock_extractor = Mock()

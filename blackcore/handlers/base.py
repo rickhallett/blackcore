@@ -79,7 +79,9 @@ class PropertyHandler(ABC):
         # Default implementation - can be overridden
         return None
 
-    def handle_error(self, error: Exception, context: Optional[Dict[str, Any]] = None) -> None:
+    def handle_error(
+        self, error: Exception, context: Optional[Dict[str, Any]] = None
+    ) -> None:
         """Handle property-specific errors.
 
         Args:
@@ -144,7 +146,9 @@ class PropertyHandlerRegistry:
                 raise KeyError(f"Invalid property type: {property_type}")
 
         if property_type not in self._handlers:
-            raise KeyError(f"No handler registered for property type: {property_type.value}")
+            raise KeyError(
+                f"No handler registered for property type: {property_type.value}"
+            )
 
         return self._handlers[property_type]
 
@@ -194,7 +198,9 @@ class PropertyHandlerRegistry:
 
         self._initialized = True
 
-    def validate_value(self, property_type: Union[PropertyType, str], value: Any) -> bool:
+    def validate_value(
+        self, property_type: Union[PropertyType, str], value: Any
+    ) -> bool:
         """Validate a value using appropriate handler.
 
         Args:
@@ -207,7 +213,9 @@ class PropertyHandlerRegistry:
         handler = self.get_handler(property_type)
         return handler.validate(value)
 
-    def normalize_value(self, property_type: Union[PropertyType, str], value: Any) -> Any:
+    def normalize_value(
+        self, property_type: Union[PropertyType, str], value: Any
+    ) -> Any:
         """Normalize a value using appropriate handler.
 
         Args:
@@ -239,7 +247,9 @@ class PropertyHandlerRegistry:
         except (ValueError, KeyError):
             return None
 
-    def format_for_api(self, property_type: Union[PropertyType, str], value: Any) -> Dict[str, Any]:
+    def format_for_api(
+        self, property_type: Union[PropertyType, str], value: Any
+    ) -> Dict[str, Any]:
         """Format a value for API submission.
 
         Args:

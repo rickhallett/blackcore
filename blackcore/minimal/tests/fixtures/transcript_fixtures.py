@@ -38,7 +38,10 @@ COMPLEX_TRANSCRIPT = TranscriptInput(
 
 # Edge case transcript - empty content
 EMPTY_TRANSCRIPT = TranscriptInput(
-    title="Empty Note", content="", source=TranscriptSource.PERSONAL_NOTE, date=datetime(2025, 1, 9)
+    title="Empty Note",
+    content="",
+    source=TranscriptSource.PERSONAL_NOTE,
+    date=datetime(2025, 1, 9),
 )
 
 # Edge case transcript - very long content

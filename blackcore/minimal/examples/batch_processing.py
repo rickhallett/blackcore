@@ -3,7 +3,10 @@
 import os
 from pathlib import Path
 from blackcore.minimal import TranscriptProcessor
-from blackcore.minimal.utils import load_transcripts_from_directory, save_processing_result
+from blackcore.minimal.utils import (
+    load_transcripts_from_directory,
+    save_processing_result,
+)
 
 
 def create_sample_transcripts(directory: str):
@@ -113,7 +116,9 @@ def main():
     print(f"✅ Loaded {len(transcripts)} transcripts")
 
     for t in transcripts:
-        print(f"   - {t.title} ({t.date.strftime('%Y-%m-%d') if t.date else 'undated'})")
+        print(
+            f"   - {t.title} ({t.date.strftime('%Y-%m-%d') if t.date else 'undated'})"
+        )
 
     # Process in batch
     print("\n4️⃣ Processing transcripts in batch...")
@@ -151,7 +156,9 @@ def main():
         print("\n⚠️  Failed transcripts:")
         for i, result in enumerate(batch_result.results):
             if not result.success:
-                print(f"   - Transcript {i + 1}: {', '.join(e.message for e in result.errors)}")
+                print(
+                    f"   - Transcript {i + 1}: {', '.join(e.message for e in result.errors)}"
+                )
 
     print("\n" + "=" * 50)
     print("💡 Tips for batch processing:")

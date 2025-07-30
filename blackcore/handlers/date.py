@@ -22,7 +22,9 @@ class DateHandler(PropertyHandler):
 
         if isinstance(value, dict):
             if "start" not in value:
-                raise ValidationError("Date must have 'start' field", field="date", value=value)
+                raise ValidationError(
+                    "Date must have 'start' field", field="date", value=value
+                )
             return True
 
         raise ValidationError(
@@ -46,7 +48,9 @@ class DateHandler(PropertyHandler):
             return value
 
         raise ValidationError(
-            f"Cannot normalize {type(value).__name__} to date", field="date", value=value
+            f"Cannot normalize {type(value).__name__} to date",
+            field="date",
+            value=value,
         )
 
     def parse(self, api_value: Dict[str, Any]) -> DateProperty:

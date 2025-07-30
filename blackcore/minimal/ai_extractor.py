@@ -117,7 +117,8 @@ class ClaudeProvider(AIProvider):
             entities.append(Entity(name=name, type=EntityType.PERSON, confidence=0.5))
 
         return ExtractedEntities(
-            entities=entities, summary="Failed to parse AI response - extracted basic entities only"
+            entities=entities,
+            summary="Failed to parse AI response - extracted basic entities only",
         )
 
 
@@ -217,7 +218,9 @@ class AIExtractor:
         else:
             raise ValueError(f"Unsupported AI provider: {provider}")
 
-    def extract_entities(self, text: str, prompt: Optional[str] = None) -> ExtractedEntities:
+    def extract_entities(
+        self, text: str, prompt: Optional[str] = None
+    ) -> ExtractedEntities:
         """Extract entities and relationships from text.
 
         Args:
@@ -299,9 +302,7 @@ Format your response as JSON with this structure:
 
         for transcript in transcripts:
             # Add title as context
-            text = (
-                f"Title: {transcript.get('title', 'Untitled')}\n\n{transcript.get('content', '')}"
-            )
+            text = f"Title: {transcript.get('title', 'Untitled')}\n\n{transcript.get('content', '')}"
             result = self.extract_entities(text, prompt)
             results.append(result)
 

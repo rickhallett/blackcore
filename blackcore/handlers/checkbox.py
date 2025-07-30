@@ -18,7 +18,9 @@ class CheckboxHandler(PropertyHandler):
         if isinstance(value, bool):
             return True
         raise ValidationError(
-            f"Checkbox must be boolean, got {type(value).__name__}", field="checkbox", value=value
+            f"Checkbox must be boolean, got {type(value).__name__}",
+            field="checkbox",
+            value=value,
         )
 
     def normalize(self, value: Any) -> bool:

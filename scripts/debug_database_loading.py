@@ -14,29 +14,29 @@ from blackcore.deduplication.cli.standard_mode import StandardModeCLI
 async def debug_loading():
     """Debug the database loading process."""
     cli = StandardModeCLI()
-    
+
     print(f"Current working directory: {Path.cwd()}")
     print(f"Script location: {Path(__file__).parent}")
     print(f"Parent directory: {Path(__file__).parent.parent}")
-    
+
     # Test different paths
     relative_path = Path("blackcore/models/json")
     print(f"\nRelative path exists: {relative_path.exists()}")
     print(f"Relative path absolute: {relative_path.absolute()}")
-    
+
     # Try from parent
     parent_path = Path(__file__).parent.parent / "blackcore" / "models" / "json"
     print(f"\nParent path exists: {parent_path.exists()}")
     print(f"Parent path absolute: {parent_path.absolute()}")
-    
+
     # Load databases
     print("\nLoading databases...")
     databases = await cli._load_databases()
-    
+
     print(f"\nFound {len(databases)} databases:")
     for name, records in databases.items():
         print(f"  - {name}: {len(records)} records")
-        
+
     # Also check specific files
     json_dir = Path("blackcore/models/json")
     if json_dir.exists():

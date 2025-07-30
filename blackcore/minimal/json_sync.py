@@ -119,7 +119,9 @@ class JSONSyncProcessor:
 
         # First, ensure we have the title property
         if title_property in record:
-            properties[title_property] = {"title": [{"text": {"content": str(record[title_property])}}]}
+            properties[title_property] = {
+                "title": [{"text": {"content": str(record[title_property])}}]
+            }
 
         # Process all other properties
         for key, value in record.items():
@@ -147,7 +149,13 @@ class JSONSyncProcessor:
                 properties[key] = {"number": value}
             elif isinstance(value, str):
                 # Could be select, text, or other string types
-                if value in ["Active", "Completed", "Pending", "Planning", "Monitoring"]:
+                if value in [
+                    "Active",
+                    "Completed",
+                    "Pending",
+                    "Planning",
+                    "Monitoring",
+                ]:
                     # Likely a select property
                     properties[key] = {"select": {"name": value}}
                 else:
@@ -172,7 +180,9 @@ class JSONSyncProcessor:
 
         if database_name not in self.notion_config:
             result.success = False
-            result.errors.append(f"Database '{database_name}' not found in configuration")
+            result.errors.append(
+                f"Database '{database_name}' not found in configuration"
+            )
             return result
 
         db_config = self.notion_config[database_name]
@@ -198,7 +208,9 @@ class JSONSyncProcessor:
                     print(f"\n   Processing: {title_value}")
 
                 # Check if page already exists
-                existing_page = self._find_existing_page(database_id, title_property, str(title_value))
+                existing_page = self._find_existing_page(
+                    database_id, title_property, str(title_value)
+                )
 
                 if existing_page:
                     # Update existing page
@@ -220,7 +232,9 @@ class JSONSyncProcessor:
                             )
                             result.updated_count += 1
                         except Exception as e:
-                            result.errors.append(f"Failed to update '{title_value}': {str(e)}")
+                            result.errors.append(
+                                f"Failed to update '{title_value}': {str(e)}"
+                            )
                             if self.verbose:
                                 print(f"   ❌ Error: {e}")
                     else:
@@ -237,7 +251,8 @@ class JSONSyncProcessor:
                         try:
                             properties = self._prepare_properties(record, db_config)
                             created_page = self.notion_updater.client.pages.create(
-                                parent={"database_id": database_id}, properties=properties
+                                parent={"database_id": database_id},
+                                properties=properties,
                             )
                             result.created_pages.append(
                                 NotionPage(
@@ -248,7 +263,9 @@ class JSONSyncProcessor:
                             )
                             result.created_count += 1
                         except Exception as e:
-                            result.errors.append(f"Failed to create '{title_value}': {str(e)}")
+                            result.errors.append(
+                                f"Failed to create '{title_value}': {str(e)}"
+                            )
                             if self.verbose:
                                 print(f"   ❌ Error: {e}")
                     else:
@@ -283,7 +300,10 @@ class JSONSyncProcessor:
 
             # Check if JSON file exists
             json_path = self.notion_config[db_name]["local_json_path"]
-            if not Path(json_path).exists() and not (Path("..") / ".." / json_path).exists():
+            if (
+                not Path(json_path).exists()
+                and not (Path("..") / ".." / json_path).exists()
+            ):
                 if self.verbose:
                     print(f"\nSkipping {db_name} - JSON file not found: {json_path}")
                 combined_result.skipped_count += 1

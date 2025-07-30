@@ -204,7 +204,9 @@ class AuditLogger:
 
         # Generate access hash for integrity
         access_string = f"{operation}:{resource_type}:{resource_id}"
-        log_data["access_hash"] = hashlib.sha256(access_string.encode()).hexdigest()[:16]
+        log_data["access_hash"] = hashlib.sha256(access_string.encode()).hexdigest()[
+            :16
+        ]
 
         self.logger.info("data_access", **log_data)
 
@@ -361,7 +363,10 @@ class AuditLogger:
         self.logger.error("application_error", **log_data)
 
     def get_audit_trail(
-        self, start_date: datetime, end_date: datetime, filters: Optional[Dict[str, Any]] = None
+        self,
+        start_date: datetime,
+        end_date: datetime,
+        filters: Optional[Dict[str, Any]] = None,
     ) -> List[Dict[str, Any]]:
         """Retrieve audit trail for specified period.
 
@@ -382,7 +387,9 @@ class AuditLogger:
                 for line in f:
                     try:
                         entry = json.loads(line)
-                        entry_time = datetime.fromisoformat(entry.get("audit_timestamp", ""))
+                        entry_time = datetime.fromisoformat(
+                            entry.get("audit_timestamp", "")
+                        )
 
                         if start_date <= entry_time <= end_date:
                             if self._matches_filters(entry, filters):
@@ -393,7 +400,9 @@ class AuditLogger:
 
         return entries
 
-    def _matches_filters(self, entry: Dict[str, Any], filters: Optional[Dict[str, Any]]) -> bool:
+    def _matches_filters(
+        self, entry: Dict[str, Any], filters: Optional[Dict[str, Any]]
+    ) -> bool:
         """Check if entry matches filters."""
         if not filters:
             return True

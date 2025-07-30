@@ -37,7 +37,12 @@ DATABASE_SCHEMA_RESPONSE = {
     "properties": {
         "Name": {"id": "title", "name": "Name", "type": "title", "title": {}},
         "Email": {"id": "email", "name": "Email", "type": "email", "email": {}},
-        "Phone": {"id": "phone", "name": "Phone", "type": "phone_number", "phone_number": {}},
+        "Phone": {
+            "id": "phone",
+            "name": "Phone",
+            "type": "phone_number",
+            "phone_number": {},
+        },
         "Status": {
             "id": "status",
             "name": "Status",
@@ -60,7 +65,12 @@ DATABASE_SCHEMA_RESPONSE = {
                 ]
             },
         },
-        "Created": {"id": "created", "name": "Created", "type": "created_time", "created_time": {}},
+        "Created": {
+            "id": "created",
+            "name": "Created",
+            "type": "created_time",
+            "created_time": {},
+        },
     },
 }
 

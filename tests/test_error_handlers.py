@@ -139,7 +139,9 @@ class TestSpecificErrors:
 
     def test_validation_error(self):
         """Test ValidationError."""
-        error = ValidationError(message="Invalid email format", field="email", value="not-an-email")
+        error = ValidationError(
+            message="Invalid email format", field="email", value="not-an-email"
+        )
 
         assert error.field == "email"
         assert error.value == "not-an-email"
@@ -150,7 +152,9 @@ class TestSpecificErrors:
     def test_property_error(self):
         """Test PropertyError."""
         error = PropertyError(
-            message="Invalid property value", property_name="Due Date", property_type="date"
+            message="Invalid property value",
+            property_name="Due Date",
+            property_type="date",
         )
 
         assert error.property_name == "Due Date"
@@ -159,7 +163,9 @@ class TestSpecificErrors:
 
     def test_sync_error(self):
         """Test SyncError."""
-        error = SyncError(message="Sync failed", phase="validation", partial_success=True)
+        error = SyncError(
+            message="Sync failed", phase="validation", partial_success=True
+        )
 
         assert error.phase == "validation"
         assert error.partial_success is True

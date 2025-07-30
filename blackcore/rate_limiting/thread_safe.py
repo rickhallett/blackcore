@@ -154,7 +154,9 @@ class ThreadSafeRateLimiter:
             from ..security.audit import AuditLogger
 
             audit = AuditLogger()
-            audit.log_error("rate_limit_redis_error", str(e), context={"fallback": "local"})
+            audit.log_error(
+                "rate_limit_redis_error", str(e), context={"fallback": "local"}
+            )
             return self._local_wait()
 
         return wait_time
@@ -185,7 +187,9 @@ class ThreadSafeRateLimiter:
             if self.redis_client and redis is not None:
                 try:
                     key = f"{self.redis_key_prefix}:sliding_window"
-                    current_count = self.redis_client.zcount(key, time.time() - 1.0, time.time())
+                    current_count = self.redis_client.zcount(
+                        key, time.time() - 1.0, time.time()
+                    )
                     stats["current_window_requests"] = current_count
                 except Exception:
                     pass
@@ -206,7 +210,9 @@ class ThreadSafeRateLimiter:
             except Exception:
                 pass
 
-    def update_rate(self, requests_per_second: float, burst_size: Optional[int] = None) -> None:
+    def update_rate(
+        self, requests_per_second: float, burst_size: Optional[int] = None
+    ) -> None:
         """Update rate limit parameters dynamically.
 
         Args:

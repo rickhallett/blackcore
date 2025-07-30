@@ -152,7 +152,9 @@ class TestNotionAPICompliance:
             env["notion_client"].pages.create.side_effect = error
 
             transcript = TranscriptInput(
-                title=f"Error Test {status_code}", content="Test content", date=datetime.now()
+                title=f"Error Test {status_code}",
+                content="Test content",
+                date=datetime.now(),
             )
 
             processor = TranscriptProcessor(config=env["config"])
@@ -180,7 +182,9 @@ class TestNotionAPICompliance:
         """
 
         transcript = TranscriptInput(
-            title="Special Characters Test", content=special_content, date=datetime.now()
+            title="Special Characters Test",
+            content=special_content,
+            date=datetime.now(),
         )
 
         # Configure AI to extract entity with special chars
@@ -323,7 +327,9 @@ class TestNotionWorkspaceInteraction:
             "results": [
                 {
                     "id": "existing-page-123",
-                    "properties": {"Name": {"rich_text": [{"text": {"content": "John Smith"}}]}},
+                    "properties": {
+                        "Name": {"rich_text": [{"text": {"content": "John Smith"}}]}
+                    },
                 }
             ],
             "has_more": False,
@@ -333,7 +339,9 @@ class TestNotionWorkspaceInteraction:
 
         # Try to create duplicate
         page, created = updater.find_or_create_page(
-            database_id="test-people-db", title="John Smith", properties={"Full Name": "John Smith"}
+            database_id="test-people-db",
+            title="John Smith",
+            properties={"Full Name": "John Smith"},
         )
 
         # Should find existing page, not create new one
@@ -359,6 +367,8 @@ class TestNotionWorkspaceInteraction:
 
         # Should handle permission error gracefully
         with pytest.raises(Exception) as exc_info:
-            updater.find_or_create_page(database_id="restricted-db", title="Test", properties={})
+            updater.find_or_create_page(
+                database_id="restricted-db", title="Test", properties={}
+            )
 
         assert "403" in str(exc_info.value) or "restricted" in str(exc_info.value)

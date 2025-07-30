@@ -59,7 +59,9 @@ class TestTranscriptProcessorInit:
     def test_init_no_config(self):
         """Test initialization with no config (loads from env)."""
         with (
-            patch("blackcore.minimal.transcript_processor.ConfigManager.load") as mock_load,
+            patch(
+                "blackcore.minimal.transcript_processor.ConfigManager.load"
+            ) as mock_load,
             patch("blackcore.minimal.transcript_processor.AIExtractor"),
             patch("blackcore.minimal.transcript_processor.NotionUpdater"),
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
@@ -91,7 +93,10 @@ class TestTranscriptProcessorInit:
             processor = TranscriptProcessor(config=config)
             captured = capsys.readouterr()
             assert "Warning: Database ID not configured for 'people'" in captured.out
-            assert "Warning: Database ID not configured for 'organizations'" in captured.out
+            assert (
+                "Warning: Database ID not configured for 'organizations'"
+                in captured.out
+            )
 
 
 class TestEntityExtraction:
@@ -102,7 +107,10 @@ class TestEntityExtraction:
         """Test extracting entities from cache."""
         # Setup cache hit
         mock_cache = Mock()
-        cached_data = {"entities": [{"name": "John Doe", "type": "person"}], "relationships": []}
+        cached_data = {
+            "entities": [{"name": "John Doe", "type": "person"}],
+            "relationships": [],
+        }
         mock_cache.get.return_value = cached_data
         mock_cache_class.return_value = mock_cache
 
@@ -218,7 +226,9 @@ class TestEntityProcessing:
 
         with (
             patch("blackcore.minimal.transcript_processor.AIExtractor"),
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             mock_page = NotionPage(
@@ -234,7 +244,9 @@ class TestEntityProcessing:
 
             processor = TranscriptProcessor(config=config)
             org = Entity(
-                name="ACME Corp", type=EntityType.ORGANIZATION, properties={"type": "Corporation"}
+                name="ACME Corp",
+                type=EntityType.ORGANIZATION,
+                properties={"type": "Corporation"},
             )
 
             page, created = processor._process_organization(org)
@@ -256,7 +268,9 @@ class TestEntityProcessing:
 
         with (
             patch("blackcore.minimal.transcript_processor.AIExtractor"),
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             mock_updater = Mock()
@@ -357,8 +371,12 @@ class TestBatchProcessing:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             # Setup mocks
@@ -388,7 +406,9 @@ class TestBatchProcessing:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
             patch("blackcore.minimal.transcript_processor.NotionUpdater"),
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
@@ -419,7 +439,9 @@ class TestBatchProcessing:
         config.processing.verbose = True
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
             patch("blackcore.minimal.transcript_processor.NotionUpdater"),
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
@@ -510,7 +532,9 @@ class TestOutputFormatting:
                 NotionPage(id="1", database_id="db", properties={"Name": "New Person"})
             ]
             result.updated = [
-                NotionPage(id="2", database_id="db", properties={"Name": "Existing Person"})
+                NotionPage(
+                    id="2", database_id="db", properties={"Name": "Existing Person"}
+                )
             ]
             result.processing_time = 1.5
 
@@ -533,7 +557,9 @@ class TestErrorHandling:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
             patch("blackcore.minimal.transcript_processor.NotionUpdater"),
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
@@ -556,14 +582,19 @@ class TestErrorHandling:
         config = create_test_config()
 
         with (
-            patch("blackcore.minimal.transcript_processor.AIExtractor") as mock_extractor_class,
-            patch("blackcore.minimal.transcript_processor.NotionUpdater") as mock_updater_class,
+            patch(
+                "blackcore.minimal.transcript_processor.AIExtractor"
+            ) as mock_extractor_class,
+            patch(
+                "blackcore.minimal.transcript_processor.NotionUpdater"
+            ) as mock_updater_class,
             patch("blackcore.minimal.transcript_processor.SimpleCache"),
         ):
             # Setup successful extraction
             mock_extractor = Mock()
             mock_extractor.extract_entities.return_value = ExtractedEntities(
-                entities=[Entity(name="Test Person", type=EntityType.PERSON)], relationships=[]
+                entities=[Entity(name="Test Person", type=EntityType.PERSON)],
+                relationships=[],
             )
             mock_extractor_class.return_value = mock_extractor
 

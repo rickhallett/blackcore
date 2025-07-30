@@ -65,12 +65,15 @@ class PeopleHandler(PropertyHandler):
                     people.append(item)
                 else:
                     raise ValidationError(
-                        f"Cannot normalize {type(item).__name__} to user", field="people"
+                        f"Cannot normalize {type(item).__name__} to user",
+                        field="people",
                     )
             return people
 
         raise ValidationError(
-            f"Cannot normalize {type(value).__name__} to people", field="people", value=value
+            f"Cannot normalize {type(value).__name__} to people",
+            field="people",
+            value=value,
         )
 
     def parse(self, api_value: Dict[str, Any]) -> PeopleProperty:

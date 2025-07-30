@@ -283,7 +283,9 @@ class TestProcessSingleFile:
             mock_result = ProcessingResult()
             mock_result.success = False
             mock_result.add_error(
-                stage="processing", error_type="TestError", message="Something went wrong"
+                stage="processing",
+                error_type="TestError",
+                message="Something went wrong",
             )
 
             mock_processor = Mock()
@@ -371,7 +373,9 @@ class TestProcessBatch:
         """Test batch processing with file pattern."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create mixed files
-            Path(temp_dir, "transcript.json").write_text('{"title": "JSON", "content": ""}')
+            Path(temp_dir, "transcript.json").write_text(
+                '{"title": "JSON", "content": ""}'
+            )
             Path(temp_dir, "notes.txt").write_text("Text content")
             Path(temp_dir, "readme.md").write_text("# Readme")
 
@@ -410,7 +414,10 @@ class TestProcessBatch:
 
             # Setup mock
             mock_batch_result = BatchResult(
-                total_transcripts=1, successful=1, failed=0, results=[ProcessingResult()]
+                total_transcripts=1,
+                successful=1,
+                failed=0,
+                results=[ProcessingResult()],
             )
             mock_processor = Mock()
             mock_processor.process_batch.return_value = mock_batch_result

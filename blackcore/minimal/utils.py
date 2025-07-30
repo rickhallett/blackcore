@@ -70,14 +70,19 @@ def load_transcript_from_file(file_path: Union[str, Path]) -> TranscriptInput:
                 break
 
         return TranscriptInput(
-            title=title, content=content, date=date, source=TranscriptSource.PERSONAL_NOTE
+            title=title,
+            content=content,
+            date=date,
+            source=TranscriptSource.PERSONAL_NOTE,
         )
 
     else:
         raise ValueError(f"Unsupported file format: {path.suffix}")
 
 
-def load_transcripts_from_directory(dir_path: Union[str, Path]) -> List[TranscriptInput]:
+def load_transcripts_from_directory(
+    dir_path: Union[str, Path],
+) -> List[TranscriptInput]:
     """Load all transcripts from a directory.
 
     Args:
@@ -111,7 +116,9 @@ def load_transcripts_from_directory(dir_path: Union[str, Path]) -> List[Transcri
     return transcripts
 
 
-def save_processing_result(result: Dict[str, Any], output_path: Union[str, Path]) -> None:
+def save_processing_result(
+    result: Dict[str, Any], output_path: Union[str, Path]
+) -> None:
     """Save processing result to a JSON file.
 
     Args:
@@ -190,7 +197,13 @@ def validate_config_databases(config: Dict[str, Any]) -> List[str]:
 
     databases = config.get("notion", {}).get("databases", {})
 
-    required_databases = ["people", "organizations", "tasks", "transcripts", "transgressions"]
+    required_databases = [
+        "people",
+        "organizations",
+        "tasks",
+        "transcripts",
+        "transgressions",
+    ]
 
     for db_name in required_databases:
         db_config = databases.get(db_name, {})
@@ -304,5 +317,10 @@ def create_sample_config() -> Dict[str, Any]:
             "max_tokens": 4000,
             "temperature": 0.3,
         },
-        "processing": {"batch_size": 10, "cache_ttl": 3600, "dry_run": False, "verbose": True},
+        "processing": {
+            "batch_size": 10,
+            "cache_ttl": 3600,
+            "dry_run": False,
+            "verbose": True,
+        },
     }

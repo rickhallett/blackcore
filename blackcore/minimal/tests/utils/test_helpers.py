@@ -100,7 +100,9 @@ def create_mock_ai_client(provider: str = "claude"):
         mock.chat.completions.create.return_value = MagicMock(
             choices=[
                 MagicMock(
-                    message=MagicMock(content=json.dumps({"entities": [], "relationships": []}))
+                    message=MagicMock(
+                        content=json.dumps({"entities": [], "relationships": []})
+                    )
                 )
             ]
         )
@@ -150,7 +152,9 @@ def mock_datetime_now(target_time: datetime):
     return mock
 
 
-def assert_properties_formatted(properties: Dict[str, Any], expected_types: Dict[str, str]):
+def assert_properties_formatted(
+    properties: Dict[str, Any], expected_types: Dict[str, str]
+):
     """Assert that properties are correctly formatted for Notion API."""
     for prop_name, prop_type in expected_types.items():
         assert prop_name in properties

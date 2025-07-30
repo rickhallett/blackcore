@@ -152,13 +152,17 @@ class TestTranscriptInput:
 
     def test_transcript_date_parsing(self):
         """Test date parsing from string."""
-        transcript = TranscriptInput(title="Test", content="Content", date="2025-01-09T14:00:00")
+        transcript = TranscriptInput(
+            title="Test", content="Content", date="2025-01-09T14:00:00"
+        )
 
         assert isinstance(transcript.date, datetime)
         assert transcript.date.year == 2025
 
         # Test with timezone
-        transcript2 = TranscriptInput(title="Test", content="Content", date="2025-01-09T14:00:00Z")
+        transcript2 = TranscriptInput(
+            title="Test", content="Content", date="2025-01-09T14:00:00Z"
+        )
 
         assert transcript2.date.tzinfo is not None
 
@@ -244,7 +248,9 @@ class TestConfiguration:
     def test_database_config(self):
         """Test DatabaseConfig model."""
         config = DatabaseConfig(
-            id="db123", name="People & Contacts", mappings={"name": "Full Name", "role": "Role"}
+            id="db123",
+            name="People & Contacts",
+            mappings={"name": "Full Name", "role": "Role"},
         )
 
         assert config.id == "db123"
@@ -254,7 +260,8 @@ class TestConfiguration:
     def test_notion_config(self):
         """Test NotionConfig model."""
         config = NotionConfig(
-            api_key="secret123", databases={"people": DatabaseConfig(id="db1", name="People")}
+            api_key="secret123",
+            databases={"people": DatabaseConfig(id="db1", name="People")},
         )
 
         assert config.api_key == "secret123"
@@ -272,7 +279,8 @@ class TestConfiguration:
     def test_complete_config(self):
         """Test complete Config model."""
         config = Config(
-            notion=NotionConfig(api_key="notion-key", databases={}), ai=AIConfig(api_key="ai-key")
+            notion=NotionConfig(api_key="notion-key", databases={}),
+            ai=AIConfig(api_key="ai-key"),
         )
 
         assert config.notion.api_key == "notion-key"

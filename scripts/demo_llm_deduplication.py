@@ -5,7 +5,12 @@ Demo script showing LLM-based deduplication in action
 
 import os
 from datetime import datetime
-from blackcore.minimal.models import TranscriptInput, Config, TranscriptSource, ProcessingConfig
+from blackcore.minimal.models import (
+    TranscriptInput,
+    Config,
+    TranscriptSource,
+    ProcessingConfig,
+)
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.llm_scorer import LLMScorer
 

@@ -80,7 +80,11 @@ def process_batch(args):
     # Print summary
     print("\n✅ Batch processing complete:")
     print(f"   Success rate: {batch_result.success_rate:.1%}")
-    print(f"   Time: {batch_result.processing_time:.2f}s" if batch_result.processing_time else "")
+    print(
+        f"   Time: {batch_result.processing_time:.2f}s"
+        if batch_result.processing_time
+        else ""
+    )
 
     # Save results if requested
     if args.output:
@@ -213,16 +217,22 @@ Examples:
     process_parser = subparsers.add_parser(
         "process", aliases=["sync-transcript"], help="Process a single transcript"
     )
-    process_parser.add_argument("transcript", help="Path to transcript file (JSON or text)")
+    process_parser.add_argument(
+        "transcript", help="Path to transcript file (JSON or text)"
+    )
     process_parser.add_argument("-c", "--config", help="Path to configuration file")
     process_parser.add_argument("-o", "--output", help="Save results to file")
     process_parser.add_argument(
         "--dry-run", action="store_true", help="Preview without making changes"
     )
-    process_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    process_parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Verbose output"
+    )
 
     # Process batch
-    batch_parser = subparsers.add_parser("process-batch", help="Process multiple transcripts")
+    batch_parser = subparsers.add_parser(
+        "process-batch", help="Process multiple transcripts"
+    )
     batch_parser.add_argument("directory", help="Directory containing transcript files")
     batch_parser.add_argument("-c", "--config", help="Path to configuration file")
     batch_parser.add_argument("-o", "--output", help="Save results to file")
@@ -232,20 +242,32 @@ Examples:
     batch_parser.add_argument(
         "--dry-run", action="store_true", help="Preview without making changes"
     )
-    batch_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    batch_parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Verbose output"
+    )
 
     # Generate config
-    config_parser = subparsers.add_parser("generate-config", help="Generate configuration template")
-    config_parser.add_argument("-o", "--output", help="Save to file (default: print to stdout)")
+    config_parser = subparsers.add_parser(
+        "generate-config", help="Generate configuration template"
+    )
+    config_parser.add_argument(
+        "-o", "--output", help="Save to file (default: print to stdout)"
+    )
 
     # Generate sample
-    sample_parser = subparsers.add_parser("generate-sample", help="Generate sample transcript")
-    sample_parser.add_argument("-o", "--output", help="Save to file (default: print to stdout)")
+    sample_parser = subparsers.add_parser(
+        "generate-sample", help="Generate sample transcript"
+    )
+    sample_parser.add_argument(
+        "-o", "--output", help="Save to file (default: print to stdout)"
+    )
 
     # Cache management
     cache_parser = subparsers.add_parser("cache-info", help="Display cache information")
     cache_parser.add_argument("--cache-dir", default=".cache", help="Cache directory")
-    cache_parser.add_argument("--cleanup", action="store_true", help="Remove expired entries")
+    cache_parser.add_argument(
+        "--cleanup", action="store_true", help="Remove expired entries"
+    )
     cache_parser.add_argument("--clear", action="store_true", help="Clear all cache")
 
     # JSON sync
@@ -253,11 +275,15 @@ Examples:
         "sync-json", help="Sync local JSON files to Notion databases"
     )
     sync_parser.add_argument("-c", "--config", help="Path to configuration file")
-    sync_parser.add_argument("-d", "--database", help="Specific database to sync (default: all)")
+    sync_parser.add_argument(
+        "-d", "--database", help="Specific database to sync (default: all)"
+    )
     sync_parser.add_argument(
         "--dry-run", action="store_true", help="Preview changes without updating Notion"
     )
-    sync_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    sync_parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Verbose output"
+    )
 
     # Parse arguments
     args = parser.parse_args()

@@ -116,7 +116,11 @@ class TestTitleHandler:
             "id": "title",
             "type": "title",
             "title": [
-                {"type": "text", "text": {"content": "Test Title"}, "plain_text": "Test Title"}
+                {
+                    "type": "text",
+                    "text": {"content": "Test Title"},
+                    "plain_text": "Test Title",
+                }
             ],
         }
 

@@ -11,12 +11,12 @@ from .config_wizard import ConfigurationWizard
 from .async_engine import AsyncDeduplicationEngine
 
 __all__ = [
-    'StandardModeCLI',
-    'UIComponents',
-    'ProgressTracker',
-    'MatchReviewDisplay',
-    'ConfigurationWizard',
-    'AsyncDeduplicationEngine',
+    "StandardModeCLI",
+    "UIComponents",
+    "ProgressTracker",
+    "MatchReviewDisplay",
+    "ConfigurationWizard",
+    "AsyncDeduplicationEngine",
 ]
 
-__version__ = '1.0.0'
+__version__ = "1.0.0"

@@ -206,7 +206,9 @@ class StatusHandler(PropertyHandler):
 
         if isinstance(value, dict):
             if "name" not in value:
-                raise ValidationError("Status must have 'name' field", field="status", value=value)
+                raise ValidationError(
+                    "Status must have 'name' field", field="status", value=value
+                )
             if len(value["name"]) > 100:
                 raise ValidationError(
                     "Status name too long (max 100 characters)",

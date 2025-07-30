@@ -336,7 +336,9 @@ class ErrorHandler:
 
         return wrapped_error
 
-    def _wrap_error(self, error: Exception, context: Optional[ErrorContext]) -> BaseNotionError:
+    def _wrap_error(
+        self, error: Exception, context: Optional[ErrorContext]
+    ) -> BaseNotionError:
         """Wrap a generic exception in appropriate error type."""
         error_str = str(error)
         error_type = type(error).__name__

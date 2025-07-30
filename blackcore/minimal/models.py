@@ -124,10 +124,14 @@ class ProcessingResult(BaseModel):
         """Total number of changes made."""
         return len(self.created) + len(self.updated) + self.relationships_created
 
-    def add_error(self, stage: str, error_type: str, message: str, entity: Optional[str] = None):
+    def add_error(
+        self, stage: str, error_type: str, message: str, entity: Optional[str] = None
+    ):
         """Add an error to the result."""
         self.errors.append(
-            ProcessingError(stage=stage, entity=entity, error_type=error_type, message=message)
+            ProcessingError(
+                stage=stage, entity=entity, error_type=error_type, message=message
+            )
         )
         self.success = False
 
@@ -196,12 +200,14 @@ class ProcessingConfig(BaseModel):
     enable_deduplication: bool = True
     deduplication_threshold: float = 90.0
     deduplication_scorer: str = "simple"  # "simple" or "llm"
-    llm_scorer_config: Dict[str, Any] = Field(default_factory=lambda: {
-        "model": "claude-3-5-haiku-20241022",
-        "temperature": 0.1,
-        "cache_ttl": 3600,
-        "batch_size": 5
-    })
+    llm_scorer_config: Dict[str, Any] = Field(
+        default_factory=lambda: {
+            "model": "claude-3-5-haiku-20241022",
+            "temperature": 0.1,
+            "cache_ttl": 3600,
+            "batch_size": 5,
+        }
+    )
 
 
 class Config(BaseModel):

@@ -2,7 +2,11 @@
 
 from typing import Any, Dict
 from datetime import datetime
-from ..models.properties import PropertyType, CreatedTimeProperty, LastEditedTimeProperty
+from ..models.properties import (
+    PropertyType,
+    CreatedTimeProperty,
+    LastEditedTimeProperty,
+)
 from .base import PropertyHandler
 
 

@@ -19,9 +19,13 @@ class NumberHandler(PropertyHandler):
         if isinstance(value, (int, float)):
             # Check for special float values
             if value != value:  # NaN check
-                raise ValidationError("Number cannot be NaN", field="number", value=value)
+                raise ValidationError(
+                    "Number cannot be NaN", field="number", value=value
+                )
             if value == float("inf") or value == float("-inf"):
-                raise ValidationError("Number cannot be infinity", field="number", value=value)
+                raise ValidationError(
+                    "Number cannot be infinity", field="number", value=value
+                )
             return True
 
         if isinstance(value, str):

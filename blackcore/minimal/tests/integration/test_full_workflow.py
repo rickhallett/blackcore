@@ -12,7 +12,9 @@ from blackcore.minimal.models import TranscriptInput
 class TestFullWorkflow:
     """Test complete transcript processing workflow."""
 
-    def test_simple_transcript_end_to_end(self, integration_test_env, sample_transcripts):
+    def test_simple_transcript_end_to_end(
+        self, integration_test_env, sample_transcripts
+    ):
         """Test processing a simple transcript from input to Notion pages."""
         env = integration_test_env
         transcript_data = sample_transcripts["meeting"]
@@ -50,7 +52,9 @@ class TestFullWorkflow:
         cache_files = list(cache_dir.glob("*.json"))
         assert len(cache_files) > 0
 
-    def test_complex_transcript_with_relationships(self, integration_test_env, sample_transcripts):
+    def test_complex_transcript_with_relationships(
+        self, integration_test_env, sample_transcripts
+    ):
         """Test processing transcript with multiple entities and relationships."""
         env = integration_test_env
 
@@ -78,7 +82,9 @@ class TestFullWorkflow:
         assert "test-people-db" in created_types
         assert "test-org-db" in created_types
 
-    def test_batch_processing_integration(self, integration_test_env, sample_transcripts):
+    def test_batch_processing_integration(
+        self, integration_test_env, sample_transcripts
+    ):
         """Test batch processing of multiple transcripts."""
         env = integration_test_env
 
@@ -178,7 +184,9 @@ class TestFullWorkflow:
         # Notion should NOT be called for creation
         assert not env["notion_client"].pages.create.called
 
-    def test_rate_limiting_integration(self, rate_limit_test_config, integration_test_env):
+    def test_rate_limiting_integration(
+        self, rate_limit_test_config, integration_test_env
+    ):
         """Test rate limiting in full workflow."""
         env = integration_test_env
         env["config"] = rate_limit_test_config
@@ -300,14 +308,22 @@ class TestDatabaseInteractions:
             if database_id == "test-people-db":
                 # Check person properties mapping
                 assert "Full Name" in properties
-                assert properties["Full Name"]["rich_text"][0]["text"]["content"] == "John Smith"
+                assert (
+                    properties["Full Name"]["rich_text"][0]["text"]["content"]
+                    == "John Smith"
+                )
                 if "Role" in properties:
-                    assert properties["Role"]["rich_text"][0]["text"]["content"] == "CEO"
+                    assert (
+                        properties["Role"]["rich_text"][0]["text"]["content"] == "CEO"
+                    )
 
             elif database_id == "test-org-db":
                 # Check organization properties mapping
                 assert "Name" in properties
-                assert properties["Name"]["rich_text"][0]["text"]["content"] == "Acme Corporation"
+                assert (
+                    properties["Name"]["rich_text"][0]["text"]["content"]
+                    == "Acme Corporation"
+                )
 
 
 class TestPerformance:
@@ -335,7 +351,9 @@ class TestPerformance:
         result = processor.process_transcript(transcript)
         process_end = time.time()
 
-        performance_monitor.record_timing("total_processing", process_end - process_start)
+        performance_monitor.record_timing(
+            "total_processing", process_end - process_start
+        )
 
         # Verify success
         assert result.success is True
@@ -393,7 +411,9 @@ class TestEdgeCasesIntegration:
         """Test processing empty transcript."""
         env = integration_test_env
 
-        transcript = TranscriptInput(title="Empty Content", content="", date=datetime.now())
+        transcript = TranscriptInput(
+            title="Empty Content", content="", date=datetime.now()
+        )
 
         # Configure AI to return no entities
         env["ai_client"].messages.create.return_value.content[0].text = json.dumps(

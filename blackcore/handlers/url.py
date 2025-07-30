@@ -55,7 +55,9 @@ class EmailHandler(PropertyHandler):
                 return True
             raise ValidationError("Invalid email format", field="email", value=value)
         raise ValidationError(
-            f"Email must be string, got {type(value).__name__}", field="email", value=value
+            f"Email must be string, got {type(value).__name__}",
+            field="email",
+            value=value,
         )
 
     def normalize(self, value: Any) -> Optional[str]:
@@ -90,7 +92,9 @@ class PhoneHandler(PropertyHandler):
         if isinstance(value, str):
             return True
         raise ValidationError(
-            f"Phone must be string, got {type(value).__name__}", field="phone_number", value=value
+            f"Phone must be string, got {type(value).__name__}",
+            field="phone_number",
+            value=value,
         )
 
     def normalize(self, value: Any) -> Optional[str]:

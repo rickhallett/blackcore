@@ -1,15 +1,5 @@
 #!/usr/bin/env -S uv run --script
 # /// script
-
-import os
-import sys
-import asyncio
-from dotenv import load_dotenv
-        from openai import AsyncOpenAI
-        from openai.helpers import LocalAudioPlayer
-from pathlib import Path
-
-# ===== FROM .claude VERSION =====
 # requires-python = ">=3.8"
 # dependencies = [
 #     "openai",
@@ -18,6 +8,13 @@ from pathlib import Path
 # ]
 # ///
 
+import os
+import sys
+import asyncio
+from dotenv import load_dotenv
+from openai import AsyncOpenAI
+from openai.helpers import LocalAudioPlayer
+from pathlib import Path
 
 
 async def main():
@@ -103,7 +100,6 @@ if __name__ == "__main__":
 #     "python-dotenv",
 # ]
 # ///
-
 
 
 async def main():

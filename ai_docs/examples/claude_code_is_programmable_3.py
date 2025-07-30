@@ -29,7 +29,9 @@ if not NOTION_API_SECRET:
 
 # Check for the page name argument
 if len(sys.argv) < 2:
-    console.print("[bold red]ERROR: Please provide a Notion page name as an argument.[/bold red]")
+    console.print(
+        "[bold red]ERROR: Please provide a Notion page name as an argument.[/bold red]"
+    )
     console.print("Usage: uv run claude_code_is_programmable_3.py <notion_page_name>")
     sys.exit(1)
 
@@ -178,7 +180,9 @@ try:
     if return_code == 0:
         console.print("[bold green]✅ Claude Code completed successfully[/bold green]")
     else:
-        console.print(f"[bold red]❌ Claude Code failed with exit code: {return_code}[/bold red]")
+        console.print(
+            f"[bold red]❌ Claude Code failed with exit code: {return_code}[/bold red]"
+        )
         sys.exit(return_code)
 
 except subprocess.CalledProcessError as e:

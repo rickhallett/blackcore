@@ -76,7 +76,9 @@ class DatabaseRepository(BaseRepository[NotionDatabase]):
 
                 # Add optional fields
                 if "description" in data:
-                    request_data["description"] = self._format_title(data["description"])
+                    request_data["description"] = self._format_title(
+                        data["description"]
+                    )
                 if "icon" in data:
                     request_data["icon"] = data["icon"]
                 if "cover" in data:
@@ -130,7 +132,9 @@ class DatabaseRepository(BaseRepository[NotionDatabase]):
 
                 # Update properties if provided
                 if "properties" in data:
-                    update_data["properties"] = self._format_database_properties(data["properties"])
+                    update_data["properties"] = self._format_database_properties(
+                        data["properties"]
+                    )
 
                 # Update other fields
                 if "archived" in data:
@@ -224,7 +228,9 @@ class DatabaseRepository(BaseRepository[NotionDatabase]):
                 return pages
 
             except Exception as e:
-                raise RepositoryError(f"Failed to query database {database_id}: {str(e)}")
+                raise RepositoryError(
+                    f"Failed to query database {database_id}: {str(e)}"
+                )
 
     def get_all_pages(self, database_id: str) -> List[NotionPage]:
         """Get all pages in a database.
@@ -255,7 +261,8 @@ class DatabaseRepository(BaseRepository[NotionDatabase]):
 
         # Add new property
         properties = {
-            prop_name: prop.model_dump() for prop_name, prop in database.properties.items()
+            prop_name: prop.model_dump()
+            for prop_name, prop in database.properties.items()
         }
         properties[property_name] = property_config
 
@@ -277,14 +284,17 @@ class DatabaseRepository(BaseRepository[NotionDatabase]):
 
         # Remove property by setting to null
         properties = {
-            prop_name: prop.model_dump() for prop_name, prop in database.properties.items()
+            prop_name: prop.model_dump()
+            for prop_name, prop in database.properties.items()
         }
         properties[property_name] = None
 
         # Update database
         return self.update(database_id, {"properties": properties})
 
-    def rename_property(self, database_id: str, old_name: str, new_name: str) -> NotionDatabase:
+    def rename_property(
+        self, database_id: str, old_name: str, new_name: str
+    ) -> NotionDatabase:
         """Rename a database property.
 
         Args:
@@ -336,7 +346,11 @@ class DatabaseRepository(BaseRepository[NotionDatabase]):
         return formatted
 
     def _execute_api_call(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        data: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Execute the actual API call using the Notion client."""
         if method == "GET" and endpoint.startswith("databases/"):

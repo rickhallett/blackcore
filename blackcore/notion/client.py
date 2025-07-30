@@ -32,7 +32,9 @@ RATE_LIMIT_DELAY = 1.0 / RATE_LIMIT_REQUESTS_PER_SECOND  # ~334ms
 MAX_TEXT_LENGTH = 2000
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 URL_REGEX = re.compile(r"^https?://[^\s]+$")
-ISO_DATE_REGEX = re.compile(r"^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})?)?$")
+ISO_DATE_REGEX = re.compile(
+    r"^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})?)?$"
+)
 
 
 class RateLimiter:
@@ -82,7 +84,11 @@ def with_retry(max_attempts: int = 3, backoff_base: float = 2.0):
 
                     # Don't retry on certain error codes
                     if hasattr(e, "code"):
-                        if e.code in ["invalid_request", "unauthorized", "restricted_resource"]:
+                        if e.code in [
+                            "invalid_request",
+                            "unauthorized",
+                            "restricted_resource",
+                        ]:
                             raise  # Don't retry these errors
 
                     if attempt < max_attempts - 1:
@@ -163,14 +169,22 @@ class NotionClient:
     @with_retry()
     def discover_databases(self) -> List[Dict[str, Any]]:
         """Searches the workspace for all databases accessible by the integration."""
-        console.print("Searching for databases in the Notion workspace...", style="yellow")
-        response = self.client.search(filter={"property": "object", "value": "database"})
+        console.print(
+            "Searching for databases in the Notion workspace...", style="yellow"
+        )
+        response = self.client.search(
+            filter={"property": "object", "value": "database"}
+        )
         databases = response.get("results", [])
 
         if not databases:
-            console.print("[bold yellow]Warning:[/] No databases found.", style="yellow")
+            console.print(
+                "[bold yellow]Warning:[/] No databases found.", style="yellow"
+            )
         else:
-            console.print(f"Found {len(databases)} accessible database(s).", style="green")
+            console.print(
+                f"Found {len(databases)} accessible database(s).", style="green"
+            )
         return databases
 
     @rate_limited
@@ -203,9 +217,15 @@ class NotionClient:
                 continue
 
             if prop_type == "title":
-                value = prop_data["title"][0]["plain_text"] if prop_data["title"] else None
+                value = (
+                    prop_data["title"][0]["plain_text"] if prop_data["title"] else None
+                )
             elif prop_type == "rich_text":
-                value = prop_data["rich_text"][0]["plain_text"] if prop_data["rich_text"] else None
+                value = (
+                    prop_data["rich_text"][0]["plain_text"]
+                    if prop_data["rich_text"]
+                    else None
+                )
             elif prop_type == "select":
                 value = prop_data["select"]["name"] if prop_data["select"] else None
             elif prop_type == "people":
@@ -216,7 +236,11 @@ class NotionClient:
                         if person.get("object") == "user":
                             # Try to get name, fallback to email
                             name = person.get("name")
-                            if not name and "person" in person and "email" in person["person"]:
+                            if (
+                                not name
+                                and "person" in person
+                                and "email" in person["person"]
+                            ):
                                 name = person["person"]["email"]
                             if name:
                                 people_list.append(name)
@@ -253,11 +277,17 @@ class NotionClient:
                 for file in files:
                     if file.get("type") == "external":
                         value.append(
-                            {"name": file.get("name"), "url": file.get("external", {}).get("url")}
+                            {
+                                "name": file.get("name"),
+                                "url": file.get("external", {}).get("url"),
+                            }
                         )
                     elif file.get("type") == "file":
                         value.append(
-                            {"name": file.get("name"), "url": file.get("file", {}).get("url")}
+                            {
+                                "name": file.get("name"),
+                                "url": file.get("file", {}).get("url"),
+                            }
                         )
             else:
                 value = None
@@ -354,7 +384,9 @@ class NotionClient:
             List of matching databases
         """
         try:
-            response = self.client.search(filter={"property": "object", "value": "database"})
+            response = self.client.search(
+                filter={"property": "object", "value": "database"}
+            )
 
             # Filter results by title
             databases = []
@@ -395,7 +427,9 @@ class NotionClient:
             List of all databases
         """
         try:
-            response = self.client.search(filter={"property": "object", "value": "database"})
+            response = self.client.search(
+                filter={"property": "object", "value": "database"}
+            )
             return response.get("results", [])
         except APIResponseError as e:
             print(f"Error listing databases: {e}")
@@ -461,7 +495,9 @@ class NotionClient:
                 }
             elif prop_type == "rich_text":
                 payload_props[prop_name] = {
-                    "rich_text": [{"text": {"content": truncate_text(str(local_value))}}]
+                    "rich_text": [
+                        {"text": {"content": truncate_text(str(local_value))}}
+                    ]
                 }
             elif prop_type == "select" and isinstance(local_value, str):
                 # Note: We can't validate select options without fetching them from the schema
@@ -491,7 +527,9 @@ class NotionClient:
                     start_date = local_value["start"]
                     if validate_iso_date(start_date):
                         date_obj = {"start": start_date}
-                        if "end" in local_value and validate_iso_date(local_value["end"]):
+                        if "end" in local_value and validate_iso_date(
+                            local_value["end"]
+                        ):
                             date_obj["end"] = local_value["end"]
                         payload_props[prop_name] = {"date": date_obj}
                     else:
@@ -582,15 +620,21 @@ def save_config_to_file(databases: List[Dict[str, Any]]):
     client = NotionClient()
 
     # --- Pass 1: Discover all databases and create an ID-to-Name map ---
-    console.print("Pass 1: Discovering all databases and building an ID map...", style="yellow")
+    console.print(
+        "Pass 1: Discovering all databases and building an ID map...", style="yellow"
+    )
     id_to_name_map = {
-        db["id"]: (db.get("title", [])[0]["plain_text"] if db.get("title") else "Untitled")
+        db["id"]: (
+            db.get("title", [])[0]["plain_text"] if db.get("title") else "Untitled"
+        )
         for db in databases
     }
     console.print(f"Mapped {len(id_to_name_map)} database IDs to names.", style="green")
 
     # --- Pass 2: Fetch schema for each database and resolve relations ---
-    console.print("\nPass 2: Fetching schemas and resolving relations...", style="yellow")
+    console.print(
+        "\nPass 2: Fetching schemas and resolving relations...", style="yellow"
+    )
     for db in databases:
         db_id = db["id"]
         db_title = id_to_name_map.get(db_id, "Untitled Database")
@@ -643,7 +687,9 @@ def save_config_to_file(databases: List[Dict[str, Any]]):
 def load_config_from_file() -> Dict[str, Any]:
     """Loads the database configuration from the JSON file."""
     if not CONFIG_FILE_PATH.exists():
-        console.print(f"[bold red]Error:[/] Configuration file '{CONFIG_FILE_PATH}' not found.")
+        console.print(
+            f"[bold red]Error:[/] Configuration file '{CONFIG_FILE_PATH}' not found."
+        )
         return None
     with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
         return json.load(f)

@@ -10,14 +10,14 @@ Components:
 - Similarity Scoring: Advanced fuzzy matching with multiple algorithms
 - Entity Processors: Domain-specific logic for different entity types
 - LLM Analyzer: AI-powered entity resolution using Claude/GPT
-- Graph Analyzer: Relationship-based disambiguation 
+- Graph Analyzer: Relationship-based disambiguation
 - Merge Proposals: Safe merge execution with rollback capabilities
 - Audit System: Comprehensive tracking and quality assurance
 - Review Interface: Human validation workflows
 
 Usage:
     from blackcore.deduplication import DeduplicationEngine
-    
+
     engine = DeduplicationEngine()
     results = engine.analyze_database("People & Contacts", records)
 """
@@ -25,10 +25,10 @@ Usage:
 from .core_engine import DeduplicationEngine, DeduplicationResult, EntityPair
 from .similarity_scoring import SimilarityScorer, ConfidenceThresholds
 from .entity_processors import (
-    PersonProcessor, 
-    OrganizationProcessor, 
-    EventProcessor, 
-    DocumentProcessor
+    PersonProcessor,
+    OrganizationProcessor,
+    EventProcessor,
+    DocumentProcessor,
 )
 from .llm_analyzer import LLMEntityAnalyzer, LLMAnalysisResult
 from .graph_analyzer import GraphRelationshipAnalyzer, GraphAnalysisResult
@@ -38,42 +38,35 @@ from .review_interface import HumanReviewInterface, ReviewContext, ReviewDecisio
 
 __all__ = [
     # Core engine
-    'DeduplicationEngine',
-    'DeduplicationResult', 
-    'EntityPair',
-    
+    "DeduplicationEngine",
+    "DeduplicationResult",
+    "EntityPair",
     # Similarity scoring
-    'SimilarityScorer',
-    'ConfidenceThresholds',
-    
+    "SimilarityScorer",
+    "ConfidenceThresholds",
     # Entity processors
-    'PersonProcessor',
-    'OrganizationProcessor', 
-    'EventProcessor',
-    'DocumentProcessor',
-    
+    "PersonProcessor",
+    "OrganizationProcessor",
+    "EventProcessor",
+    "DocumentProcessor",
     # AI analysis
-    'LLMEntityAnalyzer',
-    'LLMAnalysisResult',
-    
+    "LLMEntityAnalyzer",
+    "LLMAnalysisResult",
     # Graph analysis
-    'GraphRelationshipAnalyzer',
-    'GraphAnalysisResult',
-    
+    "GraphRelationshipAnalyzer",
+    "GraphAnalysisResult",
     # Merge execution
-    'MergeProposal',
-    'MergeExecutor', 
-    'MergeResult',
-    
+    "MergeProposal",
+    "MergeExecutor",
+    "MergeResult",
     # Audit system
-    'DeduplicationAudit',
-    'ReviewTask',
-    'AuditRecord',
-    
+    "DeduplicationAudit",
+    "ReviewTask",
+    "AuditRecord",
     # Human review
-    'HumanReviewInterface',
-    'ReviewContext', 
-    'ReviewDecision',
+    "HumanReviewInterface",
+    "ReviewContext",
+    "ReviewDecision",
 ]
 
-__version__ = '1.0.0'
+__version__ = "1.0.0"

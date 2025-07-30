@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 def add_prepare_properties_method():
     """Add the _prepare_properties method to staged_json_sync.py"""
-    
+
     method_code = '''
     def _prepare_properties(self, record: Dict[str, Any], db_config: Dict[str, Any]) -> Dict[str, Any]:
         """Prepare properties for Notion API using schema information."""
@@ -122,25 +122,27 @@ def add_prepare_properties_method():
                 
         return properties
 '''
-    
+
     # Read the current file
-    file_path = Path(__file__).parent.parent / "blackcore" / "minimal" / "staged_json_sync.py"
-    with open(file_path, 'r') as f:
+    file_path = (
+        Path(__file__).parent.parent / "blackcore" / "minimal" / "staged_json_sync.py"
+    )
+    with open(file_path, "r") as f:
         content = f.read()
-        
+
     # Find where to insert the method (after the _update_page method)
     insert_pos = content.find("    def _merge_results(")
     if insert_pos == -1:
         print("Could not find insertion point")
         return False
-        
+
     # Insert the new method
     new_content = content[:insert_pos] + method_code + "\n" + content[insert_pos:]
-    
+
     # Write back
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         f.write(new_content)
-        
+
     print(f"✅ Added _prepare_properties method to {file_path}")
     return True
 
@@ -148,7 +150,7 @@ def add_prepare_properties_method():
 def main():
     """Apply the fix."""
     print("Fixing property formatting in staged sync processor...")
-    
+
     if add_prepare_properties_method():
         print("\n✅ Fix applied successfully!")
         print("\nThe sync processor will now:")
@@ -158,7 +160,7 @@ def main():
     else:
         print("\n❌ Failed to apply fix")
         return 1
-        
+
     return 0
 
 

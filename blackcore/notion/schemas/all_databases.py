@@ -45,7 +45,9 @@ def get_people_contacts_schema() -> DatabaseSchema:
             RelationProperty(name="Organization"),  # Links to Organizations & Bodies
             EmailProperty(name="Email"),
             PhoneProperty(name="Phone"),
-            RelationProperty(name="Linked Transgressions"),  # Links to Identified Transgressions
+            RelationProperty(
+                name="Linked Transgressions"
+            ),  # Links to Identified Transgressions
             DateProperty(name="Last Contacted"),
             RichTextProperty(name="Notes"),
         ],
@@ -152,7 +154,9 @@ def get_intelligence_transcripts_schema() -> DatabaseSchema:
             ),
             RichTextProperty(name="Raw Transcript/Note"),
             RichTextProperty(name="AI Summary"),
-            RelationProperty(name="Tagged Entities"),  # Multi-relation to various databases
+            RelationProperty(
+                name="Tagged Entities"
+            ),  # Multi-relation to various databases
             SelectProperty(
                 name="Processing Status",
                 options=[
@@ -181,7 +185,9 @@ def get_documents_evidence_schema() -> DatabaseSchema:
                     SelectOption(name="Evidence", color="red"),
                 ],
             ),
-            RelationProperty(name="Source Organization"),  # Links to Organizations & Bodies
+            RelationProperty(
+                name="Source Organization"
+            ),  # Links to Organizations & Bodies
             RichTextProperty(name="AI Analysis (from Colab)"),
         ],
     )
@@ -203,7 +209,9 @@ def get_key_places_events_schema() -> DatabaseSchema:
             DateProperty(name="Date of Event"),
             RichTextProperty(name="Description"),
             RelationProperty(name="People Involved"),  # Links to People & Contacts
-            RelationProperty(name="Related Transgressions"),  # Links to Identified Transgressions
+            RelationProperty(
+                name="Related Transgressions"
+            ),  # Links to Identified Transgressions
         ],
     )
 
@@ -215,9 +223,13 @@ def get_identified_transgressions_schema() -> DatabaseSchema:
         properties=[
             TitleProperty(name="Transgression Summary"),
             RelationProperty(name="Perpetrator (Person)"),  # Links to People & Contacts
-            RelationProperty(name="Perpetrator (Org)"),  # Links to Organizations & Bodies
+            RelationProperty(
+                name="Perpetrator (Org)"
+            ),  # Links to Organizations & Bodies
             DateProperty(name="Date of Transgression"),
-            RelationProperty(name="Evidence"),  # Links to Documents & Evidence and Intelligence
+            RelationProperty(
+                name="Evidence"
+            ),  # Links to Documents & Evidence and Intelligence
             SelectProperty(
                 name="Severity",
                 options=[

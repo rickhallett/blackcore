@@ -15,9 +15,9 @@ os.chdir(Path(__file__).parent)
 # Add to Python path
 sys.path.insert(0, str(Path(__file__).parent))
 
-print("="*60)
+print("=" * 60)
 print("Blackcore Deduplication CLI Demo")
-print("="*60)
+print("=" * 60)
 print()
 print("This will launch the interactive deduplication CLI.")
 print("The CLI will guide you through:")

@@ -32,7 +32,9 @@ def load_database_ids() -> Dict[str, str]:
     return db_ids
 
 
-def verify_database_properties(client: NotionClient, db_name: str, db_id: str) -> List[str]:
+def verify_database_properties(
+    client: NotionClient, db_name: str, db_id: str
+) -> List[str]:
     """Verify that a database has all expected properties.
 
     Args:
@@ -133,7 +135,9 @@ def main():
             return 0
         else:
             print("\n⚠ Some databases are missing or incomplete.")
-            print("Run 'python scripts/setup_databases.py' to create missing databases.")
+            print(
+                "Run 'python scripts/setup_databases.py' to create missing databases."
+            )
             return 1
 
     except ValueError as e:

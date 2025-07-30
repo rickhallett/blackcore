@@ -100,8 +100,8 @@ Format as JSON."""
                 "model": "claude-3-5-haiku-20241022",
                 "temperature": 0.1,
                 "cache_ttl": 3600,
-                "batch_size": 5
-            }
+                "batch_size": 5,
+            },
         },
     }
 
@@ -135,12 +135,18 @@ Format as JSON."""
         self._config = Config(**config_dict)
         return self._config
 
-    def _deep_merge(self, base: Dict[str, Any], update: Dict[str, Any]) -> Dict[str, Any]:
+    def _deep_merge(
+        self, base: Dict[str, Any], update: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Deep merge two dictionaries."""
         result = base.copy()
 
         for key, value in update.items():
-            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            if (
+                key in result
+                and isinstance(result[key], dict)
+                and isinstance(value, dict)
+            ):
                 result[key] = self._deep_merge(result[key], value)
             else:
                 result[key] = value
@@ -167,13 +173,19 @@ Format as JSON."""
                 config.setdefault("ai", {})["api_key"] = ai_key
 
         # Database IDs from environment
-        for db_name in ["people", "organizations", "tasks", "transcripts", "transgressions"]:
+        for db_name in [
+            "people",
+            "organizations",
+            "tasks",
+            "transcripts",
+            "transgressions",
+        ]:
             env_key = f"NOTION_DB_{db_name.upper()}_ID"
             db_id = os.getenv(env_key)
             if db_id:
-                config.setdefault("notion", {}).setdefault("databases", {}).setdefault(db_name, {})[
-                    "id"
-                ] = db_id
+                config.setdefault("notion", {}).setdefault("databases", {}).setdefault(
+                    db_name, {}
+                )["id"] = db_id
 
         # Processing options
         if os.getenv("BLACKCORE_DRY_RUN", "").lower() in ("true", "1", "yes"):
@@ -197,31 +209,33 @@ Format as JSON."""
                 "databases": {
                     "people": {
                         "id": "YOUR_PEOPLE_DATABASE_ID",
-                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"]["people"][
-                            "mappings"
-                        ],
+                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"][
+                            "people"
+                        ]["mappings"],
                     },
                     "organizations": {
                         "id": "YOUR_ORGANIZATIONS_DATABASE_ID",
-                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"]["organizations"][
-                            "mappings"
-                        ],
+                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"][
+                            "organizations"
+                        ]["mappings"],
                     },
                     "tasks": {
                         "id": "YOUR_TASKS_DATABASE_ID",
-                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"]["tasks"]["mappings"],
+                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"]["tasks"][
+                            "mappings"
+                        ],
                     },
                     "transcripts": {
                         "id": "YOUR_TRANSCRIPTS_DATABASE_ID",
-                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"]["transcripts"][
-                            "mappings"
-                        ],
+                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"][
+                            "transcripts"
+                        ]["mappings"],
                     },
                     "transgressions": {
                         "id": "YOUR_TRANSGRESSIONS_DATABASE_ID",
-                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"]["transgressions"][
-                            "mappings"
-                        ],
+                        "mappings": self.DEFAULT_CONFIG["notion"]["databases"][
+                            "transgressions"
+                        ]["mappings"],
                     },
                 },
                 "rate_limit": 3.0,

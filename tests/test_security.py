@@ -5,7 +5,12 @@ from unittest.mock import Mock, patch
 import json
 
 from blackcore.security.secrets_manager import SecretsManager
-from blackcore.security.validators import URLValidator, validate_email, validate_url, InputSanitizer
+from blackcore.security.validators import (
+    URLValidator,
+    validate_email,
+    validate_url,
+    InputSanitizer,
+)
 from blackcore.security.audit import AuditLogger
 
 
@@ -50,11 +55,15 @@ class TestSecretsManager:
                 secret2 = manager.get_secret("test_key")
                 assert secret2 == "cached-value"  # Still cached value
 
-    @patch("blackcore.security.secrets_manager.SecretsManager._get_or_create_encryption_key")
+    @patch(
+        "blackcore.security.secrets_manager.SecretsManager._get_or_create_encryption_key"
+    )
     @patch("pathlib.Path.mkdir")
     @patch("pathlib.Path.exists")
     @patch("os.chmod")
-    def test_store_secret_local(self, mock_chmod, mock_exists, mock_mkdir, mock_get_key):
+    def test_store_secret_local(
+        self, mock_chmod, mock_exists, mock_mkdir, mock_get_key
+    ):
         """Test storing secret locally with encryption."""
         # Mock the encryption key - must be a valid Fernet key
         from cryptography.fernet import Fernet
@@ -375,7 +384,9 @@ class TestAuditLogger:
                         }
                     ),
                 ]
-                mock_open.return_value.__enter__.return_value.__iter__.return_value = log_entries
+                mock_open.return_value.__enter__.return_value.__iter__.return_value = (
+                    log_entries
+                )
 
                 trail = logger.get_audit_trail(start_date, end_date)
 

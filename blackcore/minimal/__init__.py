@@ -10,7 +10,13 @@ This module provides a streamlined implementation focused on:
 from .transcript_processor import TranscriptProcessor
 from .ai_extractor import AIExtractor
 from .notion_updater import NotionUpdater
-from .models import TranscriptInput, ProcessingResult, ExtractedEntities, Entity, Relationship
+from .models import (
+    TranscriptInput,
+    ProcessingResult,
+    ExtractedEntities,
+    Entity,
+    Relationship,
+)
 
 __all__ = [
     "TranscriptProcessor",

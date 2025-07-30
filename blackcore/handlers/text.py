@@ -24,7 +24,9 @@ class TitleHandler(PropertyHandler):
         if isinstance(value, str):
             if len(value) > 2000:
                 raise ValidationError(
-                    "Title too long (max 2000 characters)", field="title", value=value[:50] + "..."
+                    "Title too long (max 2000 characters)",
+                    field="title",
+                    value=value[:50] + "...",
                 )
             return True
 
@@ -33,16 +35,22 @@ class TitleHandler(PropertyHandler):
             total_length = 0
             for element in value:
                 if not isinstance(element, dict):
-                    raise ValidationError("Title elements must be dictionaries", field="title")
+                    raise ValidationError(
+                        "Title elements must be dictionaries", field="title"
+                    )
                 if "text" in element and "content" in element["text"]:
                     total_length += len(element["text"]["content"])
 
             if total_length > 2000:
-                raise ValidationError("Title too long (max 2000 characters)", field="title")
+                raise ValidationError(
+                    "Title too long (max 2000 characters)", field="title"
+                )
             return True
 
         raise ValidationError(
-            f"Title must be string or list, got {type(value).__name__}", field="title", value=value
+            f"Title must be string or list, got {type(value).__name__}",
+            field="title",
+            value=value,
         )
 
     def normalize(self, value: Any) -> List[RichTextElement]:
@@ -51,7 +59,9 @@ class TitleHandler(PropertyHandler):
             return []
 
         if isinstance(value, str):
-            return [RichTextElement(type="text", text={"content": value}, plain_text=value)]
+            return [
+                RichTextElement(type="text", text={"content": value}, plain_text=value)
+            ]
 
         if isinstance(value, list):
             normalized = []
@@ -64,7 +74,9 @@ class TitleHandler(PropertyHandler):
                     # Convert to string
                     text = str(element)
                     normalized.append(
-                        RichTextElement(type="text", text={"content": text}, plain_text=text)
+                        RichTextElement(
+                            type="text", text={"content": text}, plain_text=text
+                        )
                     )
             return normalized
 
@@ -121,7 +133,9 @@ class RichTextHandler(PropertyHandler):
                     total_length += len(element["text"]["content"])
 
             if total_length > 2000:
-                raise ValidationError("Rich text too long (max 2000 characters)", field="rich_text")
+                raise ValidationError(
+                    "Rich text too long (max 2000 characters)", field="rich_text"
+                )
             return True
 
         raise ValidationError(
@@ -136,7 +150,9 @@ class RichTextHandler(PropertyHandler):
             return []
 
         if isinstance(value, str):
-            return [RichTextElement(type="text", text={"content": value}, plain_text=value)]
+            return [
+                RichTextElement(type="text", text={"content": value}, plain_text=value)
+            ]
 
         if isinstance(value, list):
             normalized = []
@@ -149,7 +165,9 @@ class RichTextHandler(PropertyHandler):
                     # Convert to string
                     text = str(element)
                     normalized.append(
-                        RichTextElement(type="text", text={"content": text}, plain_text=text)
+                        RichTextElement(
+                            type="text", text={"content": text}, plain_text=text
+                        )
                     )
             return normalized
 

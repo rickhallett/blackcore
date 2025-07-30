@@ -52,7 +52,9 @@ class TestTitleHandler:
         """Test title property simplification."""
         page = {
             "id": "test-id",
-            "properties": {"Name": {"type": "title", "title": [{"plain_text": "Test Title"}]}},
+            "properties": {
+                "Name": {"type": "title", "title": [{"plain_text": "Test Title"}]}
+            },
         }
 
         result = NotionClient.simplify_page_properties(page)
@@ -80,7 +82,10 @@ class TestTitleHandler:
         page = {
             "id": "test-id",
             "properties": {
-                "Status": {"type": "select", "select": {"name": "Active", "color": "green"}}
+                "Status": {
+                    "type": "select",
+                    "select": {"name": "Active", "color": "green"},
+                }
             },
         }
 
@@ -139,7 +144,10 @@ class TestTitleHandler:
         page = {
             "id": "test-id",
             "properties": {
-                "Due Date": {"type": "date", "date": {"start": "2025-07-15", "end": None}}
+                "Due Date": {
+                    "type": "date",
+                    "date": {"start": "2025-07-15", "end": None},
+                }
             },
         }
 
@@ -169,7 +177,9 @@ class TestTitleHandler:
         """Test email property simplification."""
         page = {
             "id": "test-id",
-            "properties": {"Contact Email": {"type": "email", "email": "test@example.com"}},
+            "properties": {
+                "Contact Email": {"type": "email", "email": "test@example.com"}
+            },
         }
 
         result = NotionClient.simplify_page_properties(page)
@@ -179,7 +189,9 @@ class TestTitleHandler:
         """Test phone number property simplification."""
         page = {
             "id": "test-id",
-            "properties": {"Phone": {"type": "phone_number", "phone_number": "+1234567890"}},
+            "properties": {
+                "Phone": {"type": "phone_number", "phone_number": "+1234567890"}
+            },
         }
 
         result = NotionClient.simplify_page_properties(page)
@@ -193,7 +205,9 @@ class TestTitleHandler:
             "properties": {
                 "Assignee": {
                     "type": "people",
-                    "people": [{"object": "user", "id": "user-123", "name": "John Doe"}],
+                    "people": [
+                        {"object": "user", "id": "user-123", "name": "John Doe"}
+                    ],
                 }
             },
         }
@@ -205,7 +219,11 @@ class TestTitleHandler:
         page["properties"]["Manager"] = {
             "type": "people",
             "people": [
-                {"object": "user", "id": "user-456", "person": {"email": "jane@example.com"}}
+                {
+                    "object": "user",
+                    "id": "user-456",
+                    "person": {"email": "jane@example.com"},
+                }
             ],
         }
 
@@ -295,7 +313,12 @@ class TestPropertyBuilding:
 
     def test_text_length_limit(self):
         """Test that text properties enforce 2000 character limit."""
-        schema = {"properties": {"Title": {"type": "title"}, "Description": {"type": "rich_text"}}}
+        schema = {
+            "properties": {
+                "Title": {"type": "title"},
+                "Description": {"type": "rich_text"},
+            }
+        }
 
         long_text = "x" * 3000
         local_data = {"Title": long_text, "Description": long_text}
@@ -318,7 +341,9 @@ class TestPropertyBuilding:
 
     def test_number_property_building(self):
         """Test building number property payload."""
-        schema = {"properties": {"Integer": {"type": "number"}, "Float": {"type": "number"}}}
+        schema = {
+            "properties": {"Integer": {"type": "number"}, "Float": {"type": "number"}}
+        }
         local_data = {"Integer": 42, "Float": 3.14}
 
         result = NotionClient.build_payload_properties(schema, local_data, {})
@@ -337,7 +362,12 @@ class TestPropertyBuilding:
 
     def test_date_property_building(self):
         """Test building date property payload."""
-        schema = {"properties": {"Simple Date": {"type": "date"}, "Date Range": {"type": "date"}}}
+        schema = {
+            "properties": {
+                "Simple Date": {"type": "date"},
+                "Date Range": {"type": "date"},
+            }
+        }
         local_data = {
             "Simple Date": "2025-07-15",
             "Date Range": {"start": "2025-07-15", "end": "2025-07-20"},
@@ -388,7 +418,10 @@ class TestPropertyBuilding:
         assert len(result["Attachments"]["files"]) == 2
         assert result["Attachments"]["files"][0]["type"] == "external"
         assert result["Attachments"]["files"][0]["name"] == "Document.pdf"
-        assert result["Attachments"]["files"][0]["external"]["url"] == "https://example.com/doc.pdf"
+        assert (
+            result["Attachments"]["files"][0]["external"]["url"]
+            == "https://example.com/doc.pdf"
+        )
 
     def test_relation_property_building(self):
         """Test building relation property payload."""
@@ -401,7 +434,9 @@ class TestPropertyBuilding:
             }
         }
 
-        result = NotionClient.build_payload_properties(schema, local_data, relation_lookups)
+        result = NotionClient.build_payload_properties(
+            schema, local_data, relation_lookups
+        )
 
         assert "Related Items" in result
         assert len(result["Related Items"]["relation"]) == 2
@@ -460,7 +495,10 @@ class TestPropertyRoundTrip:
         relation_lookups = {
             "Related Pages": {
                 "target_db": "Test Database",
-                "id_map": {"related-page-1": "related-page-1", "related-page-2": "related-page-2"},
+                "id_map": {
+                    "related-page-1": "related-page-1",
+                    "related-page-2": "related-page-2",
+                },
             }
         }
 
@@ -473,7 +511,10 @@ class TestPropertyRoundTrip:
 
         # Verify key properties maintained their values
         assert rebuilt["Name"]["title"][0]["text"]["content"] == "Test Page Title"
-        assert rebuilt["Description"]["rich_text"][0]["text"]["content"] == "Test description"
+        assert (
+            rebuilt["Description"]["rich_text"][0]["text"]["content"]
+            == "Test description"
+        )
         assert rebuilt["Status"]["select"]["name"] == "Active"
         assert rebuilt["Priority"]["number"] == 5
         assert rebuilt["Is Active"]["checkbox"] is True

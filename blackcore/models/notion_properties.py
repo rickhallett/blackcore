@@ -75,7 +75,11 @@ class SelectProperty(PropertySchema):
 
     def to_notion(self) -> Dict[str, Any]:
         return {
-            "select": {"options": [{"name": opt.name, "color": opt.color} for opt in self.options]}
+            "select": {
+                "options": [
+                    {"name": opt.name, "color": opt.color} for opt in self.options
+                ]
+            }
         }
 
 
@@ -88,7 +92,9 @@ class MultiSelectProperty(PropertySchema):
     def to_notion(self) -> Dict[str, Any]:
         return {
             "multi_select": {
-                "options": [{"name": opt.name, "color": opt.color} for opt in self.options]
+                "options": [
+                    {"name": opt.name, "color": opt.color} for opt in self.options
+                ]
             }
         }
 

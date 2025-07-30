@@ -39,38 +39,32 @@ Available modes:
   standard: Interactive interface with guided workflows (recommended)
   simple:   Basic deduplication with minimal options (future)
   expert:   Advanced features with full control (future)
-"""
+""",
     )
-    
+
     parser.add_argument(
         "--mode",
         choices=["simple", "standard", "expert"],
         default="standard",
-        help="CLI mode to use (default: standard)"
+        help="CLI mode to use (default: standard)",
     )
-    
+
     parser.add_argument(
-        "--version",
-        action="version",
-        version="Blackcore Deduplication CLI v1.0.0"
+        "--version", action="version", version="Blackcore Deduplication CLI v1.0.0"
     )
-    
-    parser.add_argument(
-        "--config",
-        type=Path,
-        help="Path to configuration file"
-    )
-    
+
+    parser.add_argument("--config", type=Path, help="Path to configuration file")
+
     args = parser.parse_args()
-    
+
     # Currently only standard mode is implemented
     if args.mode == "standard":
         cli = StandardModeCLI()
-        
+
         # Load config if provided
         if args.config and args.config.exists():
             cli.config_wizard.load_config(args.config)
-            
+
         # Run the CLI
         try:
             asyncio.run(cli.run())

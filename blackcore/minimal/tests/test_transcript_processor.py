@@ -31,8 +31,12 @@ class TestTranscriptProcessor:
                     "people": DatabaseConfig(id="people-db", name="People"),
                     "organizations": DatabaseConfig(id="org-db", name="Organizations"),
                     "tasks": DatabaseConfig(id="task-db", name="Tasks"),
-                    "transcripts": DatabaseConfig(id="transcript-db", name="Transcripts"),
-                    "transgressions": DatabaseConfig(id="trans-db", name="Transgressions"),
+                    "transcripts": DatabaseConfig(
+                        id="transcript-db", name="Transcripts"
+                    ),
+                    "transgressions": DatabaseConfig(
+                        id="trans-db", name="Transgressions"
+                    ),
                 },
             ),
             ai=AIConfig(api_key="ai-key"),
@@ -43,9 +47,17 @@ class TestTranscriptProcessor:
         """Create mock extracted entities."""
         return ExtractedEntities(
             entities=[
-                Entity(name="John Doe", type=EntityType.PERSON, properties={"role": "Mayor"}),
+                Entity(
+                    name="John Doe",
+                    type=EntityType.PERSON,
+                    properties={"role": "Mayor"},
+                ),
                 Entity(name="Town Council", type=EntityType.ORGANIZATION),
-                Entity(name="Review Survey", type=EntityType.TASK, properties={"status": "To-Do"}),
+                Entity(
+                    name="Review Survey",
+                    type=EntityType.TASK,
+                    properties={"status": "To-Do"},
+                ),
             ],
             relationships=[],
             summary="Meeting about survey concerns",
@@ -55,7 +67,9 @@ class TestTranscriptProcessor:
     @patch("blackcore.minimal.transcript_processor.AIExtractor")
     @patch("blackcore.minimal.transcript_processor.NotionUpdater")
     @patch("blackcore.minimal.transcript_processor.SimpleCache")
-    def test_processor_init(self, mock_cache, mock_updater, mock_extractor, mock_config):
+    def test_processor_init(
+        self, mock_cache, mock_updater, mock_extractor, mock_config
+    ):
         """Test processor initialization."""
         processor = TranscriptProcessor(config=mock_config)
 
@@ -63,7 +77,9 @@ class TestTranscriptProcessor:
         mock_extractor.assert_called_once_with(
             provider="claude", api_key="ai-key", model="claude-3-sonnet-20240229"
         )
-        mock_updater.assert_called_once_with(api_key="notion-key", rate_limit=3.0, retry_attempts=3)
+        mock_updater.assert_called_once_with(
+            api_key="notion-key", rate_limit=3.0, retry_attempts=3
+        )
 
     @patch("blackcore.minimal.transcript_processor.AIExtractor")
     @patch("blackcore.minimal.transcript_processor.NotionUpdater")

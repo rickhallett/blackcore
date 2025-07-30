@@ -19,7 +19,9 @@ class SearchRepository(BaseRepository[Union[NotionPage, NotionDatabase]]):
         """Not supported for search repository."""
         raise NotImplementedError("Search repository doesn't support create")
 
-    def update(self, id: str, data: Dict[str, Any]) -> Union[NotionPage, NotionDatabase]:
+    def update(
+        self, id: str, data: Dict[str, Any]
+    ) -> Union[NotionPage, NotionDatabase]:
         """Not supported for search repository."""
         raise NotImplementedError("Search repository doesn't support update")
 
@@ -186,7 +188,11 @@ class SearchRepository(BaseRepository[Union[NotionPage, NotionDatabase]]):
         return filtered
 
     def _execute_api_call(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        data: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Execute the actual API call using the Notion client."""
         if method == "POST" and endpoint == "search":

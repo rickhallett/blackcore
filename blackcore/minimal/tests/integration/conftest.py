@@ -41,7 +41,11 @@ def integration_config():
                 "tasks": DatabaseConfig(
                     id="test-tasks-db",
                     name="Test Tasks",
-                    mappings={"name": "Title", "status": "Status", "assigned_to": "Assigned To"},
+                    mappings={
+                        "name": "Title",
+                        "status": "Status",
+                        "assigned_to": "Assigned To",
+                    },
                 ),
                 "events": DatabaseConfig(
                     id="test-events-db",
@@ -67,7 +71,9 @@ def integration_config():
             max_tokens=4000,
             temperature=0.3,
         ),
-        processing=ProcessingConfig(batch_size=5, cache_ttl=3600, dry_run=False, verbose=True),
+        processing=ProcessingConfig(
+            batch_size=5, cache_ttl=3600, dry_run=False, verbose=True
+        ),
         cache_dir=".test_cache",
         cache_ttl=3600,
     )
@@ -148,10 +154,26 @@ def mock_ai_responses():
         },
         "complex": {
             "entities": [
-                {"name": "Sarah Johnson", "type": "person", "properties": {"role": "VP Sales"}},
-                {"name": "Mike Chen", "type": "person", "properties": {"role": "Engineer"}},
-                {"name": "TechCorp", "type": "organization", "properties": {"type": "Startup"}},
-                {"name": "Q4 Planning", "type": "task", "properties": {"status": "In Progress"}},
+                {
+                    "name": "Sarah Johnson",
+                    "type": "person",
+                    "properties": {"role": "VP Sales"},
+                },
+                {
+                    "name": "Mike Chen",
+                    "type": "person",
+                    "properties": {"role": "Engineer"},
+                },
+                {
+                    "name": "TechCorp",
+                    "type": "organization",
+                    "properties": {"type": "Startup"},
+                },
+                {
+                    "name": "Q4 Planning",
+                    "type": "task",
+                    "properties": {"status": "In Progress"},
+                },
                 {
                     "name": "Annual Review Meeting",
                     "type": "event",
@@ -282,7 +304,9 @@ def sample_transcripts():
 
 
 @pytest.fixture
-def integration_test_env(integration_config, temp_cache_dir, mock_notion_client, mock_ai_client):
+def integration_test_env(
+    integration_config, temp_cache_dir, mock_notion_client, mock_ai_client
+):
     """Set up complete integration test environment."""
     # Update cache directory in config
     integration_config.cache_dir = temp_cache_dir
@@ -352,7 +376,9 @@ def performance_monitor():
                 "api_time": api_time,
                 "processing_time": total_time - api_time,
                 "api_call_count": len(self.api_calls),
-                "average_api_time": api_time / len(self.api_calls) if self.api_calls else 0,
+                "average_api_time": (
+                    api_time / len(self.api_calls) if self.api_calls else 0
+                ),
             }
 
     return PerformanceMonitor()

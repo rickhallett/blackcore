@@ -105,7 +105,9 @@ class TestNotionUpdater:
         updater = NotionUpdater(api_key="test-key")
 
         # Update page
-        page = updater.update_page(page_id="page-123", properties={"Status": "Completed"})
+        page = updater.update_page(
+            page_id="page-123", properties={"Status": "Completed"}
+        )
 
         assert page.id == "page-123"
         mock_client.pages.update.assert_called_once_with(
@@ -122,7 +124,9 @@ class TestNotionUpdater:
                 {
                     "id": "page-123",
                     "parent": {"database_id": "db-123"},
-                    "properties": {"Name": {"title": [{"text": {"content": "John Doe"}}]}},
+                    "properties": {
+                        "Name": {"title": [{"text": {"content": "John Doe"}}]}
+                    },
                     "created_time": "2025-01-09T12:00:00.000Z",
                     "last_edited_time": "2025-01-09T12:00:00.000Z",
                 }

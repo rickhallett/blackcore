@@ -309,7 +309,10 @@ class TestDatabaseRepository:
 
         # Mock update response
         mock_updated = mock_db.copy()
-        mock_updated["properties"]["Status"] = {"type": "select", "select": {"options": []}}
+        mock_updated["properties"]["Status"] = {
+            "type": "select",
+            "select": {"options": []},
+        }
         mock_client.databases.update.return_value = mock_updated
 
         # Test adding property

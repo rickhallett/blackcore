@@ -88,7 +88,9 @@ class URLValidator:
 
         # Check allowed domains if in allowlist mode
         if self.allowed_domains:
-            if not any(parsed.hostname.endswith(domain) for domain in self.allowed_domains):
+            if not any(
+                parsed.hostname.endswith(domain) for domain in self.allowed_domains
+            ):
                 raise ValueError(f"Domain {parsed.hostname} not in allowed list")
 
         # Resolve hostname to IP and check
@@ -106,7 +108,9 @@ class URLValidator:
                 # Check against blocked networks
                 for network in self.BLOCKED_NETWORKS:
                     if ip in network:
-                        raise ValueError(f"URL resolves to blocked network {network}: {ip}")
+                        raise ValueError(
+                            f"URL resolves to blocked network {network}: {ip}"
+                        )
 
         except socket.gaierror as e:
             raise ValueError(f"Cannot resolve hostname {parsed.hostname}: {e}")

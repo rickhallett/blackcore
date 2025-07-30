@@ -143,7 +143,11 @@ class BaseRepository(ABC, Generic[T]):
         return self.__class__.__name__.replace("Repository", "").lower()
 
     def _make_api_call(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        data: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Make rate-limited API call with error handling.
 
@@ -199,7 +203,11 @@ class BaseRepository(ABC, Generic[T]):
             self.error_handler.handle_error(e)
 
     def _execute_api_call(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        data: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Execute the actual API call.
 

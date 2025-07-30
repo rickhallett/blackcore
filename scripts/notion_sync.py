@@ -12,13 +12,16 @@ from blackcore.notion.client import (
 class SyncEngine:
     """Manages the core logic of diffing and planning the sync."""
 
-    def __init__(self, db_name: str, config: Dict[str, Any], notion_client: NotionClient):
+    def __init__(
+        self, db_name: str, config: Dict[str, Any], notion_client: NotionClient
+    ):
         self.db_name = db_name
         self.config = config
         self.notion = notion_client
         self.title_prop = config["title_property"]
         self.cache_path = (
-            CACHE_DIR / f"{db_name.lower().replace(' & ', '_').replace(' ', '_')}_cache.json"
+            CACHE_DIR
+            / f"{db_name.lower().replace(' & ', '_').replace(' ', '_')}_cache.json"
         )
         self.db_schema = None  # Will be loaded during fetch
 
@@ -62,7 +65,8 @@ class SyncEngine:
                 continue
 
             id_map = {
-                item.get(target_title_prop): item.get("notion_page_id") for item in target_items
+                item.get(target_title_prop): item.get("notion_page_id")
+                for item in target_items
             }
             lookups[prop_name] = {"target_db": target_db_name, "id_map": id_map}
             console.print(
@@ -79,7 +83,9 @@ class SyncEngine:
         )
         self.db_schema = self.notion.get_database_schema(self.config["id"])
         if not self.db_schema:
-            console.print("[bold red]Error:[/] Could not fetch database schema. Aborting.")
+            console.print(
+                "[bold red]Error:[/] Could not fetch database schema. Aborting."
+            )
             return
 
         console.print(
@@ -143,7 +149,9 @@ class SyncEngine:
             if action == "CREATE":
                 title = item["data"].get(self.title_prop, "Untitled")
                 if is_live:
-                    console.print(f"  [CREATE] Creating page: '[cyan]{title}[/cyan]'...", end="")
+                    console.print(
+                        f"  [CREATE] Creating page: '[cyan]{title}[/cyan]'...", end=""
+                    )
                     properties = self.notion.build_payload_properties(
                         self.db_schema, item["data"], relation_lookups
                     )
@@ -153,7 +161,9 @@ class SyncEngine:
                     else:
                         console.print(" [bold red]Failed.[/bold red]")
                 else:
-                    console.print(f"  [DRY RUN - CREATE] Would create page for: '{title}'")
+                    console.print(
+                        f"  [DRY RUN - CREATE] Would create page for: '{title}'"
+                    )
 
             elif action == "SKIP":
                 console.print(f"  [SKIP] Page exists: '{item['title']}'")
@@ -193,13 +203,17 @@ def main():
             break
 
     if not db_to_sync:
-        console.print("[bold red]Error:[/] Please specify which database to sync.", style="red")
+        console.print(
+            "[bold red]Error:[/] Please specify which database to sync.", style="red"
+        )
         console.print('Example: `python3 -m scripts.notion_sync "Agendas & Epics"`')
         return
 
     config = DATABASE_CONFIG.get(db_to_sync)
     if not config:
-        console.print(f"[bold red]Error:[/] No configuration found for database '{db_to_sync}'.")
+        console.print(
+            f"[bold red]Error:[/] No configuration found for database '{db_to_sync}'."
+        )
         return
 
     # Validate that the database still exists
@@ -208,7 +222,11 @@ def main():
         console.print(
             f"[bold red]Error:[/] Database '{db_to_sync}' (ID: {db_id}) not found or inaccessible."
         )
-        refresh = input("Would you like to refresh the configuration? (y/n): ").lower().strip()
+        refresh = (
+            input("Would you like to refresh the configuration? (y/n): ")
+            .lower()
+            .strip()
+        )
         if refresh == "y":
             notion_client.refresh_config()
             console.print("[bold green]Configuration refreshed![/bold]")

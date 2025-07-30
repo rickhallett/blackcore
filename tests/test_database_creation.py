@@ -76,7 +76,9 @@ class TestDatabaseSchemas:
                 relations = RELATION_MAPPINGS[schema.name]
 
                 # Get relation properties from schema
-                relation_props = [p for p in schema.properties if isinstance(p, RelationProperty)]
+                relation_props = [
+                    p for p in schema.properties if isinstance(p, RelationProperty)
+                ]
 
                 # Check that all relation properties have mappings
                 for prop in relation_props:
@@ -105,7 +107,10 @@ class TestNotionClient:
         # Mock the Notion client
         mock_client = Mock()
         mock_client_class.return_value = mock_client
-        mock_client.databases.create.return_value = {"id": "test-db-id", "object": "database"}
+        mock_client.databases.create.return_value = {
+            "id": "test-db-id",
+            "object": "database",
+        }
 
         # Create our client
         client = NotionClient(api_key="test-key")

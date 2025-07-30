@@ -51,7 +51,9 @@ class LLMScorerCache:
         """Remove all expired entries."""
         now = datetime.now()
         expired_keys = [
-            key for key, (_, timestamp) in self.cache.items() if now - timestamp >= self.ttl
+            key
+            for key, (_, timestamp) in self.cache.items()
+            if now - timestamp >= self.ttl
         ]
         for key in expired_keys:
             del self.cache[key]
@@ -89,19 +91,56 @@ class LLMScorer:
                 "analysis_dimensions": {
                     "type": "object",
                     "properties": {
-                        "name_similarity": {"type": "number", "minimum": 0, "maximum": 100},
-                        "temporal_proximity": {"type": "number", "minimum": 0, "maximum": 100},
-                        "social_graph": {"type": "number", "minimum": 0, "maximum": 100},
-                        "location_overlap": {"type": "number", "minimum": 0, "maximum": 100},
-                        "communication_pattern": {"type": "number", "minimum": 0, "maximum": 100},
-                        "professional_context": {"type": "number", "minimum": 0, "maximum": 100},
-                        "behavioral_pattern": {"type": "number", "minimum": 0, "maximum": 100},
-                        "linguistic_similarity": {"type": "number", "minimum": 0, "maximum": 100},
+                        "name_similarity": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "temporal_proximity": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "social_graph": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "location_overlap": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "communication_pattern": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "professional_context": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "behavioral_pattern": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
+                        "linguistic_similarity": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                        },
                     },
                     "description": "Individual dimension scores",
                 },
             },
-            "required": ["confidence_score", "is_match", "match_reason", "supporting_evidence"],
+            "required": [
+                "confidence_score",
+                "is_match",
+                "match_reason",
+                "supporting_evidence",
+            ],
         },
     }
 
@@ -214,7 +253,9 @@ class LLMScorer:
 
         return results
 
-    def _build_prompt(self, entity1: Dict, entity2: Dict, entity_type: str, context: Dict) -> str:
+    def _build_prompt(
+        self, entity1: Dict, entity2: Dict, entity_type: str, context: Dict
+    ) -> str:
         """Build comprehensive prompt for LLM analysis."""
         prompt = f"""Analyze these two {entity_type} entities for potential duplication.
 
@@ -230,7 +271,9 @@ Additional Context:"""
             prompt += f"\n- Time between mentions: {context['time_gap']}"
 
         if context.get("shared_connections"):
-            prompt += f"\n- Shared connections: {', '.join(context['shared_connections'])}"
+            prompt += (
+                f"\n- Shared connections: {', '.join(context['shared_connections'])}"
+            )
 
         if context.get("source_documents"):
             prompt += f"\n- Source documents: {', '.join(context['source_documents'])}"
@@ -249,7 +292,9 @@ Use the score_entity_match tool to provide your structured analysis."""
 
         return prompt
 
-    def _process_response(self, response: anthropic.types.Message) -> Tuple[float, str, Dict]:
+    def _process_response(
+        self, response: anthropic.types.Message
+    ) -> Tuple[float, str, Dict]:
         """Extract scoring from LLM response."""
         # Look for tool use in response
         for content in response.content:
@@ -268,7 +313,9 @@ Use the score_entity_match tool to provide your structured analysis."""
         # Fallback if no tool use found
         return 0.0, "No structured response from LLM", {"error": True}
 
-    def _process_batch(self, batch: List[Tuple[Dict, Dict, str]]) -> List[Tuple[float, str, Dict]]:
+    def _process_batch(
+        self, batch: List[Tuple[Dict, Dict, str]]
+    ) -> List[Tuple[float, str, Dict]]:
         """Process a batch of entity pairs in a single LLM request."""
         # Build batch prompt
         prompt = "Analyze the following entity pairs for potential duplication.\n\n"
@@ -278,7 +325,9 @@ Use the score_entity_match tool to provide your structured analysis."""
             prompt += f"Entity A: {json.dumps(entity1)}\n"
             prompt += f"Entity B: {json.dumps(entity2)}\n\n"
 
-        prompt += "For each comparison, use the score_entity_match tool to provide analysis."
+        prompt += (
+            "For each comparison, use the score_entity_match tool to provide analysis."
+        )
 
         try:
             # Create a tool for each comparison
@@ -331,7 +380,10 @@ Use the score_entity_match tool to provide your structured analysis."""
     def get_cache_stats(self) -> Dict[str, int]:
         """Get cache statistics."""
         self.cache.clear_expired()
-        return {"entries": len(self.cache.cache), "ttl_seconds": self.cache.ttl.total_seconds()}
+        return {
+            "entries": len(self.cache.cache),
+            "ttl_seconds": self.cache.ttl.total_seconds(),
+        }
 
 
 # Fallback to simple scorer if LLM fails
@@ -356,7 +408,9 @@ class LLMScorerWithFallback(LLMScorer):
         except Exception as e:
             if self.fallback_scorer:
                 # Use fallback scorer
-                score, reason = self.fallback_scorer.score_entities(entity1, entity2, entity_type)
+                score, reason = self.fallback_scorer.score_entities(
+                    entity1, entity2, entity_type
+                )
                 return score, reason, {"fallback": True, "error": str(e)}
             else:
                 raise

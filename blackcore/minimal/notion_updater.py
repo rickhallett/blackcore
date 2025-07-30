@@ -95,12 +95,16 @@ class NotionUpdater:
 
         # Update page with retries
         response = self._execute_with_retry(
-            lambda: self.client.pages.update(page_id=page_id, properties=formatted_properties)
+            lambda: self.client.pages.update(
+                page_id=page_id, properties=formatted_properties
+            )
         )
 
         return self._parse_page_response(response)
 
-    def find_page(self, database_id: str, filter_query: Dict[str, Any]) -> Optional[NotionPage]:
+    def find_page(
+        self, database_id: str, filter_query: Dict[str, Any]
+    ) -> Optional[NotionPage]:
         """Find a page by property values.
 
         Args:
@@ -143,7 +147,9 @@ class NotionUpdater:
         """
         # Try to find existing page
         if match_property in properties:
-            existing = self.find_page(database_id, {match_property: properties[match_property]})
+            existing = self.find_page(
+                database_id, {match_property: properties[match_property]}
+            )
             if existing:
                 # Update existing page
                 updated = self.update_page(existing.id, properties)
@@ -180,18 +186,18 @@ class NotionUpdater:
         self, database_id: str, query: str, limit: int = 10
     ) -> List[NotionPage]:
         """Search for pages in a database.
-        
+
         Args:
             database_id: The database ID to search
             query: Search query text
             limit: Maximum number of results
-            
+
         Returns:
             List of NotionPage objects matching the query
         """
         # Apply rate limiting
         self.rate_limiter.wait_if_needed()
-        
+
         # Use database query with title contains filter
         filter_params = {
             "filter": {
@@ -205,24 +211,28 @@ class NotionUpdater:
             },
             "page_size": limit,
         }
-        
+
         try:
             response = self._execute_with_retry(
-                lambda: self.client.databases.query(database_id=database_id, **filter_params)
+                lambda: self.client.databases.query(
+                    database_id=database_id, **filter_params
+                )
             )
-            
+
             pages = []
             for page_data in response.get("results", []):
                 pages.append(self._parse_notion_page(page_data))
-                
+
             return pages
         except Exception:
             # If filter fails, try without filter (some databases may have different schemas)
             try:
                 response = self._execute_with_retry(
-                    lambda: self.client.databases.query(database_id=database_id, page_size=limit)
+                    lambda: self.client.databases.query(
+                        database_id=database_id, page_size=limit
+                    )
                 )
-                
+
                 # Filter results manually
                 pages = []
                 query_lower = query.lower()
@@ -230,10 +240,13 @@ class NotionUpdater:
                     page = self._parse_notion_page(page_data)
                     # Check if query matches any text property
                     for prop_value in page.properties.values():
-                        if isinstance(prop_value, str) and query_lower in prop_value.lower():
+                        if (
+                            isinstance(prop_value, str)
+                            and query_lower in prop_value.lower()
+                        ):
                             pages.append(page)
                             break
-                            
+
                 return pages[:limit]
             except Exception:
                 # Return empty list if all search attempts fail
@@ -251,7 +264,9 @@ class NotionUpdater:
         # Apply rate limiting
         self.rate_limiter.wait_if_needed()
 
-        response = self._execute_with_retry(lambda: self.client.databases.retrieve(database_id))
+        response = self._execute_with_retry(
+            lambda: self.client.databases.retrieve(database_id)
+        )
 
         schema = {}
         for prop_name, prop_data in response.get("properties", {}).items():
@@ -352,7 +367,9 @@ class NotionUpdater:
             id=response["id"],
             database_id=response.get("parent", {}).get("database_id", ""),
             properties=properties,
-            created_time=datetime.fromisoformat(response["created_time"].replace("Z", "+00:00")),
+            created_time=datetime.fromisoformat(
+                response["created_time"].replace("Z", "+00:00")
+            ),
             last_edited_time=datetime.fromisoformat(
                 response["last_edited_time"].replace("Z", "+00:00")
             ),
@@ -371,7 +388,9 @@ class NotionUpdater:
         self.rate_limiter.wait_if_needed()
         return self._execute_with_retry(lambda: self.client.pages.retrieve(page_id))
 
-    def _get_relation_ids(self, page: Dict[str, Any], relation_property: str) -> List[str]:
+    def _get_relation_ids(
+        self, page: Dict[str, Any], relation_property: str
+    ) -> List[str]:
         """Extract relation IDs from a page.
 
         Args:

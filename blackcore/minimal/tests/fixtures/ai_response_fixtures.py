@@ -28,7 +28,10 @@ CLAUDE_RESPONSE_SUCCESS = {
                         {
                             "name": "Project Phoenix",
                             "type": "task",
-                            "properties": {"status": "In Progress", "owner": "John Doe"},
+                            "properties": {
+                                "status": "In Progress",
+                                "owner": "John Doe",
+                            },
                             "context": "New project mentioned",
                             "confidence": 0.85,
                         },
@@ -80,7 +83,9 @@ OPENAI_RESPONSE_SUCCESS = {
 
 # Malformed JSON response
 MALFORMED_JSON_RESPONSE = {
-    "content": [{"type": "text", "text": "Here are the entities I found: {invalid json"}]
+    "content": [
+        {"type": "text", "text": "Here are the entities I found: {invalid json"}
+    ]
 }
 
 # Response with markdown formatting
@@ -111,12 +116,17 @@ The main entity found was Bob Johnson who serves as CTO.""",
 
 # Empty extraction response
 EMPTY_EXTRACTION_RESPONSE = {
-    "content": [{"type": "text", "text": json.dumps({"entities": [], "relationships": []})}]
+    "content": [
+        {"type": "text", "text": json.dumps({"entities": [], "relationships": []})}
+    ]
 }
 
 # Rate limit error from AI provider
 AI_RATE_LIMIT_ERROR = {
-    "error": {"type": "rate_limit_error", "message": "Rate limit exceeded. Please try again later."}
+    "error": {
+        "type": "rate_limit_error",
+        "message": "Rate limit exceeded. Please try again later.",
+    }
 }
 
 # Token limit exceeded error
@@ -154,31 +164,46 @@ COMPLEX_EXTRACTION_RESPONSE = {
                         {
                             "name": "Q1 Board Meeting",
                             "type": "event",
-                            "properties": {"date": "2025-01-20", "location": "NYC headquarters"},
+                            "properties": {
+                                "date": "2025-01-20",
+                                "location": "NYC headquarters",
+                            },
                             "confidence": 0.88,
                         },
                         {
                             "name": "Financial Review",
                             "type": "task",
-                            "properties": {"assignee": "Jane Doe", "due_date": "2025-03-15"},
+                            "properties": {
+                                "assignee": "Jane Doe",
+                                "due_date": "2025-03-15",
+                            },
                             "confidence": 0.9,
                         },
                         {
                             "name": "Data Privacy Violation",
                             "type": "transgression",
-                            "properties": {"severity": "High", "organization": "DataSoft"},
+                            "properties": {
+                                "severity": "High",
+                                "organization": "DataSoft",
+                            },
                             "confidence": 0.85,
                         },
                         {
                             "name": "Q1 Forecast Document",
                             "type": "document",
-                            "properties": {"type": "Financial Report", "owner": "Jane Doe"},
+                            "properties": {
+                                "type": "Financial Report",
+                                "owner": "Jane Doe",
+                            },
                             "confidence": 0.82,
                         },
                         {
                             "name": "NYC headquarters",
                             "type": "place",
-                            "properties": {"address": "123 Tech Avenue, NYC", "type": "Office"},
+                            "properties": {
+                                "address": "123 Tech Avenue, NYC",
+                                "type": "Office",
+                            },
                             "confidence": 0.87,
                         },
                     ],
@@ -212,7 +237,9 @@ COMPLEX_EXTRACTION_RESPONSE = {
 }
 
 
-def create_mock_ai_response(entities: list, relationships: list = None) -> Dict[str, Any]:
+def create_mock_ai_response(
+    entities: list, relationships: list = None
+) -> Dict[str, Any]:
     """Create a mock AI response with custom entities."""
     content = {"entities": entities, "relationships": relationships or []}
 

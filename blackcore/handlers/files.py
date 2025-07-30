@@ -23,7 +23,9 @@ class FilesHandler(PropertyHandler):
                     continue
                 elif isinstance(item, dict):
                     if "url" not in item and "name" not in item:
-                        raise ValidationError("File item must have 'url' or 'name'", field="files")
+                        raise ValidationError(
+                            "File item must have 'url' or 'name'", field="files"
+                        )
                 else:
                     raise ValidationError(
                         f"File items must be string or dict, got {type(item).__name__}",
@@ -32,7 +34,9 @@ class FilesHandler(PropertyHandler):
             return True
 
         raise ValidationError(
-            f"Files must be list, got {type(value).__name__}", field="files", value=value
+            f"Files must be list, got {type(value).__name__}",
+            field="files",
+            value=value,
         )
 
     def normalize(self, value: Any) -> List[Dict[str, Any]]:
@@ -46,7 +50,11 @@ class FilesHandler(PropertyHandler):
                 if isinstance(item, str):
                     # Convert URL to file object
                     files.append(
-                        {"type": "external", "name": f"File {i + 1}", "external": {"url": item}}
+                        {
+                            "type": "external",
+                            "name": f"File {i + 1}",
+                            "external": {"url": item},
+                        }
                     )
                 elif isinstance(item, dict):
                     # Ensure proper structure
@@ -56,7 +64,9 @@ class FilesHandler(PropertyHandler):
             return files
 
         raise ValidationError(
-            f"Cannot normalize {type(value).__name__} to files", field="files", value=value
+            f"Cannot normalize {type(value).__name__} to files",
+            field="files",
+            value=value,
         )
 
     def parse(self, api_value: Dict[str, Any]) -> FilesProperty:
@@ -69,6 +79,8 @@ class FilesHandler(PropertyHandler):
 
         return {"type": "files", "files": normalized}
 
-    def extract_plain_value(self, property_value: FilesProperty) -> List[Dict[str, Any]]:
+    def extract_plain_value(
+        self, property_value: FilesProperty
+    ) -> List[Dict[str, Any]]:
         """Extract file information."""
         return property_value.files

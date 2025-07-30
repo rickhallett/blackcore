@@ -78,7 +78,9 @@ class DatabaseCreator:
         print("\nPhase 2: Updating databases with relations...")
         self._update_all_relations()
 
-        print(f"\nDatabase creation complete! Created {len(self.created_databases)} databases.")
+        print(
+            f"\nDatabase creation complete! Created {len(self.created_databases)} databases."
+        )
         return self.database_ids
 
     def _check_existing_databases(self) -> List[str]:
@@ -97,7 +99,9 @@ class DatabaseCreator:
 
         return existing_names
 
-    def _create_database_without_relations(self, schema: DatabaseSchema) -> Optional[str]:
+    def _create_database_without_relations(
+        self, schema: DatabaseSchema
+    ) -> Optional[str]:
         """Create a database without relation properties.
 
         Args:
@@ -149,10 +153,14 @@ class DatabaseCreator:
                     target_db_id = self.database_ids[target_db_name]
 
                     # Create proper relation configuration
-                    relation_config = RelationConfig(database_id=target_db_id, type="dual_property")
+                    relation_config = RelationConfig(
+                        database_id=target_db_id, type="dual_property"
+                    )
 
                     # Create relation property with config
-                    relation_prop = RelationProperty(name=relation_name, config=relation_config)
+                    relation_prop = RelationProperty(
+                        name=relation_name, config=relation_config
+                    )
 
                     relation_properties[relation_name] = relation_prop.to_notion()
                 else:
@@ -162,7 +170,9 @@ class DatabaseCreator:
 
             if relation_properties:
                 try:
-                    self.client.update_database(database_id=db_id, properties=relation_properties)
+                    self.client.update_database(
+                        database_id=db_id, properties=relation_properties
+                    )
                     print(f"✓ Updated relations for: {db_name}")
                     time.sleep(0.5)  # Rate limit protection
                 except Exception as e:

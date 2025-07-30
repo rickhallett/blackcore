@@ -14,7 +14,9 @@ from blackcore.minimal.notion_updater import RateLimiter
 class TestPerformanceBaseline:
     """Test basic performance characteristics."""
 
-    def test_single_transcript_performance(self, integration_test_env, performance_monitor):
+    def test_single_transcript_performance(
+        self, integration_test_env, performance_monitor
+    ):
         """Test performance of processing a single transcript."""
         env = integration_test_env
 
@@ -41,7 +43,9 @@ class TestPerformanceBaseline:
         assert result.processing_time > 0
         assert result.processing_time < 2.0
 
-    def test_batch_processing_performance(self, integration_test_env, performance_monitor):
+    def test_batch_processing_performance(
+        self, integration_test_env, performance_monitor
+    ):
         """Test performance of batch processing."""
         env = integration_test_env
 
@@ -338,14 +342,18 @@ class TestAPICallOptimization:
         # Process multiple transcripts with overlapping entities
         transcripts = [
             TranscriptInput(
-                title="Meeting 1", content="John Smith from Acme Corp", date=datetime.now()
+                title="Meeting 1",
+                content="John Smith from Acme Corp",
+                date=datetime.now(),
             ),
             TranscriptInput(
                 title="Meeting 2",
                 content="John Smith and Jane Doe from Acme Corp",
                 date=datetime.now(),
             ),
-            TranscriptInput(title="Meeting 3", content="Jane Doe presenting", date=datetime.now()),
+            TranscriptInput(
+                title="Meeting 3", content="Jane Doe presenting", date=datetime.now()
+            ),
         ]
 
         processor = TranscriptProcessor(config=env["config"])

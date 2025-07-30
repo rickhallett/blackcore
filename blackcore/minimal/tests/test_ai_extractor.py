@@ -183,7 +183,11 @@ class TestAIExtractor:
         # Setup mock
         mock_response = Mock()
         mock_response.content = [
-            Mock(text=json.dumps({"entities": [], "relationships": [], "summary": "Test"}))
+            Mock(
+                text=json.dumps(
+                    {"entities": [], "relationships": [], "summary": "Test"}
+                )
+            )
         ]
 
         mock_client = Mock()
@@ -202,7 +206,11 @@ class TestAIExtractor:
         # Setup mock
         mock_response = Mock()
         mock_response.content = [
-            Mock(text=json.dumps({"entities": [], "relationships": [], "summary": "Test"}))
+            Mock(
+                text=json.dumps(
+                    {"entities": [], "relationships": [], "summary": "Test"}
+                )
+            )
         ]
 
         mock_client = Mock()

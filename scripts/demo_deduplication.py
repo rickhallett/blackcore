@@ -31,31 +31,32 @@ Issues:
 - Nassau Council received complaints about beach access
 """
 
+
 def main():
     print("🚀 MVP Black Mini - Deduplication Demo\n")
-    
+
     # Create test config
     config = Config()
     config.processing.verbose = True
     config.processing.dry_run = True  # Don't actually sync to Notion
-    
+
     # Create processor
     processor = TranscriptProcessor(config=config)
-    
+
     # Create transcript
     transcript = TranscriptInput(
         title="Council Meeting - System Upgrade Discussion",
         content=sample_transcript,
         date=datetime.now(),
-        source=TranscriptSource.GOOGLE_MEET
+        source=TranscriptSource.GOOGLE_MEET,
     )
-    
+
     print("📝 Processing transcript...")
     print("-" * 60)
-    
+
     # Process and show results
     result = processor.process_transcript(transcript)
-    
+
     print("\n" + "=" * 60)
     print("🔍 DEDUPLICATION EXAMPLES:")
     print("=" * 60)
@@ -71,6 +72,7 @@ def main():
     print("  • Phone match: 92% (high confidence)")
     print("  • Nickname match: 90% (high confidence)")
     print("  • Same org boost: +15% (when names partially match)")
+
 
 if __name__ == "__main__":
     main()

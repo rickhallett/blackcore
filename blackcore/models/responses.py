@@ -287,7 +287,9 @@ class NotionSearchResponse(NotionPaginatedResponse):
     pass
 
 
-def validate_notion_response(response_data: Dict[str, Any], expected_type: ObjectType) -> BaseModel:
+def validate_notion_response(
+    response_data: Dict[str, Any], expected_type: ObjectType
+) -> BaseModel:
     """Validate a Notion API response.
 
     Args:
@@ -318,7 +320,9 @@ def validate_notion_response(response_data: Dict[str, Any], expected_type: Objec
         raise ValueError(f"Unsupported object type: {expected_type}")
 
 
-def validate_paginated_response(response_data: Dict[str, Any]) -> NotionPaginatedResponse:
+def validate_paginated_response(
+    response_data: Dict[str, Any],
+) -> NotionPaginatedResponse:
     """Validate a paginated response.
 
     Args:

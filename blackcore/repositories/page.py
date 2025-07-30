@@ -116,7 +116,9 @@ class PageRepository(BaseRepository[NotionPage]):
 
                 # Update properties if provided
                 if "properties" in data:
-                    update_data["properties"] = self._normalize_properties(data["properties"])
+                    update_data["properties"] = self._normalize_properties(
+                        data["properties"]
+                    )
 
                 # Update other fields
                 if "archived" in data:
@@ -252,28 +254,40 @@ class PageRepository(BaseRepository[NotionPage]):
                 if isinstance(value, str):
                     # Could be title, rich_text, select, etc.
                     # Default to rich_text for now
-                    handler = property_handler_registry.get_handler(PropertyType.RICH_TEXT)
+                    handler = property_handler_registry.get_handler(
+                        PropertyType.RICH_TEXT
+                    )
                     normalized[name] = handler.format_for_api(value)
                 elif isinstance(value, (int, float)):
                     handler = property_handler_registry.get_handler(PropertyType.NUMBER)
                     normalized[name] = handler.format_for_api(value)
                 elif isinstance(value, bool):
-                    handler = property_handler_registry.get_handler(PropertyType.CHECKBOX)
+                    handler = property_handler_registry.get_handler(
+                        PropertyType.CHECKBOX
+                    )
                     normalized[name] = handler.format_for_api(value)
                 elif isinstance(value, list):
                     # Could be multi_select, people, files, etc.
                     # Default to multi_select for now
-                    handler = property_handler_registry.get_handler(PropertyType.MULTI_SELECT)
+                    handler = property_handler_registry.get_handler(
+                        PropertyType.MULTI_SELECT
+                    )
                     normalized[name] = handler.format_for_api(value)
                 else:
                     # Convert to string and use rich_text
-                    handler = property_handler_registry.get_handler(PropertyType.RICH_TEXT)
+                    handler = property_handler_registry.get_handler(
+                        PropertyType.RICH_TEXT
+                    )
                     normalized[name] = handler.format_for_api(str(value))
 
         return normalized
 
     def _execute_api_call(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        data: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Execute the actual API call using the Notion client."""
         if method == "GET" and endpoint.startswith("pages/"):

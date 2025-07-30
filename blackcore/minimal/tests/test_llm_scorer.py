@@ -4,7 +4,11 @@ import pytest
 from unittest.mock import Mock, patch
 from datetime import datetime, timedelta
 
-from blackcore.minimal.llm_scorer import LLMScorer, LLMScorerCache, LLMScorerWithFallback
+from blackcore.minimal.llm_scorer import (
+    LLMScorer,
+    LLMScorerCache,
+    LLMScorerWithFallback,
+)
 from blackcore.minimal.simple_scorer import SimpleScorer
 
 
@@ -212,7 +216,9 @@ class TestLLMScorer:
 
         # Second call should use cache
         score2, _, _ = scorer.score_entities(entity1, entity2, "person")
-        assert mock_anthropic_client.messages.create.call_count == 1  # No additional call
+        assert (
+            mock_anthropic_client.messages.create.call_count == 1
+        )  # No additional call
         assert score1 == score2
 
     def test_score_entities_error_handling(self, scorer, mock_anthropic_client):
@@ -267,7 +273,8 @@ class TestLLMScorer:
 
         # Test batch
         entity_pairs = [
-            ({"name": f"Entity {i}"}, {"name": f"Entity {i}b"}, "person") for i in range(3)
+            ({"name": f"Entity {i}"}, {"name": f"Entity {i}b"}, "person")
+            for i in range(3)
         ]
 
         results = scorer.score_batch(entity_pairs, batch_size=5)
@@ -297,7 +304,9 @@ class TestLLMScorerWithFallback:
 
     def test_fallback_on_error(self, mock_anthropic_failing, simple_scorer):
         """Test fallback to simple scorer on LLM error."""
-        scorer = LLMScorerWithFallback(api_key="test_key", fallback_scorer=simple_scorer)
+        scorer = LLMScorerWithFallback(
+            api_key="test_key", fallback_scorer=simple_scorer
+        )
 
         entity1 = {"name": "Tony Smith", "email": "tony@example.com"}
         entity2 = {"name": "Anthony Smith", "email": "anthony@example.com"}

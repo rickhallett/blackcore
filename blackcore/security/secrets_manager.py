@@ -88,7 +88,11 @@ class SecretsManager:
             raise ValueError(f"Unknown secrets provider: {self.provider}")
 
         # Cache the value
-        self._key_cache[key] = {"value": value, "timestamp": datetime.utcnow(), "version": version}
+        self._key_cache[key] = {
+            "value": value,
+            "timestamp": datetime.utcnow(),
+            "version": version,
+        }
 
         return value
 
@@ -137,7 +141,9 @@ class SecretsManager:
             credential = DefaultAzureCredential()
             client = SecretClient(vault_url=vault_url, credential=credential)
 
-            secret = client.get_secret(key, version=version if version != "latest" else None)
+            secret = client.get_secret(
+                key, version=version if version != "latest" else None
+            )
             return secret.value
 
         except ImportError:
@@ -179,7 +185,9 @@ class SecretsManager:
     def store_secret(self, key: str, value: str) -> None:
         """Store a secret securely (local storage only)."""
         if self.provider != "env":
-            raise NotImplementedError(f"Secret storage not implemented for {self.provider}")
+            raise NotImplementedError(
+                f"Secret storage not implemented for {self.provider}"
+            )
 
         # Encrypt the value
         f = Fernet(self._encryption_key)

@@ -24,7 +24,9 @@ from .llm_scorer import LLMScorerWithFallback
 class TranscriptProcessor:
     """Main class for processing transcripts through the pipeline."""
 
-    def __init__(self, config: Optional[Config] = None, config_path: Optional[str] = None):
+    def __init__(
+        self, config: Optional[Config] = None, config_path: Optional[str] = None
+    ):
         """Initialize transcript processor.
 
         Args:
@@ -61,11 +63,11 @@ class TranscriptProcessor:
 
         # Track database schemas
         self._schemas: Dict[str, Dict[str, str]] = {}
-    
+
     def _init_scorer(self):
         """Initialize the appropriate scorer based on configuration."""
         scorer_type = getattr(self.config.processing, "deduplication_scorer", "simple")
-        
+
         if scorer_type == "llm":
             # Use LLM scorer with fallback
             try:
@@ -74,22 +76,24 @@ class TranscriptProcessor:
                 model = llm_config.get("model", "claude-3-5-haiku-20241022")
                 temperature = llm_config.get("temperature", 0.1)
                 cache_ttl = llm_config.get("cache_ttl", 3600)
-                
+
                 # Create simple scorer as fallback
                 simple_scorer = SimpleScorer()
-                
+
                 # Create LLM scorer with fallback
                 self.scorer = LLMScorerWithFallback(
                     api_key=self.config.ai.api_key,
                     model=model,
                     temperature=temperature,
                     cache_ttl=cache_ttl,
-                    fallback_scorer=simple_scorer
+                    fallback_scorer=simple_scorer,
                 )
-                
+
                 if self.config.processing.verbose:
-                    print("Using LLM scorer (Claude 3.5 Haiku) with simple scorer fallback")
-                    
+                    print(
+                        "Using LLM scorer (Claude 3.5 Haiku) with simple scorer fallback"
+                    )
+
             except Exception as e:
                 print(f"Failed to initialize LLM scorer: {e}")
                 print("Falling back to simple scorer")
@@ -114,7 +118,7 @@ class TranscriptProcessor:
 
         # Store transcript title for context
         self._current_transcript_title = transcript.title
-        
+
         try:
             # Step 1: Extract entities using AI
             if self.config.processing.verbose:
@@ -188,7 +192,9 @@ class TranscriptProcessor:
             result.success = True
 
         except Exception as e:
-            result.add_error(stage="processing", error_type=type(e).__name__, message=str(e))
+            result.add_error(
+                stage="processing", error_type=type(e).__name__, message=str(e)
+            )
 
         result.processing_time = time.time() - start_time
 
@@ -206,11 +212,15 @@ class TranscriptProcessor:
         Returns:
             BatchResult with summary of all processing
         """
-        batch_result = BatchResult(total_transcripts=len(transcripts), successful=0, failed=0)
+        batch_result = BatchResult(
+            total_transcripts=len(transcripts), successful=0, failed=0
+        )
 
         for i, transcript in enumerate(transcripts):
             if self.config.processing.verbose:
-                print(f"\nProcessing transcript {i + 1}/{len(transcripts)}: {transcript.title}")
+                print(
+                    f"\nProcessing transcript {i + 1}/{len(transcripts)}: {transcript.title}"
+                )
 
             result = self.process_transcript(transcript)
             batch_result.results.append(result)
@@ -314,13 +324,20 @@ class TranscriptProcessor:
 
             # Calculate similarity score
             # Check if scorer supports context (LLM scorer)
-            if hasattr(self.scorer, 'score_entities') and 'context' in self.scorer.score_entities.__code__.co_varnames:
+            if (
+                hasattr(self.scorer, "score_entities")
+                and "context" in self.scorer.score_entities.__code__.co_varnames
+            ):
                 # LLM scorer with context
                 score_result = self.scorer.score_entities(
-                    existing_entity, new_entity, entity_type,
+                    existing_entity,
+                    new_entity,
+                    entity_type,
                     context={
-                        "source_documents": [f"Transcript: {getattr(self, '_current_transcript_title', 'Unknown')}"]
-                    }
+                        "source_documents": [
+                            f"Transcript: {getattr(self, '_current_transcript_title', 'Unknown')}"
+                        ]
+                    },
                 )
                 # Handle both tuple formats
                 if len(score_result) == 3:
@@ -329,7 +346,9 @@ class TranscriptProcessor:
                     score, reason = score_result
             else:
                 # Simple scorer
-                score, reason = self.scorer.score_entities(existing_entity, new_entity, entity_type)
+                score, reason = self.scorer.score_entities(
+                    existing_entity, new_entity, entity_type
+                )
 
             if score > best_score:
                 best_score = score
@@ -361,22 +380,27 @@ class TranscriptProcessor:
 
                 # Only update properties that have values
                 if "role" in person.properties and person.properties["role"]:
-                    properties[db_config.mappings.get("role", "Role")] = person.properties["role"]
-
-                if "organization" in person.properties and person.properties["organization"]:
-                    properties[db_config.mappings.get("organization", "Organization")] = (
-                        person.properties["organization"]
+                    properties[db_config.mappings.get("role", "Role")] = (
+                        person.properties["role"]
                     )
 
+                if (
+                    "organization" in person.properties
+                    and person.properties["organization"]
+                ):
+                    properties[
+                        db_config.mappings.get("organization", "Organization")
+                    ] = person.properties["organization"]
+
                 if "email" in person.properties and person.properties["email"]:
-                    properties[db_config.mappings.get("email", "Email")] = person.properties[
-                        "email"
-                    ]
+                    properties[db_config.mappings.get("email", "Email")] = (
+                        person.properties["email"]
+                    )
 
                 if "phone" in person.properties and person.properties["phone"]:
-                    properties[db_config.mappings.get("phone", "Phone")] = person.properties[
-                        "phone"
-                    ]
+                    properties[db_config.mappings.get("phone", "Phone")] = (
+                        person.properties["phone"]
+                    )
 
                 if person.context:
                     # Append context to existing notes
@@ -388,11 +412,15 @@ class TranscriptProcessor:
                             f"{existing_notes}\n\n{person.context}"
                         )
                     else:
-                        properties[db_config.mappings.get("notes", "Notes")] = person.context
+                        properties[db_config.mappings.get("notes", "Notes")] = (
+                            person.context
+                        )
 
                 # Update if we have new properties
                 if properties:
-                    updated_page = self.notion_updater.update_page(existing.id, properties)
+                    updated_page = self.notion_updater.update_page(
+                        existing.id, properties
+                    )
                     return updated_page, False  # False = not created, was updated
                 else:
                     return existing, False  # No updates needed
@@ -402,18 +430,24 @@ class TranscriptProcessor:
 
         # Add additional properties
         if "role" in person.properties:
-            properties[db_config.mappings.get("role", "Role")] = person.properties["role"]
-
-        if "organization" in person.properties:
-            properties[db_config.mappings.get("organization", "Organization")] = person.properties[
-                "organization"
+            properties[db_config.mappings.get("role", "Role")] = person.properties[
+                "role"
             ]
 
+        if "organization" in person.properties:
+            properties[db_config.mappings.get("organization", "Organization")] = (
+                person.properties["organization"]
+            )
+
         if "email" in person.properties:
-            properties[db_config.mappings.get("email", "Email")] = person.properties["email"]
+            properties[db_config.mappings.get("email", "Email")] = person.properties[
+                "email"
+            ]
 
         if "phone" in person.properties:
-            properties[db_config.mappings.get("phone", "Phone")] = person.properties["phone"]
+            properties[db_config.mappings.get("phone", "Phone")] = person.properties[
+                "phone"
+            ]
 
         if person.context:
             properties[db_config.mappings.get("notes", "Notes")] = person.context
@@ -437,14 +471,14 @@ class TranscriptProcessor:
 
                 # Only update properties that have values
                 if "category" in org.properties and org.properties["category"]:
-                    properties[db_config.mappings.get("category", "Category")] = org.properties[
-                        "category"
-                    ]
+                    properties[db_config.mappings.get("category", "Category")] = (
+                        org.properties["category"]
+                    )
 
                 if "website" in org.properties and org.properties["website"]:
-                    properties[db_config.mappings.get("website", "Website")] = org.properties[
-                        "website"
-                    ]
+                    properties[db_config.mappings.get("website", "Website")] = (
+                        org.properties["website"]
+                    )
 
                 if org.context:
                     # Append context to existing notes
@@ -456,11 +490,15 @@ class TranscriptProcessor:
                             f"{existing_notes}\n\n{org.context}"
                         )
                     else:
-                        properties[db_config.mappings.get("notes", "Notes")] = org.context
+                        properties[db_config.mappings.get("notes", "Notes")] = (
+                            org.context
+                        )
 
                 # Update if we have new properties
                 if properties:
-                    updated_page = self.notion_updater.update_page(existing.id, properties)
+                    updated_page = self.notion_updater.update_page(
+                        existing.id, properties
+                    )
                     return updated_page, False  # False = not created, was updated
                 else:
                     return existing, False  # No updates needed
@@ -469,10 +507,14 @@ class TranscriptProcessor:
         properties = {db_config.mappings.get("name", "Organization Name"): org.name}
 
         if "category" in org.properties:
-            properties[db_config.mappings.get("category", "Category")] = org.properties["category"]
+            properties[db_config.mappings.get("category", "Category")] = org.properties[
+                "category"
+            ]
 
         if "website" in org.properties:
-            properties[db_config.mappings.get("website", "Website")] = org.properties["website"]
+            properties[db_config.mappings.get("website", "Website")] = org.properties[
+                "website"
+            ]
 
         # Create new page
         page = self.notion_updater.create_page(db_config.id, properties)
@@ -486,17 +528,25 @@ class TranscriptProcessor:
 
         properties = {
             db_config.mappings.get("name", "Task Name"): task.name,
-            db_config.mappings.get("status", "Status"): task.properties.get("status", "To-Do"),
+            db_config.mappings.get("status", "Status"): task.properties.get(
+                "status", "To-Do"
+            ),
         }
 
         if "assignee" in task.properties:
-            properties[db_config.mappings.get("assignee", "Assignee")] = task.properties["assignee"]
+            properties[db_config.mappings.get("assignee", "Assignee")] = (
+                task.properties["assignee"]
+            )
 
         if "due_date" in task.properties:
-            properties[db_config.mappings.get("due_date", "Due Date")] = task.properties["due_date"]
+            properties[db_config.mappings.get("due_date", "Due Date")] = (
+                task.properties["due_date"]
+            )
 
         if "priority" in task.properties:
-            properties[db_config.mappings.get("priority", "Priority")] = task.properties["priority"]
+            properties[db_config.mappings.get("priority", "Priority")] = (
+                task.properties["priority"]
+            )
 
         return self.notion_updater.create_page(db_config.id, properties), True
 
@@ -509,23 +559,25 @@ class TranscriptProcessor:
             return None, False
 
         properties = {
-            db_config.mappings.get("summary", "Transgression Summary"): transgression.name
+            db_config.mappings.get(
+                "summary", "Transgression Summary"
+            ): transgression.name
         }
 
         # Link perpetrators if they exist
         if "perpetrator_person" in transgression.properties:
             person_name = transgression.properties["perpetrator_person"]
             if person_name in entity_map:
-                properties[db_config.mappings.get("perpetrator_person", "Perpetrator (Person)")] = [
-                    entity_map[person_name]
-                ]
+                properties[
+                    db_config.mappings.get("perpetrator_person", "Perpetrator (Person)")
+                ] = [entity_map[person_name]]
 
         if "perpetrator_org" in transgression.properties:
             org_name = transgression.properties["perpetrator_org"]
             if org_name in entity_map:
-                properties[db_config.mappings.get("perpetrator_org", "Perpetrator (Org)")] = [
-                    entity_map[org_name]
-                ]
+                properties[
+                    db_config.mappings.get("perpetrator_org", "Perpetrator (Org)")
+                ] = [entity_map[org_name]]
 
         if "date" in transgression.properties:
             properties[db_config.mappings.get("date", "Date of Transgression")] = (
@@ -533,14 +585,17 @@ class TranscriptProcessor:
             )
 
         if "severity" in transgression.properties:
-            properties[db_config.mappings.get("severity", "Severity")] = transgression.properties[
-                "severity"
-            ]
+            properties[db_config.mappings.get("severity", "Severity")] = (
+                transgression.properties["severity"]
+            )
 
         return self.notion_updater.create_page(db_config.id, properties), True
 
     def _update_transcript(
-        self, transcript: TranscriptInput, extracted: ExtractedEntities, entity_map: Dict[str, str]
+        self,
+        transcript: TranscriptInput,
+        extracted: ExtractedEntities,
+        entity_map: Dict[str, str],
     ) -> Optional[NotionPage]:
         """Update the transcript in Notion with extracted information."""
         db_config = self.config.notion.databases.get("transcripts")
@@ -552,7 +607,9 @@ class TranscriptProcessor:
 
         properties = {
             db_config.mappings.get("title", "Entry Title"): transcript.title,
-            db_config.mappings.get("content", "Raw Transcript/Note"): transcript.content[
+            db_config.mappings.get(
+                "content", "Raw Transcript/Note"
+            ): transcript.content[
                 :2000
             ],  # Notion text limit
             db_config.mappings.get("status", "Processing Status"): "Processed",
@@ -564,13 +621,19 @@ class TranscriptProcessor:
             )
 
         if transcript.source:
-            properties[db_config.mappings.get("source", "Source")] = transcript.source.value
+            properties[db_config.mappings.get("source", "Source")] = (
+                transcript.source.value
+            )
 
         if extracted.summary:
-            properties[db_config.mappings.get("summary", "AI Summary")] = extracted.summary
+            properties[db_config.mappings.get("summary", "AI Summary")] = (
+                extracted.summary
+            )
 
         if entity_ids:
-            properties[db_config.mappings.get("entities", "Tagged Entities")] = entity_ids
+            properties[db_config.mappings.get("entities", "Tagged Entities")] = (
+                entity_ids
+            )
 
         page, _ = self.notion_updater.find_or_create_page(
             database_id=db_config.id,
