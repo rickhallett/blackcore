@@ -10,6 +10,7 @@
 import os
 import sys
 from dotenv import load_dotenv
+from openai import OpenAI
 
 
 def prompt_llm(prompt_text):
@@ -29,7 +30,6 @@ def prompt_llm(prompt_text):
         return None
 
     try:
-        from openai import OpenAI
 
         client = OpenAI(api_key=api_key)
 
