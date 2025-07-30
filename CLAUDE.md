@@ -317,3 +317,6 @@ facts = await mcp__graphiti__search_facts(
     max_facts=10
 )
 ```
+
+Development Rules
+- ALWAYS QQQ   Q  Q  
