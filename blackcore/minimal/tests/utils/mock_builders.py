@@ -1,16 +1,14 @@
 """Mock builders for complex test scenarios."""
 
-from typing import Dict, Any, List, Optional
-from unittest.mock import MagicMock, Mock
+from typing import Dict, Any, List
+from unittest.mock import MagicMock
 import json
 from datetime import datetime
 
 from blackcore.minimal.models import (
     Entity,
-    EntityType,
     ExtractedEntities,
     Relationship,
-    ProcessingResult,
     NotionPage,
 )
 

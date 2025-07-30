@@ -1,15 +1,13 @@
 """JSON sync functionality for syncing local JSON files to Notion databases."""
 
 import json
-import os
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
-from datetime import datetime
 
 from .notion_updater import NotionUpdater
 from .property_handlers import PropertyHandlerFactory
-from .models import NotionPage, NotionConfig, ProcessingResult
+from .models import NotionPage
 from .config import ConfigManager
 
 
@@ -205,7 +203,7 @@ class JSONSyncProcessor:
                 if existing_page:
                     # Update existing page
                     if self.verbose:
-                        print(f"   → Found existing page, updating...")
+                        print("   → Found existing page, updating...")
 
                     if not self.dry_run:
                         try:
@@ -228,12 +226,12 @@ class JSONSyncProcessor:
                     else:
                         result.updated_count += 1
                         if self.verbose:
-                            print(f"   → Would update existing page")
+                            print("   → Would update existing page")
 
                 else:
                     # Create new page
                     if self.verbose:
-                        print(f"   → Creating new page...")
+                        print("   → Creating new page...")
 
                     if not self.dry_run:
                         try:
@@ -256,7 +254,7 @@ class JSONSyncProcessor:
                     else:
                         result.created_count += 1
                         if self.verbose:
-                            print(f"   → Would create new page")
+                            print("   → Would create new page")
 
         except Exception as e:
             result.success = False

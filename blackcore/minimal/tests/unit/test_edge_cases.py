@@ -1,33 +1,24 @@
 """Edge case and error handling tests for minimal module."""
 
-import pytest
 import json
 import tempfile
 import time
 from datetime import datetime
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 import threading
-import os
 
 from blackcore.minimal.models import (
     TranscriptInput,
     Entity,
     EntityType,
-    ProcessingError,
     ExtractedEntities,
 )
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.ai_extractor import AIExtractor
-from blackcore.minimal.notion_updater import NotionUpdater, RateLimiter
+from blackcore.minimal.notion_updater import RateLimiter
 from blackcore.minimal.cache import SimpleCache
 from blackcore.minimal.property_handlers import PropertyHandlerFactory
 
-from ..fixtures import (
-    EMPTY_TRANSCRIPT,
-    LARGE_TRANSCRIPT,
-    SPECIAL_CHARS_TRANSCRIPT,
-    ERROR_TRANSCRIPT,
-)
 from ..utils import create_test_config
 
 

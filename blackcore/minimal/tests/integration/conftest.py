@@ -3,10 +3,8 @@
 import pytest
 import json
 import tempfile
-import os
 from datetime import datetime
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 import time
 
 from blackcore.minimal.config import (
@@ -16,8 +14,6 @@ from blackcore.minimal.config import (
     ProcessingConfig,
     DatabaseConfig,
 )
-from blackcore.minimal.models import ExtractedEntities, Entity, EntityType, Relationship
-from blackcore.minimal.transcript_processor import TranscriptProcessor
 
 
 @pytest.fixture

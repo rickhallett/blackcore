@@ -4,8 +4,6 @@ from typing import Any, Dict, List, Optional, Union
 from ..models.responses import (
     NotionPage,
     NotionDatabase,
-    NotionSearchRequest,
-    validate_paginated_response,
 )
 from .base import BaseRepository, RepositoryError
 

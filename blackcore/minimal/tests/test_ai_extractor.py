@@ -1,11 +1,11 @@
 """Tests for AI extractor module."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 import json
 
 from ..ai_extractor import AIExtractor, ClaudeProvider, OpenAIProvider
-from ..models import ExtractedEntities, Entity, Relationship, EntityType
+from ..models import ExtractedEntities, EntityType
 
 
 class TestClaudeProvider:

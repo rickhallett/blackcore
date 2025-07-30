@@ -1,6 +1,6 @@
 """Handler for date properties."""
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 from datetime import datetime, date
 from ..models.properties import PropertyType, DateProperty, DateValue
 from ..errors.handlers import ValidationError

@@ -3,7 +3,7 @@
 import os
 from datetime import datetime
 from blackcore.minimal import TranscriptProcessor, TranscriptInput
-from blackcore.minimal.utils import create_sample_transcript, create_sample_config
+from blackcore.minimal.utils import create_sample_config
 
 
 def main():

@@ -5,13 +5,11 @@ Handles the creation, validation, and execution of entity merge proposals
 with comprehensive safety protocols and rollback capabilities.
 """
 
-import json
 import logging
 import uuid
 from datetime import datetime
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

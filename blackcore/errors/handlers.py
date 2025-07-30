@@ -1,8 +1,7 @@
 """Error handlers with context preservation for better debugging."""
 
 import traceback
-import json
-from typing import Any, Dict, Optional, List, Union, Type
+from typing import Any, Dict, Optional, List
 from datetime import datetime
 from contextlib import contextmanager
 import threading

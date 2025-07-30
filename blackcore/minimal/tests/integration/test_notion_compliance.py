@@ -4,11 +4,11 @@ import pytest
 import time
 import json
 from datetime import datetime
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.notion_updater import NotionUpdater, RateLimiter
-from blackcore.minimal.models import TranscriptInput, Entity, EntityType
+from blackcore.minimal.models import TranscriptInput
 from blackcore.minimal.property_handlers import PropertyHandlerFactory
 
 

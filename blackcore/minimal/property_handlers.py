@@ -1,7 +1,7 @@
 """Consolidated property handlers for all Notion property types."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from datetime import datetime, date
 import re
 

@@ -3,9 +3,8 @@
 import time
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
-import os
 
-from .models import NotionPage, NotionConfig
+from .models import NotionPage
 from .property_handlers import PropertyHandlerFactory
 
 
@@ -217,7 +216,7 @@ class NotionUpdater:
                 pages.append(self._parse_notion_page(page_data))
                 
             return pages
-        except Exception as e:
+        except Exception:
             # If filter fails, try without filter (some databases may have different schemas)
             try:
                 response = self._execute_with_retry(

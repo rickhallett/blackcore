@@ -5,12 +5,10 @@ Provides a comprehensive interface for human reviewers to validate,
 approve, or reject entity merge proposals with detailed context and evidence.
 """
 
-import json
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple
+from datetime import datetime
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

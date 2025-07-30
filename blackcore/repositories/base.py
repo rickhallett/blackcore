@@ -6,10 +6,10 @@ from contextlib import contextmanager
 import logging
 
 from notion_client import Client
-from ..errors.handlers import BaseNotionError, ErrorHandler, ErrorContext
+from ..errors.handlers import ErrorHandler, ErrorContext
 from ..security.audit import AuditLogger
 from ..rate_limiting.thread_safe import ThreadSafeRateLimiter
-from ..models.responses import NotionPaginatedResponse, validate_notion_response, ObjectType
+from ..models.responses import validate_notion_response, ObjectType
 
 
 T = TypeVar("T")

@@ -6,7 +6,6 @@ import tempfile
 import os
 from pathlib import Path
 from datetime import datetime
-from unittest.mock import patch, mock_open
 
 from blackcore.minimal.utils import (
     load_json_file,

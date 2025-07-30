@@ -1,8 +1,7 @@
 """AI integration for entity extraction from transcripts."""
 
 import json
-import os
-from typing import Dict, Any, Optional, List
+from typing import Dict, Optional, List
 from abc import ABC, abstractmethod
 
 from .models import ExtractedEntities, Entity, Relationship, EntityType

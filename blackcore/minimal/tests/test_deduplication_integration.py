@@ -1,7 +1,7 @@
 """Integration tests for deduplication functionality."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 from datetime import datetime
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor

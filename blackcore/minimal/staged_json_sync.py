@@ -2,11 +2,8 @@
 Staged JSON Sync - Enhanced sync processor with data transformation and staged synchronization.
 """
 
-import json
 import logging
-import time
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 
 from .json_sync import JSONSyncProcessor, SyncResult
@@ -296,7 +293,7 @@ class StagedJSONSyncProcessor(JSONSyncProcessor):
     def _create_page(self, database_id: str, properties: Dict[str, Any], result: SyncResult, title: str) -> Optional[str]:
         """Create a new page and return its ID."""
         if self.verbose:
-            print(f"   → Creating new page...")
+            print("   → Creating new page...")
             
         if not self.dry_run:
             try:
@@ -327,13 +324,13 @@ class StagedJSONSyncProcessor(JSONSyncProcessor):
         else:
             result.created_count += 1
             if self.verbose:
-                print(f"   → Would create new page")
+                print("   → Would create new page")
             return None
             
     def _update_page(self, page_id: str, properties: Dict[str, Any], result: SyncResult, title: str) -> bool:
         """Update an existing page."""
         if self.verbose:
-            print(f"   → Found existing page, updating...")
+            print("   → Found existing page, updating...")
             
         if not self.dry_run:
             try:
@@ -353,7 +350,7 @@ class StagedJSONSyncProcessor(JSONSyncProcessor):
         else:
             result.updated_count += 1
             if self.verbose:
-                print(f"   → Would update existing page")
+                print("   → Would update existing page")
             return True
             
 

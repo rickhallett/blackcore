@@ -18,7 +18,7 @@ from .ai_extractor import AIExtractor
 from .notion_updater import NotionUpdater
 from .cache import SimpleCache
 from .simple_scorer import SimpleScorer
-from .llm_scorer import LLMScorer, LLMScorerWithFallback
+from .llm_scorer import LLMScorerWithFallback
 
 
 class TranscriptProcessor:

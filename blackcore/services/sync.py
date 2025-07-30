@@ -1,14 +1,14 @@
 """Notion synchronization service."""
 
 import json
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 from enum import Enum
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from ..repositories import PageRepository, DatabaseRepository, SearchRepository
-from ..models.responses import NotionPage, NotionDatabase
+from ..models.responses import NotionPage
 from ..errors.handlers import SyncError, ErrorContext
 from .base import BaseService, ServiceError
 
@@ -456,7 +456,7 @@ class NotionSyncService(BaseService):
         # This is simplified - would need to match the above logic
         if "id" in page_data:
             return f"id:{page_data['id']}"
-        return f"title:unknown"
+        return "title:unknown"
 
     def _save_sync_data(self, data: Dict[str, Any], file: Path) -> None:
         """Save sync data to file."""

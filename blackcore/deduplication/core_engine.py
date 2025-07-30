@@ -7,8 +7,7 @@ confidence-based decision making, and comprehensive audit trails.
 
 import logging
 import time
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple, Set
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
@@ -364,7 +363,7 @@ class DeduplicationEngine:
         results = {}
         
         total_start_time = time.time()
-        logger.info(f"🚀 Starting comprehensive deduplication analysis")
+        logger.info("🚀 Starting comprehensive deduplication analysis")
         logger.info(f"   📊 Analyzing {len(databases)} databases")
         
         for db_name, records in databases.items():
@@ -379,7 +378,7 @@ class DeduplicationEngine:
         total_entities = sum(result.total_entities for result in results.values())
         total_potential_duplicates = sum(result.potential_duplicates for result in results.values())
         
-        logger.info(f"✅ Comprehensive deduplication analysis complete")
+        logger.info("✅ Comprehensive deduplication analysis complete")
         logger.info(f"   ⏱️  Total processing time: {total_time:.2f} seconds")
         logger.info(f"   📊 Total entities analyzed: {total_entities}")
         logger.info(f"   🔍 Total potential duplicates found: {total_potential_duplicates}")

@@ -15,11 +15,7 @@ from ..property_handlers import (
     URLPropertyHandler,
     EmailPropertyHandler,
     PhonePropertyHandler,
-    PeoplePropertyHandler,
-    FilesPropertyHandler,
     RelationPropertyHandler,
-    FormulaPropertyHandler,
-    RollupPropertyHandler,
 )
 
 

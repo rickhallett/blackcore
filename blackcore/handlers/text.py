@@ -1,6 +1,6 @@
 """Handlers for text-based properties (title, rich_text)."""
 
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 from ..models.properties import (
     PropertyType,
     TitleProperty,

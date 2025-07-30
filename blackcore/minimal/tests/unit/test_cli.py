@@ -5,9 +5,8 @@ import json
 import tempfile
 import os
 from pathlib import Path
-from unittest.mock import patch, Mock, MagicMock, call
+from unittest.mock import patch, Mock
 from argparse import Namespace
-import sys
 
 from blackcore.minimal.cli import (
     create_parser,

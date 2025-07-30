@@ -6,11 +6,9 @@ accuracy through contextual analysis and relationship pattern recognition.
 """
 
 import logging
-import json
 from typing import Dict, List, Any, Optional, Set, Tuple
 from dataclasses import dataclass, field
-from collections import defaultdict, Counter
-import itertools
+from collections import Counter
 
 logger = logging.getLogger(__name__)
 
@@ -357,7 +355,7 @@ class GraphRelationshipAnalyzer:
                         strength += 0.4
                         
                 elif field == "Phone" and self._phone_similarity(val_a, val_b) > 0.8:
-                    evidence.append(f"Similar phone numbers")
+                    evidence.append("Similar phone numbers")
                     strength += 0.3
                     
         if evidence:

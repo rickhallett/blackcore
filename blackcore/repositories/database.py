@@ -7,10 +7,7 @@ from ..models.responses import (
     NotionDatabaseQuery,
     ObjectType,
     validate_notion_response,
-    validate_paginated_response,
 )
-from ..models.properties import PropertyType
-from ..handlers.base import property_handler_registry
 from .base import BaseRepository, RepositoryError
 
 

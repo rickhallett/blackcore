@@ -3,7 +3,7 @@
 import os
 import json
 import base64
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 from datetime import datetime, timedelta
 from pathlib import Path
 from cryptography.fernet import Fernet

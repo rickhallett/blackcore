@@ -5,10 +5,8 @@ Provides interactive, visually appealing components for progress tracking,
 entity comparison, and match review.
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, Any
 from datetime import datetime, timedelta
-from dataclasses import dataclass
 
 from rich.console import Console
 from rich.table import Table
@@ -18,13 +16,9 @@ from rich.progress import (
     Progress, BarColumn, TextColumn, TimeRemainingColumn,
     SpinnerColumn, MofNCompleteColumn, TimeElapsedColumn
 )
-from rich.live import Live
 from rich.align import Align
-from rich.columns import Columns
-from rich.text import Text
 from rich import box
-from rich.prompt import Prompt, Confirm, IntPrompt
-from rich.syntax import Syntax
+from rich.prompt import IntPrompt
 
 from .async_engine import ProgressUpdate
 
@@ -583,7 +577,7 @@ class MatchReviewDisplay:
                     preview_lines.append(f"[dim]{field}: {merged[field]}[/dim]")
                     
         # Show merge information
-        preview_lines.append(f"\n[bold]Merge Information:[/bold]")
+        preview_lines.append("\n[bold]Merge Information:[/bold]")
         preview_lines.append(f"Primary entity: [yellow]{primary_entity}[/yellow]")
         preview_lines.append(f"Fields filled from secondary: [green]{len(filled_fields)}[/green]")
         

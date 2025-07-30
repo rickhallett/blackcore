@@ -137,7 +137,7 @@ def main():
     total_created = sum(len(r.created) for r in batch_result.results)
     total_updated = sum(len(r.updated) for r in batch_result.results)
 
-    print(f"\n📝 Entity Summary:")
+    print("\n📝 Entity Summary:")
     print(f"   Total entities created: {total_created}")
     print(f"   Total entities updated: {total_updated}")
 

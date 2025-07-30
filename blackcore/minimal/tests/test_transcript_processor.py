@@ -1,14 +1,12 @@
 """Tests for transcript processor module."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 from datetime import datetime
 
 from ..transcript_processor import TranscriptProcessor
 from ..models import (
     TranscriptInput,
-    ProcessingResult,
-    BatchResult,
     Entity,
     EntityType,
     ExtractedEntities,

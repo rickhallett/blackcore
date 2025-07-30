@@ -1,6 +1,6 @@
 """Handler for number properties."""
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 from ..models.properties import PropertyType, NumberProperty
 from ..errors.handlers import ValidationError
 from .base import PropertyHandler

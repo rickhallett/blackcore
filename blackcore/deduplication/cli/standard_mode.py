@@ -7,8 +7,7 @@ guided workflows, real-time progress tracking, and match review capabilities.
 
 import asyncio
 import json
-import sys
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any
 from pathlib import Path
 from datetime import datetime
 import signal
@@ -16,13 +15,10 @@ import signal
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt, Confirm
-from rich.text import Text
-from rich import print as rprint
 
 from .ui_components import UIComponents, ProgressTracker, MatchReviewDisplay
 from .config_wizard import ConfigurationWizard
 from .async_engine import AsyncDeduplicationEngine, ProgressUpdate
-from ..review_interface import ReviewDecision
 
 
 class StandardModeCLI:
@@ -603,7 +599,7 @@ class StandardModeCLI:
                 progress.update(task, advance=1)
                 
         # Show final summary
-        self.console.print(f"\n[bold]Merge Summary:[/bold]")
+        self.console.print("\n[bold]Merge Summary:[/bold]")
         self.console.print(f"[green]Successful merges:[/green] {success_count}")
         if error_count > 0:
             self.console.print(f"[red]Failed merges:[/red] {error_count}")

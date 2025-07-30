@@ -1,9 +1,7 @@
 """Tests for Notion updater module."""
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock, call
-import time
-from datetime import datetime
+from unittest.mock import Mock, patch
 
 from ..notion_updater import NotionUpdater, RateLimiter
 from ..models import NotionPage

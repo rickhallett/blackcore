@@ -6,7 +6,7 @@ Provides non-blocking operations and progress callbacks for the CLI.
 
 import asyncio
 import logging
-from typing import Dict, List, Any, Optional, Callable, Tuple
+from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
 import time

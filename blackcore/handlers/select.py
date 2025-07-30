@@ -1,6 +1,6 @@
 """Handlers for select-based properties (select, multi_select, status)."""
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from ..models.properties import (
     PropertyType,
     SelectProperty,

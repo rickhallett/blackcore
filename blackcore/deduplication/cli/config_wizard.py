@@ -6,7 +6,7 @@ Guides users through setting up thresholds, AI settings, and database selection.
 
 import json
 import os
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional
 from pathlib import Path
 
 from rich.console import Console

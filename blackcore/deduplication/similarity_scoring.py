@@ -7,10 +7,9 @@ intelligence data with support for multiple string similarity metrics.
 
 import re
 import logging
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any
 from dataclasses import dataclass
 import difflib
-from collections import Counter
 
 # Try to import advanced string matching libraries
 try:

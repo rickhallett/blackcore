@@ -10,8 +10,7 @@ import logging
 import sqlite3
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
-from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import uuid
 
 logger = logging.getLogger(__name__)

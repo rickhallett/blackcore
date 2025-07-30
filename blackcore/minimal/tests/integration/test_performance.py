@@ -1,15 +1,13 @@
 """Performance tests for minimal module."""
 
-import pytest
 import time
 import threading
 import json
 from datetime import datetime
-from unittest.mock import Mock, patch
 import statistics
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
-from blackcore.minimal.models import TranscriptInput, Entity, EntityType
+from blackcore.minimal.models import TranscriptInput
 from blackcore.minimal.notion_updater import RateLimiter
 
 

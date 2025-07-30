@@ -1,6 +1,5 @@
 """Notion API response fixtures."""
 
-from datetime import datetime
 from typing import Dict, Any
 
 # Successful page creation response

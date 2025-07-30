@@ -1,33 +1,26 @@
 """Comprehensive unit tests for transcript processor module."""
 
 import pytest
-import time
 from datetime import datetime
-from unittest.mock import Mock, patch, MagicMock, call
+from unittest.mock import Mock, patch
 import tempfile
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.models import (
-    TranscriptInput,
     ProcessingResult,
-    BatchResult,
     ExtractedEntities,
     Entity,
     EntityType,
     Relationship,
     NotionPage,
-    ProcessingError,
 )
-from blackcore.minimal.config import Config, NotionConfig, AIConfig, DatabaseConfig
+from blackcore.minimal.config import DatabaseConfig
 
 from ..fixtures import (
     SIMPLE_TRANSCRIPT,
-    COMPLEX_TRANSCRIPT,
-    EMPTY_TRANSCRIPT,
-    SPECIAL_CHARS_TRANSCRIPT,
     BATCH_TRANSCRIPTS,
 )
-from ..utils import create_test_config, create_mock_notion_client, create_mock_ai_client
+from ..utils import create_test_config
 
 
 class TestTranscriptProcessorInit:

@@ -1,13 +1,12 @@
 """Integration tests for full transcript processing workflow."""
 
-import pytest
 import json
 import time
 from datetime import datetime
 from pathlib import Path
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
-from blackcore.minimal.models import TranscriptInput, ProcessingError
+from blackcore.minimal.models import TranscriptInput
 
 
 class TestFullWorkflow:
