@@ -4,14 +4,14 @@ import json
 import time
 import os
 import platform
-import logging
 from pathlib import Path
 from typing import Any, Optional, Dict
 import hashlib
 
 from . import constants
+from .logging_config import get_logger, log_event, log_error
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SimpleCache:
@@ -62,10 +62,24 @@ class SimpleCache:
                 cache_file.unlink()
                 return None
 
+            log_event(
+                __name__,
+                "cache_hit",
+                key=key,
+                cache_file=str(cache_file),
+                age_seconds=time.time() - cache_data["timestamp"]
+            )
             return cache_data["value"]
 
-        except (json.JSONDecodeError, KeyError, IOError):
+        except (json.JSONDecodeError, KeyError, IOError) as e:
             # Corrupted cache file - remove it
+            log_error(
+                __name__,
+                "cache_corrupted",
+                e,
+                key=key,
+                cache_file=str(cache_file)
+            )
             cache_file.unlink(missing_ok=True)
             return None
 
@@ -86,8 +100,22 @@ class SimpleCache:
             
             # Set restricted permissions on the cache file
             self._set_file_permissions(str(cache_file))
+            
+            log_event(
+                __name__,
+                "cache_set",
+                key=key,
+                cache_file=str(cache_file),
+                value_size=len(json.dumps(value, default=str))
+            )
         except (TypeError, IOError) as e:
-            print(f"Warning: Failed to cache value: {e}")
+            log_error(
+                __name__,
+                "cache_write_failed",
+                e,
+                key=key,
+                cache_file=str(cache_file)
+            )
 
     def delete(self, key: str) -> None:
         """Delete value from cache.

@@ -6,6 +6,9 @@ from abc import ABC, abstractmethod
 
 from .models import ExtractedEntities, Entity, Relationship, EntityType
 from . import constants
+from .logging_config import get_logger, log_event, log_error, log_performance, Timer
+
+logger = get_logger(__name__)
 
 
 def sanitize_transcript(text: str) -> str:
@@ -66,15 +69,26 @@ class ClaudeProvider(AIProvider):
         sanitized_text = sanitize_transcript(text)
         full_prompt = f"{prompt}\n\nTranscript:\n{sanitized_text}"
 
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=constants.AI_MAX_TOKENS,
-            temperature=constants.AI_TEMPERATURE,
-            messages=[{"role": "user", "content": full_prompt}],
-        )
+        with Timer() as timer:
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=constants.AI_MAX_TOKENS,
+                temperature=constants.AI_TEMPERATURE,
+                messages=[{"role": "user", "content": full_prompt}],
+            )
 
         # Parse the response
         content = response.content[0].text
+        
+        log_event(
+            __name__,
+            "claude_api_call",
+            model=self.model,
+            prompt_length=len(full_prompt),
+            response_length=len(content),
+            duration_ms=timer.duration_ms
+        )
+        
         return self._parse_response(content)
 
     def _parse_response(self, response: str) -> ExtractedEntities:
@@ -178,20 +192,31 @@ class OpenAIProvider(AIProvider):
         # Sanitize the transcript to prevent prompt injection
         sanitized_text = sanitize_transcript(text)
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            temperature=constants.AI_TEMPERATURE,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant that extracts entities and relationships from text.",
-                },
-                {"role": "user", "content": f"{prompt}\n\nTranscript:\n{sanitized_text}"},
-            ],
-            response_format={"type": "json_object"},
-        )
+        with Timer() as timer:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                temperature=constants.AI_TEMPERATURE,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a helpful assistant that extracts entities and relationships from text.",
+                    },
+                    {"role": "user", "content": f"{prompt}\n\nTranscript:\n{sanitized_text}"},
+                ],
+                response_format={"type": "json_object"},
+            )
 
         content = response.choices[0].message.content
+        
+        log_event(
+            __name__,
+            "openai_api_call",
+            model=self.model,
+            prompt_length=len(prompt) + len(sanitized_text),
+            response_length=len(content),
+            duration_ms=timer.duration_ms
+        )
+        
         return self._parse_response(content)
 
     def _parse_response(self, response: str) -> ExtractedEntities:

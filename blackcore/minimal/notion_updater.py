@@ -12,6 +12,9 @@ from urllib3.util.retry import Retry
 from .models import NotionPage
 from .property_handlers import PropertyHandlerFactory
 from . import constants
+from .logging_config import get_logger, log_event, log_error, log_performance, Timer
+
+logger = get_logger(__name__)
 
 
 class RateLimiter:
@@ -34,6 +37,12 @@ class RateLimiter:
 
             if time_since_last < self.min_interval:
                 sleep_time = self.min_interval - time_since_last
+                log_event(
+                    __name__,
+                    "rate_limit_throttle",
+                    sleep_ms=sleep_time * 1000,
+                    requests_per_second=1.0 / self.min_interval
+                )
                 time.sleep(sleep_time)
 
             self.last_request_time = time.time()
@@ -159,13 +168,25 @@ class NotionUpdater:
         formatted_properties = self._format_properties(properties)
 
         # Create page with retries
-        response = self._execute_with_retry(
-            lambda: self.client.pages.create(
-                parent={"database_id": database_id}, properties=formatted_properties
+        with Timer() as timer:
+            response = self._execute_with_retry(
+                lambda: self.client.pages.create(
+                    parent={"database_id": database_id}, properties=formatted_properties
+                )
             )
+        
+        page = self._parse_page_response(response)
+        
+        log_event(
+            __name__,
+            "page_created",
+            page_id=page.id,
+            database_id=database_id,
+            properties_count=len(properties),
+            duration_ms=timer.duration_ms
         )
-
-        return self._parse_page_response(response)
+        
+        return page
 
     def update_page(self, page_id: str, properties: Dict[str, Any]) -> NotionPage:
         """Update an existing page.
@@ -184,13 +205,24 @@ class NotionUpdater:
         formatted_properties = self._format_properties(properties)
 
         # Update page with retries
-        response = self._execute_with_retry(
-            lambda: self.client.pages.update(
-                page_id=page_id, properties=formatted_properties
+        with Timer() as timer:
+            response = self._execute_with_retry(
+                lambda: self.client.pages.update(
+                    page_id=page_id, properties=formatted_properties
+                )
             )
+        
+        page = self._parse_page_response(response)
+        
+        log_event(
+            __name__,
+            "page_updated",
+            page_id=page_id,
+            properties_count=len(properties),
+            duration_ms=timer.duration_ms
         )
-
-        return self._parse_page_response(response)
+        
+        return page
 
     def find_page(
         self, database_id: str, filter_query: Dict[str, Any]
