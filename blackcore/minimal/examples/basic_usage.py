@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from pathlib import Path
 from blackcore.minimal import TranscriptProcessor, TranscriptInput
 from blackcore.minimal.utils import create_sample_config
 
@@ -20,10 +21,10 @@ def main():
         print("\nFor this demo, we'll use a sample configuration.")
 
         # Save sample config
-        config_path = "sample_config.json"
+        config_path = Path("sample_config.json")
         import json
 
-        with open(config_path, "w") as f:
+        with config_path.open("w") as f:
             json.dump(create_sample_config(), f, indent=2)
         print(f"\n✅ Created sample configuration at: {config_path}")
         return

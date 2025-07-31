@@ -18,7 +18,7 @@ class TestCachePermissions:
     @pytest.fixture
     def temp_cache_dir(self):
         """Create a temporary directory for cache testing."""
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = Path(tempfile.mkdtemp())
         yield temp_dir
         # Cleanup
         shutil.rmtree(temp_dir, ignore_errors=True)

@@ -21,7 +21,7 @@ def create_test_config(
 ) -> Config:
     """Create a test configuration."""
     if cache_dir is None:
-        cache_dir = tempfile.mkdtemp()
+        cache_dir = str(Path(tempfile.mkdtemp()))
 
     return Config(
         notion=NotionConfig(
@@ -121,7 +121,7 @@ def assert_notion_page_equal(actual: NotionPage, expected: NotionPage):
 
 def create_temp_cache_dir():
     """Create a temporary cache directory."""
-    return tempfile.mkdtemp(prefix="test_cache_")
+    return str(Path(tempfile.mkdtemp(prefix="test_cache_")))
 
 
 def cleanup_temp_dir(path: str):

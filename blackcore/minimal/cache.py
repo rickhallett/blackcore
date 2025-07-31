@@ -2,7 +2,6 @@
 
 import json
 import time
-import os
 import platform
 from pathlib import Path
 from typing import Any, Optional, Dict
@@ -37,7 +36,7 @@ class SimpleCache:
         self.cache_dir.mkdir(exist_ok=True)
         
         # Set restricted permissions on cache directory
-        self._set_directory_permissions(str(self.cache_dir))
+        self._set_directory_permissions(self.cache_dir)
 
     def get(self, key: str) -> Optional[Any]:
         """Get value from cache.
@@ -108,7 +107,7 @@ class SimpleCache:
                 json.dump(cache_data, f, indent=2, default=str)
             
             # Set restricted permissions on the cache file
-            self._set_file_permissions(str(cache_file))
+            self._set_file_permissions(cache_file)
             
             log_event(
                 __name__,
@@ -219,24 +218,26 @@ class SimpleCache:
             "cache_directory": str(self.cache_dir.absolute()),
         }
     
-    def _set_directory_permissions(self, directory: str) -> None:
+    def _set_directory_permissions(self, directory) -> None:
         """Set restrictive permissions on directory.
         
         Args:
-            directory: Directory path to secure
+            directory: Directory path to secure (str or Path)
         """
         # Skip on Windows as it handles permissions differently
         if platform.system() == 'Windows':
             return
         
         try:
+            # Convert to Path object if needed
+            dir_path = Path(directory) if isinstance(directory, str) else directory
             # Set directory permissions to 0o700 (rwx------)
             # Only owner can read, write, and execute
-            os.chmod(directory, constants.CACHE_DIR_PERMISSIONS)
+            dir_path.chmod(constants.CACHE_DIR_PERMISSIONS)
         except (OSError, PermissionError) as e:
             logger.warning(f"Failed to set cache directory permissions: {e}")
     
-    def _set_file_permissions(self, filepath: str) -> None:
+    def _set_file_permissions(self, filepath: Path) -> None:
         """Set restrictive permissions on file.
         
         Args:
@@ -249,6 +250,6 @@ class SimpleCache:
         try:
             # Set file permissions to 0o600 (rw-------)
             # Only owner can read and write
-            os.chmod(filepath, constants.CACHE_FILE_PERMISSIONS)
+            filepath.chmod(constants.CACHE_FILE_PERMISSIONS)
         except (OSError, PermissionError) as e:
             logger.warning(f"Failed to set cache file permissions: {e}")

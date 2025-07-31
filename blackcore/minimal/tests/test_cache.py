@@ -16,7 +16,7 @@ class TestSimpleCache:
     @pytest.fixture
     def temp_cache_dir(self):
         """Create temporary cache directory."""
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = Path(tempfile.mkdtemp())
         yield temp_dir
         # Cleanup
         shutil.rmtree(temp_dir, ignore_errors=True)
