@@ -45,6 +45,11 @@ class NotionUpdater:
             rate_limit: Requests per second limit
             retry_attempts: Number of retry attempts for failed requests
         """
+        # Validate API key
+        from .validators import validate_api_key
+        if not validate_api_key(api_key, "notion"):
+            raise ValueError("Invalid Notion API key format")
+            
         self.api_key = api_key
         self.retry_attempts = retry_attempts
         self.rate_limiter = RateLimiter(rate_limit)

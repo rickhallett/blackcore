@@ -49,6 +49,11 @@ class ClaudeProvider(AIProvider):
     """Claude AI provider for entity extraction."""
 
     def __init__(self, api_key: str, model: str = "claude-3-sonnet-20240229"):
+        # Validate API key
+        from .validators import validate_api_key
+        if not validate_api_key(api_key, "anthropic"):
+            raise ValueError("Invalid Anthropic API key format")
+            
         self.api_key = api_key
         self.model = model
 
@@ -157,6 +162,11 @@ class OpenAIProvider(AIProvider):
     """OpenAI provider for entity extraction."""
 
     def __init__(self, api_key: str, model: str = "gpt-4"):
+        # Validate API key
+        from .validators import validate_api_key
+        if not validate_api_key(api_key, "openai"):
+            raise ValueError("Invalid OpenAI API key format")
+            
         self.api_key = api_key
         self.model = model
 
