@@ -198,12 +198,6 @@ class TranscriptProcessor:
                     return result
 
             # Step 2: Create/update entities in Notion
-            if self.config.processing.dry_run:
-                print("DRY RUN: Would create/update the following entities:")
-                self._print_dry_run_summary(extracted)
-                result.success = True
-                return result
-
             # Process each entity type
             entity_map = {}  # Map entity names to their Notion IDs
 
@@ -268,6 +262,13 @@ class TranscriptProcessor:
             )
 
         result.processing_time = time.time() - start_time
+        
+        # Set dry_run flag if in dry run mode
+        if self.config.processing.dry_run:
+            result.dry_run = True
+            if self.config.processing.verbose:
+                print("DRY RUN: Would create/update the following entities:")
+                self._print_dry_run_summary(extracted)
 
         if self.config.processing.verbose:
             self._print_result_summary(result)
@@ -450,6 +451,10 @@ class TranscriptProcessor:
         if getattr(self.config.processing, "enable_deduplication", True):
             existing = self._find_existing_entity(person, db_config.id, "person")
             if existing:
+                # In dry run mode, just return the existing entity without updating
+                if self.config.processing.dry_run:
+                    return existing, False
+                
                 # Update existing entity
                 properties = {}
 
@@ -499,6 +504,10 @@ class TranscriptProcessor:
                     return updated_page, False  # False = not created, was updated
                 else:
                     return existing, False  # No updates needed
+
+        # In dry run mode, don't create new entities
+        if self.config.processing.dry_run:
+            return None, False
 
         # No existing entity found or deduplication disabled - create new
         properties = {db_config.mappings.get("name", "Full Name"): person.name}
