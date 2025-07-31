@@ -73,7 +73,7 @@ class ValidationResult:
 
 
 class PropertyValidator(ABC):
-    """Base class for property validators."""
+    """Base class for property validators with configurable validation levels and security checks."""
     
     def __init__(self, 
                  field_name: str,

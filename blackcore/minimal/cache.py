@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 
 
 class SimpleCache:
-    """Simple file-based cache with TTL support."""
+    """Simple file-based cache with TTL support and secure permissions management."""
 
     def __init__(self, cache_dir: Optional[str] = None, ttl: int = constants.DEFAULT_CACHE_TTL):
         """Initialize cache.

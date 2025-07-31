@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class TranscriptProcessor:
-    """Main class for processing transcripts through the pipeline."""
+    """Main orchestrator for processing transcripts through the AI extraction and Notion integration pipeline."""
 
     def __init__(
         self, config: Optional[Config] = None, config_path: Optional[str] = None
@@ -732,11 +732,53 @@ class TranscriptProcessor:
             if not source_id or not target_id:
                 continue
 
-            # For now, we'll skip relationship creation as it requires
-            # more complex property mapping
-            # TODO: Implement relationship creation based on relationship types
+            # Create relationship based on type
+            try:
+                relation_property = self._get_relation_property_for_relationship(relationship.relationship_type)
+                if relation_property:
+                    # Add the relationship to the source entity
+                    self.notion_updater.add_relation(source_id, relation_property, [target_id])
+                    count += 1
+                    
+                    if self.config.processing.verbose:
+                        print(f"  Created relationship: {relationship.source_entity} -> {relationship.target_entity} ({relationship.relationship_type})")
+                else:
+                    if self.config.processing.verbose:
+                        print(f"  Skipped unsupported relationship type: {relationship.relationship_type}")
+            except Exception as e:
+                if self.config.processing.verbose:
+                    print(f"  Failed to create relationship: {e}")
 
         return count
+
+    def _get_relation_property_for_relationship(self, relationship_type: str) -> Optional[str]:
+        """Get the relation property name for a relationship type.
+        
+        Args:
+            relationship_type: Type of relationship (e.g., "works_for", "assigned_to")
+            
+        Returns:
+            Notion property name for the relationship, or None if not supported
+        """
+        # Mapping of relationship types to Notion property names
+        # This should be configurable in the database configuration
+        relation_mappings = {
+            "works_for": "Organization",
+            "member_of": "Organization", 
+            "employed_by": "Organization",
+            "assigned_to": "Assignee",
+            "responsible_for": "Responsible Person",
+            "reports_to": "Manager",
+            "manages": "Direct Reports",
+            "collaborates_with": "Collaborators",
+            "mentions": "Related People",
+            "involves": "Involved Parties",
+            "perpetrator": "Perpetrator (Person)",
+            "victim": "Victim",
+            "witness": "Witness"
+        }
+        
+        return relation_mappings.get(relationship_type.lower())
 
     def _print_dry_run_summary(self, extracted: ExtractedEntities):
         """Print summary for dry run mode."""

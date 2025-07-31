@@ -229,12 +229,89 @@ class TranscriptService:
     def link_entities(self, result: ProcessingResult) -> None:
         """Create relationships between entities.
 
-        This is a placeholder for relationship linking logic.
+        Analyzes the relationships in ExtractedEntities and creates
+        relation properties between pages in Notion databases.
         
         Args:
             result: Processing result with created/updated pages
         """
-        # TODO: Implement relationship linking
-        # This would analyze the relationships in ExtractedEntities
-        # and create relation properties between pages
-        pass
+        if not hasattr(result, 'extracted_entities') or not result.extracted_entities:
+            self.logger.info("No extracted entities available for relationship linking")
+            return
+
+        relationships_created = 0
+        
+        # Create a mapping of entity names to page IDs
+        entity_name_to_id = {}
+        for page in result.created_pages + result.updated_pages:
+            # Extract entity name from page properties
+            for prop_name, prop_value in page.properties.items():
+                if prop_name in ["Full Name", "Organization Name", "Task Name", "Name", "Title"]:
+                    if isinstance(prop_value, str):
+                        entity_name_to_id[prop_value] = page.id
+                        break
+
+        # Process relationships from extracted entities
+        for relationship in result.extracted_entities.relationships:
+            source_id = entity_name_to_id.get(relationship.source_entity)
+            target_id = entity_name_to_id.get(relationship.target_entity)
+            
+            if not source_id or not target_id:
+                self.logger.warning(
+                    f"Cannot link relationship: missing entity IDs for "
+                    f"{relationship.source_entity} -> {relationship.target_entity}"
+                )
+                continue
+
+            try:
+                # Determine relation property based on relationship type
+                relation_property = self._get_relation_property(relationship.relationship_type)
+                
+                if relation_property:
+                    # Add the relationship
+                    self.page_repo.add_relation(source_id, relation_property, [target_id])
+                    relationships_created += 1
+                    
+                    self.logger.info(
+                        f"Created relationship: {relationship.source_entity} -> "
+                        f"{relationship.target_entity} ({relationship.relationship_type})"
+                    )
+                else:
+                    self.logger.warning(
+                        f"No relation property mapping for relationship type: "
+                        f"{relationship.relationship_type}"
+                    )
+                    
+            except Exception as e:
+                self.logger.error(
+                    f"Failed to create relationship {relationship.source_entity} -> "
+                    f"{relationship.target_entity}: {e}"
+                )
+
+        self.logger.info(f"Created {relationships_created} entity relationships")
+
+    def _get_relation_property(self, relationship_type: str) -> Optional[str]:
+        """Get the relation property name for a relationship type.
+        
+        Args:
+            relationship_type: Type of relationship (e.g., "works_for", "assigned_to")
+            
+        Returns:
+            Notion property name for the relationship, or None if not supported
+        """
+        # Mapping of relationship types to Notion property names
+        # This should be configurable in the future
+        relation_mappings = {
+            "works_for": "Organization",
+            "member_of": "Organization", 
+            "employed_by": "Organization",
+            "assigned_to": "Assignee",
+            "responsible_for": "Responsible Person",
+            "reports_to": "Manager",
+            "manages": "Direct Reports",
+            "collaborates_with": "Collaborators",
+            "mentions": "Related People",
+            "involves": "Involved Parties"
+        }
+        
+        return relation_mappings.get(relationship_type.lower())

@@ -38,7 +38,7 @@ class BatchResult(Generic[T, R]):
 
 
 class AsyncBatchProcessor(Generic[T, R]):
-    """Process items in batches with async concurrency control."""
+    """Process items in batches with async concurrency control and semaphore-based rate limiting."""
     
     def __init__(
         self,

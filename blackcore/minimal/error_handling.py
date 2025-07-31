@@ -67,7 +67,7 @@ class ProcessingError(BlackcoreError):
 
 
 class ConfigurationError(BlackcoreError):
-    """Error from configuration issues."""
+    """Error from configuration validation and setup issues."""
     
     def __init__(
         self,
@@ -80,7 +80,7 @@ class ConfigurationError(BlackcoreError):
 
 
 class ErrorHandler:
-    """Centralized error handling with consistent logging and context."""
+    """Centralized error handling with consistent logging and context propagation for debugging."""
     
     def __init__(
         self,

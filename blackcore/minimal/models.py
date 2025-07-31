@@ -171,7 +171,7 @@ class DatabaseConfig(BaseModel):
 
 
 class NotionConfig(BaseModel):
-    """Notion configuration."""
+    """Configuration for Notion API integration and database mappings."""
 
     api_key: str
     databases: Dict[str, DatabaseConfig]
@@ -191,7 +191,7 @@ class AIConfig(BaseModel):
 
 
 class ProcessingConfig(BaseModel):
-    """Processing configuration."""
+    """Configuration for transcript processing pipeline and system behavior."""
 
     batch_size: int = 10
     cache_ttl: int = 3600

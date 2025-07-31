@@ -57,7 +57,7 @@ class RateLimiter:
 
 
 class NotionUpdater:
-    """Simplified Notion client for creating and updating database entries."""
+    """Simplified Notion client for creating and updating database entries with rate limiting and error handling."""
 
     def __init__(
         self,
@@ -486,7 +486,20 @@ class NotionUpdater:
             elif isinstance(value, bool):
                 return {"property": prop_name, "checkbox": {"equals": value}}
 
-        # TODO: Support more complex filters
+        # Support multiple property filters with AND logic
+        if len(filter_query) > 1:
+            filters = []
+            for prop_name, value in filter_query.items():
+                if isinstance(value, str):
+                    filters.append({"property": prop_name, "rich_text": {"equals": value}})
+                elif isinstance(value, (int, float)):
+                    filters.append({"property": prop_name, "number": {"equals": value}})
+                elif isinstance(value, bool):
+                    filters.append({"property": prop_name, "checkbox": {"equals": value}})
+            
+            if filters:
+                return {"and": filters}
+        
         return {}
 
     def _parse_page_response(self, response: Dict[str, Any]) -> NotionPage:

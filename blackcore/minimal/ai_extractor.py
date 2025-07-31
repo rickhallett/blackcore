@@ -261,7 +261,7 @@ class OpenAIProvider(AIProvider):
 
 
 class AIExtractor:
-    """Main class for extracting entities from transcripts using AI."""
+    """Main class for extracting entities from transcripts using AI providers with security and validation."""
 
     def __init__(self, provider: str, api_key: str, model: Optional[str] = None):
         """Initialize AI extractor.
