@@ -5,6 +5,10 @@ import threading
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
 from .models import NotionPage
 from .property_handlers import PropertyHandlerFactory
 
@@ -37,13 +41,22 @@ class RateLimiter:
 class NotionUpdater:
     """Simplified Notion client for creating and updating database entries."""
 
-    def __init__(self, api_key: str, rate_limit: float = 3.0, retry_attempts: int = 3):
+    def __init__(
+        self,
+        api_key: str,
+        rate_limit: float = 3.0,
+        retry_attempts: int = 3,
+        pool_connections: int = 10,
+        pool_maxsize: int = 10,
+    ):
         """Initialize Notion updater.
 
         Args:
             api_key: Notion API key
             rate_limit: Requests per second limit
             retry_attempts: Number of retry attempts for failed requests
+            pool_connections: Number of connection pools to cache
+            pool_maxsize: Maximum number of connections to save in the pool
         """
         # Validate API key
         from .validators import validate_api_key
@@ -53,16 +66,80 @@ class NotionUpdater:
         self.api_key = api_key
         self.retry_attempts = retry_attempts
         self.rate_limiter = RateLimiter(rate_limit)
+        self.timeout = (10.0, 60.0)  # (connect timeout, read timeout)
+        
+        # Setup HTTP session with connection pooling
+        self.session = self._create_session(pool_connections, pool_maxsize)
 
         # Lazy import to avoid dependency if not needed
         try:
             from notion_client import Client
 
-            self.client = Client(auth=api_key)
+            # Pass session to client if supported, otherwise it will use its own
+            self.client = Client(auth=api_key, session=self.session)
         except ImportError:
             raise ImportError(
                 "notion-client package required. Install with: pip install notion-client"
             )
+        except TypeError:
+            # If the client doesn't support session parameter, create without it
+            self.client = Client(auth=api_key)
+            # Store session reference for potential manual usage
+            self.client._session = self.session
+    
+    def _create_session(self, pool_connections: int, pool_maxsize: int) -> requests.Session:
+        """Create and configure HTTP session with connection pooling.
+        
+        Args:
+            pool_connections: Number of connection pools to cache
+            pool_maxsize: Maximum number of connections to save in the pool
+            
+        Returns:
+            Configured requests.Session
+        """
+        session = requests.Session()
+        
+        # Configure retry strategy
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+            allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "POST"]
+        )
+        
+        # Create adapter with connection pooling
+        adapter = HTTPAdapter(
+            pool_connections=pool_connections,
+            pool_maxsize=pool_maxsize,
+            max_retries=retry_strategy
+        )
+        
+        # Mount adapter for both HTTP and HTTPS
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
+        
+        # Set default headers
+        session.headers.update({
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "Notion-Version": "2022-06-28"
+        })
+        
+        return session
+    
+    def close(self):
+        """Close the HTTP session and clean up resources."""
+        if hasattr(self, 'session'):
+            self.session.close()
+    
+    def __enter__(self):
+        """Support using NotionUpdater as a context manager."""
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Clean up when exiting context."""
+        self.close()
+        return False
 
     def create_page(self, database_id: str, properties: Dict[str, Any]) -> NotionPage:
         """Create a new page in a database.
