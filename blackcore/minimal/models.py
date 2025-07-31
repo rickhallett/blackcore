@@ -116,6 +116,7 @@ class ProcessingResult(BaseModel):
     relationships_created: int = 0
     errors: List[ProcessingError] = Field(default_factory=list)
     processing_time: Optional[float] = None
+    dry_run: bool = False
 
     @property
     def total_changes(self) -> int:
