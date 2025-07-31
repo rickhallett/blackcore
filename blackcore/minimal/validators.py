@@ -3,6 +3,8 @@
 import re
 from typing import Optional
 
+from . import constants
+
 
 def validate_api_key(key: Optional[str], provider: str) -> bool:
     """Validate API key format for different providers.
@@ -22,9 +24,9 @@ def validate_api_key(key: Optional[str], provider: str) -> bool:
     
     # Define validation patterns for each provider
     patterns = {
-        "notion": r"^secret_[a-zA-Z0-9]{43}$",
-        "anthropic": r"^sk-ant-[a-zA-Z0-9-]{95}$",
-        "openai": r"^sk-[a-zA-Z0-9]{48}$",
+        "notion": rf"^{constants.NOTION_KEY_PREFIX}[a-zA-Z0-9]{{{constants.NOTION_KEY_LENGTH}}}$",
+        "anthropic": rf"^{constants.ANTHROPIC_KEY_PREFIX}[a-zA-Z0-9-]{{{constants.ANTHROPIC_KEY_LENGTH}}}$",
+        "openai": rf"^{constants.OPENAI_KEY_PREFIX}[a-zA-Z0-9]{{{constants.OPENAI_KEY_LENGTH}}}$",
     }
     
     # Get pattern for provider
@@ -94,9 +96,8 @@ def sanitize_property_name(name: str) -> str:
     sanitized = "".join(char for char in name if ord(char) >= 32)
     
     # Limit length
-    max_length = 100
-    if len(sanitized) > max_length:
-        sanitized = sanitized[:max_length]
+    if len(sanitized) > constants.NOTION_PAGE_SIZE_LIMIT:
+        sanitized = sanitized[:constants.NOTION_PAGE_SIZE_LIMIT]
     
     return sanitized
 

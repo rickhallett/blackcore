@@ -9,13 +9,15 @@ from pathlib import Path
 from typing import Any, Optional, Dict
 import hashlib
 
+from . import constants
+
 logger = logging.getLogger(__name__)
 
 
 class SimpleCache:
     """Simple file-based cache with TTL support."""
 
-    def __init__(self, cache_dir: Optional[str] = None, ttl: int = 3600):
+    def __init__(self, cache_dir: Optional[str] = None, ttl: int = constants.DEFAULT_CACHE_TTL):
         """Initialize cache.
 
         Args:
@@ -185,7 +187,7 @@ class SimpleCache:
         try:
             # Set directory permissions to 0o700 (rwx------)
             # Only owner can read, write, and execute
-            os.chmod(directory, 0o700)
+            os.chmod(directory, constants.CACHE_DIR_PERMISSIONS)
         except (OSError, PermissionError) as e:
             logger.warning(f"Failed to set cache directory permissions: {e}")
     
@@ -202,6 +204,6 @@ class SimpleCache:
         try:
             # Set file permissions to 0o600 (rw-------)
             # Only owner can read and write
-            os.chmod(filepath, 0o600)
+            os.chmod(filepath, constants.CACHE_FILE_PERMISSIONS)
         except (OSError, PermissionError) as e:
             logger.warning(f"Failed to set cache file permissions: {e}")

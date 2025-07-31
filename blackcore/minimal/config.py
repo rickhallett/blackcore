@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from typing import Optional, Dict, Any
 from .models import Config
+from . import constants
 
 
 class ConfigManager:
@@ -89,18 +90,18 @@ Also provide:
 Format as JSON."""
         },
         "processing": {
-            "batch_size": 10,
-            "cache_ttl": 3600,
+            "batch_size": constants.DEFAULT_BATCH_SIZE,
+            "cache_ttl": constants.DEFAULT_CACHE_TTL,
             "dry_run": False,
             "verbose": False,
             "enable_deduplication": True,
-            "deduplication_threshold": 90.0,
+            "deduplication_threshold": constants.DEDUPLICATION_THRESHOLD,
             "deduplication_scorer": "simple",  # Use "llm" for Claude-based scoring
             "llm_scorer_config": {
                 "model": "claude-3-5-haiku-20241022",
-                "temperature": 0.1,
-                "cache_ttl": 3600,
-                "batch_size": 5,
+                "temperature": constants.LLM_SCORER_TEMPERATURE,
+                "cache_ttl": constants.DEFAULT_CACHE_TTL,
+                "batch_size": constants.LLM_SCORER_BATCH_SIZE,
             },
         },
     }
@@ -238,16 +239,16 @@ Format as JSON."""
                         ]["mappings"],
                     },
                 },
-                "rate_limit": 3.0,
-                "retry_attempts": 3,
+                "rate_limit": constants.DEFAULT_RATE_LIMIT,
+                "retry_attempts": constants.DEFAULT_RETRY_ATTEMPTS,
             },
             "ai": {
                 "provider": "claude",
                 "api_key": "YOUR_AI_API_KEY",
-                "model": "claude-3-sonnet-20240229",
+                "model": constants.CLAUDE_DEFAULT_MODEL,
                 "extraction_prompt": self.DEFAULT_CONFIG["ai"]["extraction_prompt"],
-                "max_tokens": 4000,
-                "temperature": 0.3,
+                "max_tokens": constants.AI_MAX_TOKENS,
+                "temperature": constants.AI_TEMPERATURE,
             },
             "processing": self.DEFAULT_CONFIG["processing"],
         }

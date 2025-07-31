@@ -5,6 +5,7 @@ from typing import Dict, Optional, List
 from abc import ABC, abstractmethod
 
 from .models import ExtractedEntities, Entity, Relationship, EntityType
+from . import constants
 
 
 def sanitize_transcript(text: str) -> str:
@@ -22,15 +23,7 @@ def sanitize_transcript(text: str) -> str:
     sanitized = text
     
     # Remove role-based injection attempts
-    injection_patterns = [
-        "\n\nHuman:",
-        "\n\nAssistant:",
-        "\n\nSystem:",
-        "\n\nUser:",
-        "\n\nAI:",
-    ]
-    
-    for pattern in injection_patterns:
+    for pattern in constants.PROMPT_INJECTION_PATTERNS:
         sanitized = sanitized.replace(pattern, "")
     
     return sanitized
@@ -48,7 +41,7 @@ class AIProvider(ABC):
 class ClaudeProvider(AIProvider):
     """Claude AI provider for entity extraction."""
 
-    def __init__(self, api_key: str, model: str = "claude-3-sonnet-20240229"):
+    def __init__(self, api_key: str, model: str = constants.CLAUDE_DEFAULT_MODEL):
         # Validate API key
         from .validators import validate_api_key
         if not validate_api_key(api_key, "anthropic"):
@@ -75,8 +68,8 @@ class ClaudeProvider(AIProvider):
 
         response = self.client.messages.create(
             model=self.model,
-            max_tokens=4000,
-            temperature=0.3,
+            max_tokens=constants.AI_MAX_TOKENS,
+            temperature=constants.AI_TEMPERATURE,
             messages=[{"role": "user", "content": full_prompt}],
         )
 
@@ -161,7 +154,7 @@ class ClaudeProvider(AIProvider):
 class OpenAIProvider(AIProvider):
     """OpenAI provider for entity extraction."""
 
-    def __init__(self, api_key: str, model: str = "gpt-4"):
+    def __init__(self, api_key: str, model: str = constants.OPENAI_DEFAULT_MODEL):
         # Validate API key
         from .validators import validate_api_key
         if not validate_api_key(api_key, "openai"):
@@ -187,7 +180,7 @@ class OpenAIProvider(AIProvider):
         
         response = self.client.chat.completions.create(
             model=self.model,
-            temperature=0.3,
+            temperature=constants.AI_TEMPERATURE,
             messages=[
                 {
                     "role": "system",
@@ -256,9 +249,9 @@ class AIExtractor:
         self.provider_name = provider.lower()
 
         if self.provider_name == "claude":
-            self.provider = ClaudeProvider(api_key, model or "claude-3-sonnet-20240229")
+            self.provider = ClaudeProvider(api_key, model or constants.CLAUDE_DEFAULT_MODEL)
         elif self.provider_name == "openai":
-            self.provider = OpenAIProvider(api_key, model or "gpt-4")
+            self.provider = OpenAIProvider(api_key, model or constants.OPENAI_DEFAULT_MODEL)
         else:
             raise ValueError(f"Unsupported AI provider: {provider}")
 

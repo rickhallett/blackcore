@@ -11,12 +11,13 @@ from urllib3.util.retry import Retry
 
 from .models import NotionPage
 from .property_handlers import PropertyHandlerFactory
+from . import constants
 
 
 class RateLimiter:
     """Thread-safe rate limiter for API calls."""
 
-    def __init__(self, requests_per_second: float = 3.0):
+    def __init__(self, requests_per_second: float = constants.DEFAULT_RATE_LIMIT):
         self.min_interval = 1.0 / requests_per_second
         self.last_request_time = 0.0
         self._lock = threading.Lock()
@@ -44,10 +45,10 @@ class NotionUpdater:
     def __init__(
         self,
         api_key: str,
-        rate_limit: float = 3.0,
-        retry_attempts: int = 3,
-        pool_connections: int = 10,
-        pool_maxsize: int = 10,
+        rate_limit: float = constants.DEFAULT_RATE_LIMIT,
+        retry_attempts: int = constants.DEFAULT_RETRY_ATTEMPTS,
+        pool_connections: int = constants.DEFAULT_POOL_CONNECTIONS,
+        pool_maxsize: int = constants.DEFAULT_POOL_MAXSIZE,
     ):
         """Initialize Notion updater.
 
@@ -101,9 +102,9 @@ class NotionUpdater:
         
         # Configure retry strategy
         retry_strategy = Retry(
-            total=3,
-            backoff_factor=1,
-            status_forcelist=[429, 500, 502, 503, 504],
+            total=constants.RETRY_TOTAL_ATTEMPTS,
+            backoff_factor=constants.RETRY_BACKOFF_FACTOR,
+            status_forcelist=constants.RETRY_STATUS_FORCELIST,
             allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "POST"]
         )
         
@@ -122,7 +123,7 @@ class NotionUpdater:
         session.headers.update({
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "Notion-Version": "2022-06-28"
+            "Notion-Version": constants.NOTION_API_VERSION
         })
         
         return session
