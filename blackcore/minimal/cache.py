@@ -2,26 +2,39 @@
 
 import json
 import time
+import os
+import platform
+import logging
 from pathlib import Path
 from typing import Any, Optional, Dict
 import hashlib
+
+logger = logging.getLogger(__name__)
 
 
 class SimpleCache:
     """Simple file-based cache with TTL support."""
 
-    def __init__(self, cache_dir: str = ".cache", ttl: int = 3600):
+    def __init__(self, cache_dir: Optional[str] = None, ttl: int = 3600):
         """Initialize cache.
 
         Args:
-            cache_dir: Directory to store cache files
+            cache_dir: Directory to store cache files (default: ~/.blackcore_cache)
             ttl: Time to live in seconds (default 1 hour)
         """
-        self.cache_dir = Path(cache_dir)
+        if cache_dir is None:
+            # Use default directory in user home
+            self.cache_dir = Path.home() / ".blackcore_cache"
+        else:
+            self.cache_dir = Path(cache_dir)
+        
         self.ttl = ttl
 
         # Create cache directory if it doesn't exist
         self.cache_dir.mkdir(exist_ok=True)
+        
+        # Set restricted permissions on cache directory
+        self._set_directory_permissions(str(self.cache_dir))
 
     def get(self, key: str) -> Optional[Any]:
         """Get value from cache.
@@ -68,6 +81,9 @@ class SimpleCache:
         try:
             with open(cache_file, "w") as f:
                 json.dump(cache_data, f, indent=2, default=str)
+            
+            # Set restricted permissions on the cache file
+            self._set_file_permissions(str(cache_file))
         except (TypeError, IOError) as e:
             print(f"Warning: Failed to cache value: {e}")
 
@@ -155,3 +171,37 @@ class SimpleCache:
             "active_entries": total_files - expired_count,
             "cache_directory": str(self.cache_dir.absolute()),
         }
+    
+    def _set_directory_permissions(self, directory: str) -> None:
+        """Set restrictive permissions on directory.
+        
+        Args:
+            directory: Directory path to secure
+        """
+        # Skip on Windows as it handles permissions differently
+        if platform.system() == 'Windows':
+            return
+        
+        try:
+            # Set directory permissions to 0o700 (rwx------)
+            # Only owner can read, write, and execute
+            os.chmod(directory, 0o700)
+        except (OSError, PermissionError) as e:
+            logger.warning(f"Failed to set cache directory permissions: {e}")
+    
+    def _set_file_permissions(self, filepath: str) -> None:
+        """Set restrictive permissions on file.
+        
+        Args:
+            filepath: File path to secure
+        """
+        # Skip on Windows as it handles permissions differently
+        if platform.system() == 'Windows':
+            return
+        
+        try:
+            # Set file permissions to 0o600 (rw-------)
+            # Only owner can read and write
+            os.chmod(filepath, 0o600)
+        except (OSError, PermissionError) as e:
+            logger.warning(f"Failed to set cache file permissions: {e}")
