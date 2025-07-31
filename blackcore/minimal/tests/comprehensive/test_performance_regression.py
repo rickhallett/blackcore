@@ -11,6 +11,7 @@ import os
 import gc
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
+from unittest.mock import Mock
 
 from blackcore.minimal.transcript_processor import TranscriptProcessor
 from blackcore.minimal.models import TranscriptInput
@@ -75,25 +76,78 @@ class TestPerformanceBaselines:
     def test_cache_performance_baseline(self):
         """Establish baseline for cache performance."""
         with test_environment() as env:
-            transcript = create_realistic_transcript("medium")
+            # Enable dry run to focus on cache performance
+            env['config'].processing.dry_run = True
+            
+            # Create a unique transcript to ensure cache miss on first run
+            from blackcore.minimal.models import TranscriptInput
+            from datetime import datetime
+            import uuid
+            
+            unique_content = f"This is a unique test transcript for cache testing {uuid.uuid4()}"
+            transcript = TranscriptInput(
+                title=f"Cache Test {uuid.uuid4()}",
+                content=unique_content,
+                date=datetime.now(),
+                metadata={"test": "cache_performance"}
+            )
+            
             processor = TranscriptProcessor(config=env['config'])
             
+            # Clear cache to ensure clean test
+            processor.cache.clear()
+            
+            # Track AI extraction calls
+            call_count = 0
+            original_side_effect = env['mocks']['ai_client'].messages.create.side_effect
+            
+            def mock_ai_counter(*args, **kwargs):
+                nonlocal call_count
+                call_count += 1
+                # Call the original mock behavior
+                if original_side_effect:
+                    return original_side_effect(*args, **kwargs)
+                else:
+                    return env['mocks']['ai_client'].messages.create.return_value
+            
+            # Track calls to the AI client
+            env['mocks']['ai_client'].messages.create.side_effect = mock_ai_counter
+            
             # First run (cache miss)
-            with self.profiler.profile("cache_miss"):
-                result1 = processor.process_transcript(transcript)
+            result1 = processor.process_transcript(transcript)
             assert result1.success
             
             # Second run (cache hit)
-            with self.profiler.profile("cache_hit"):
-                result2 = processor.process_transcript(transcript)
+            result2 = processor.process_transcript(transcript)
             assert result2.success
             
-            # Cache hit should be faster than cache miss
-            cache_miss_time = self.profiler.get_baseline("cache_miss")
-            cache_hit_time = self.profiler.get_baseline("cache_hit")
+            # Verify cache was used (AI client called only once)
+            assert call_count == 1, f"AI client called {call_count} times, expected 1"
             
-            # Allow for mock behavior - cache might not be significantly faster
-            assert cache_hit_time <= cache_miss_time * 1.5, "Cache hit not faster than miss"
+            # Process multiple times to test cache performance
+            durations = []
+            for i in range(5):
+                start_time = time.time()
+                result = processor.process_transcript(transcript)
+                duration = time.time() - start_time
+                assert result.success
+                durations.append(duration)
+            
+            # AI should still only be called once total
+            assert call_count == 1, f"AI client called {call_count} times after 7 total runs, expected 1"
+            
+            # Cache performance should be consistent (all cached runs)
+            avg_cached_time = sum(durations) / len(durations)
+            max_cached_time = max(durations)
+            
+            # Debug output
+            print(f"Average cached run time: {avg_cached_time:.3f}s")  
+            print(f"Max cached run time: {max_cached_time:.3f}s")
+            print(f"AI client calls: {call_count}")
+            
+            # Cache performance should be reasonable
+            assert avg_cached_time < 1.0, f"Average cached time too slow: {avg_cached_time:.3f}s"
+            assert max_cached_time < 2.0, f"Max cached time too slow: {max_cached_time:.3f}s"
     
     def test_memory_usage_baseline(self):
         """Establish baseline for memory usage patterns."""
@@ -377,8 +431,40 @@ class TestCachePerformance:
     def test_cache_hit_ratio(self):
         """Test cache effectiveness with repeated operations."""
         with test_environment() as env:
+            # Enable dry run to focus on cache behavior
+            env['config'].processing.dry_run = True
+            
             transcript = create_realistic_transcript("medium")
             processor = TranscriptProcessor(config=env['config'])
+            
+            # Track AI extraction calls to verify caching
+            extraction_count = 0
+            
+            def mock_extract_with_delay(*args, **kwargs):
+                nonlocal extraction_count
+                extraction_count += 1
+                # Add delay to simulate API call
+                time.sleep(0.1)  # 100ms delay
+                
+                from blackcore.minimal.models import ExtractedEntities, Entity, EntityType
+                return ExtractedEntities(
+                    entities=[
+                        Entity(
+                            type=EntityType.PERSON,
+                            name="Test Person",
+                            confidence=0.9
+                        )
+                    ],
+                    relationships=[],
+                    summary="Cache test summary",
+                    key_points=["Test point"]
+                )
+            
+            # Replace the mock to track calls
+            processor.ai_extractor.extract_entities = Mock(side_effect=mock_extract_with_delay)
+            
+            # Clear cache to ensure clean test
+            processor.cache.clear()
             
             # Process same transcript multiple times
             durations = []
@@ -390,20 +476,57 @@ class TestCachePerformance:
                 assert result.success
                 durations.append(duration)
             
-            # Later runs should be faster due to caching (allowing for mock behavior)
+            # Verify caching is working - AI should only be called once
+            assert extraction_count == 1, f"AI extractor called {extraction_count} times, expected 1"
+            
+            # First run should be slower (includes AI call)
             first_run = durations[0]
             avg_later_runs = sum(durations[1:]) / len(durations[1:])
             
-            # Cache should provide some benefit (even if minimal with mocks)
+            # Debug output
+            print(f"First run: {first_run:.3f}s")
+            print(f"Average later runs: {avg_later_runs:.3f}s") 
+            print(f"AI extraction calls: {extraction_count}")
+            
+            # Cache should provide significant benefit
+            # First run includes 100ms AI delay, later runs should be much faster
+            assert first_run > avg_later_runs, f"First run ({first_run:.3f}s) should be slower than cached runs ({avg_later_runs:.3f}s)"
+            
+            # Cache efficiency should be good (later runs should be at least 50% faster)
             cache_efficiency = first_run / avg_later_runs if avg_later_runs > 0 else 1
-            assert cache_efficiency >= 0.8, f"Poor cache efficiency: {cache_efficiency:.2f}x"
+            assert cache_efficiency >= 1.5, f"Poor cache efficiency: {cache_efficiency:.2f}x (expected >= 1.5x)"
     
     def test_cache_memory_efficiency(self):
         """Test cache doesn't consume excessive memory."""
         initial_memory = psutil.Process(os.getpid()).memory_info().rss / 1024 / 1024
         
         with test_environment() as env:
+            # Enable dry run mode for faster test
+            env['config'].processing.dry_run = True
             processor = TranscriptProcessor(config=env['config'])
+            
+            # Mock AI extractor for consistent and fast responses
+            def mock_extract(*args, **kwargs):
+                from blackcore.minimal.models import ExtractedEntities, Entity, EntityType
+                # Extract index from content
+                import re
+                match = re.search(r'transcript (\d+)', kwargs.get('text', ''))
+                idx = match.group(1) if match else '0'
+                
+                return ExtractedEntities(
+                    entities=[
+                        Entity(
+                            type=EntityType.PERSON,
+                            name=f"Person {idx}",
+                            confidence=0.9
+                        )
+                    ],
+                    relationships=[],
+                    summary=f"Summary for transcript {idx}",
+                    key_points=[f"Point {idx}"]
+                )
+            
+            processor.ai_extractor.extract_entities = Mock(side_effect=mock_extract)
             
             # Process many different transcripts (should populate cache)
             unique_transcripts = []
@@ -495,7 +618,15 @@ class TestResourceUtilization:
             
             # Monitor I/O during cache operations
             process = psutil.Process(os.getpid())
-            initial_io = process.io_counters()
+            
+            # Check if io_counters is available (not available on macOS)
+            if not hasattr(process, 'io_counters') or process.io_counters is None:
+                pytest.skip("I/O counters not available on this platform")
+            
+            try:
+                initial_io = process.io_counters()
+            except (AttributeError, OSError):
+                pytest.skip("I/O counters not available on this platform")
             
             # Process transcripts that should trigger cache I/O
             transcripts = create_test_batch(size=5, complexity="medium")

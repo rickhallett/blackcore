@@ -279,13 +279,22 @@ class TestErrorRecoveryWorkflows:
     
     def test_malformed_transcript_recovery(self):
         """Test handling of malformed transcript data."""
-        malformed_transcripts = [
+        from pydantic import ValidationError
+        
+        # Test cases that should succeed but potentially with empty/minimal data
+        processable_transcripts = [
             TranscriptInput(title="", content="", date=datetime.now()),  # Empty content
-            TranscriptInput(title="Test", content=None, date=datetime.now()),  # None content
-            TranscriptInput(title="Test", content="Valid content", date=None),  # None date
+            TranscriptInput(title="Test", content="Valid content", date=None),  # None date (should use default)
         ]
         
-        for transcript in malformed_transcripts:
+        # Test cases that should fail at Pydantic validation level
+        invalid_cases = [
+            {"title": "Test", "content": None, "date": datetime.now()},  # None content - invalid
+            {"title": None, "content": "Valid content", "date": datetime.now()},  # None title - invalid
+        ]
+        
+        # Test processable cases
+        for transcript in processable_transcripts:
             try:
                 with test_environment() as env:
                     processor = TranscriptProcessor(config=env['config'])
@@ -298,8 +307,19 @@ class TestErrorRecoveryWorkflows:
                         error_msg = str(result.errors[0]).lower()
                         assert any(word in error_msg for word in ['empty', 'invalid', 'missing'])
             except Exception as e:
-                # Should not raise unhandled exceptions
-                pytest.fail(f"Unhandled exception for malformed input: {e}")
+                # Should not raise unhandled exceptions during processing
+                pytest.fail(f"Unhandled exception for processable input: {e}")
+        
+        # Test invalid cases that should fail at model creation
+        for invalid_data in invalid_cases:
+            try:
+                transcript = TranscriptInput(**invalid_data)
+                pytest.fail(f"Expected ValidationError for invalid data: {invalid_data}")
+            except ValidationError:
+                # This is expected behavior for invalid model data
+                pass
+            except Exception as e:
+                pytest.fail(f"Unexpected exception type for invalid data: {type(e).__name__}: {e}")
     
     def test_unicode_and_encoding_handling(self):
         """Test handling of various unicode and encoding scenarios."""
