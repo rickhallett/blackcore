@@ -1,6 +1,7 @@
 """Simplified Notion API client for database updates."""
 
 import time
+import threading
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 
@@ -9,22 +10,28 @@ from .property_handlers import PropertyHandlerFactory
 
 
 class RateLimiter:
-    """Simple rate limiter for API calls."""
+    """Thread-safe rate limiter for API calls."""
 
     def __init__(self, requests_per_second: float = 3.0):
         self.min_interval = 1.0 / requests_per_second
         self.last_request_time = 0.0
+        self._lock = threading.Lock()
 
     def wait_if_needed(self):
-        """Wait if necessary to maintain rate limit."""
-        current_time = time.time()
-        time_since_last = current_time - self.last_request_time
+        """Wait if necessary to maintain rate limit.
+        
+        This method is thread-safe and ensures that multiple threads
+        respect the rate limit when making concurrent requests.
+        """
+        with self._lock:
+            current_time = time.time()
+            time_since_last = current_time - self.last_request_time
 
-        if time_since_last < self.min_interval:
-            sleep_time = self.min_interval - time_since_last
-            time.sleep(sleep_time)
+            if time_since_last < self.min_interval:
+                sleep_time = self.min_interval - time_since_last
+                time.sleep(sleep_time)
 
-        self.last_request_time = time.time()
+            self.last_request_time = time.time()
 
 
 class NotionUpdater:
