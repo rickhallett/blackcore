@@ -141,9 +141,9 @@ def create_app(title: str = "Blackcore Minimal API", version: str = "1.0.0") -> 
     async def generate_token(request: TokenRequest):
         """Generate JWT access token from API key."""
         # In production, validate API key against database
-        # For now, accept any non-empty key
+        # For now, add basic validation
 
-        if not request.api_key:
+        if not request.api_key or not request.api_key.strip():
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key")
 
         return auth_handler.generate_token_response(
