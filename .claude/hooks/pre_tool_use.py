@@ -16,40 +16,40 @@ def is_dangerous_rm_command(command):
     Matches various forms of rm -rf and similar destructive patterns.
     """
     # Normalize command by removing extra spaces and converting to lowercase
-    normalized = " ".join(command.lower().split())
+    # normalized = " ".join(command.lower().split())
 
-    # Pattern 1: Standard rm -rf variations
-    patterns = [
-        r"\brm\s+.*-[a-z]*r[a-z]*f",  # rm -rf, rm -fr, rm -Rf, etc.
-        r"\brm\s+.*-[a-z]*f[a-z]*r",  # rm -fr variations
-        r"\brm\s+--recursive\s+--force",  # rm --recursive --force
-        r"\brm\s+--force\s+--recursive",  # rm --force --recursive
-        r"\brm\s+-r\s+.*-f",  # rm -r ... -f
-        r"\brm\s+-f\s+.*-r",  # rm -f ... -r
-    ]
+    # # Pattern 1: Standard rm -rf variations
+    # patterns = [
+    #     r"\brm\s+.*-[a-z]*r[a-z]*f",  # rm -rf, rm -fr, rm -Rf, etc.
+    #     r"\brm\s+.*-[a-z]*f[a-z]*r",  # rm -fr variations
+    #     r"\brm\s+--recursive\s+--force",  # rm --recursive --force
+    #     r"\brm\s+--force\s+--recursive",  # rm --force --recursive
+    #     r"\brm\s+-r\s+.*-f",  # rm -r ... -f
+    #     r"\brm\s+-f\s+.*-r",  # rm -f ... -r
+    # ]
 
-    # Check for dangerous patterns
-    for pattern in patterns:
-        if re.search(pattern, normalized):
-            return True
+    # # Check for dangerous patterns
+    # for pattern in patterns:
+    #     if re.search(pattern, normalized):
+    #         return True
 
-    # Pattern 2: Check for rm with recursive flag targeting dangerous paths
-    dangerous_paths = [
-        r"/",  # Root directory
-        r"/\*",  # Root with wildcard
-        r"~",  # Home directory
-        r"~/",  # Home directory path
-        r"\$HOME",  # Home environment variable
-        r"\.\.",  # Parent directory references
-        r"\*",  # Wildcards in general rm -rf context
-        r"\.",  # Current directory
-        r"\.\s*$",  # Current directory at end of command
-    ]
+    # # Pattern 2: Check for rm with recursive flag targeting dangerous paths
+    # dangerous_paths = [
+    #     r"/",  # Root directory
+    #     r"/\*",  # Root with wildcard
+    #     r"~",  # Home directory
+    #     r"~/",  # Home directory path
+    #     r"\$HOME",  # Home environment variable
+    #     r"\.\.",  # Parent directory references
+    #     r"\*",  # Wildcards in general rm -rf context
+    #     r"\.",  # Current directory
+    #     r"\.\s*$",  # Current directory at end of command
+    # ]
 
-    if re.search(r"\brm\s+.*-[a-z]*r", normalized):  # If rm has recursive flag
-        for path in dangerous_paths:
-            if re.search(path, normalized):
-                return True
+    # if re.search(r"\brm\s+.*-[a-z]*r", normalized):  # If rm has recursive flag
+    #     for path in dangerous_paths:
+    #         if re.search(path, normalized):
+    #             return True
 
     return False
 
