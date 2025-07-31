@@ -7,7 +7,7 @@
         "name": "People & Contacts",
         "mappings": {
           "name": "Full Name",
-          "role": "Role", 
+          "role": "Role",
           "status": "Status",
           "organization": "Organization",
           "email": "Email",

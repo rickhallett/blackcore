@@ -1,3 +1,7 @@
+"""
+Purpose: An end-to-end test for the entire deduplication and merge workflow. It analyzes a real dataset, auto-approves all found matches, executes the merges, and verifies the results.
+Utility: This script is a critical integration test that ensures the entire deduplication pipeline, from analysis to the final merge, works correctly. It's essential for catching regressions and validating the merge logic.
+"""
 #!/usr/bin/env python3
 """
 Comprehensive test of the full deduplication and merge flow.
@@ -81,8 +85,10 @@ def main():
     )
 
     console.print("Configuration:")
-    console.print(f"  • Auto-merge threshold: {engine.config['auto_merge_threshold']}%")
-    console.print(f"  • Review threshold: {engine.config['human_review_threshold']}%")
+    console.print(f"  • Auto-merge threshold: {engine.config['auto_merge_threshold']}%"
+)
+    console.print(f"  • Review threshold: {engine.config['human_review_threshold']}%"
+)
     console.print("  • AI analysis: [green]Enabled[/green]")
     console.print("  • Safety mode: [green]ON[/green]")
 
@@ -341,14 +347,16 @@ def main():
     console.print(
         f"  • Final count would be: {len(people_data) - success_count} people"
     )
-    console.print(f"  • Reduction: {(success_count / len(people_data) * 100):.1f}%")
+    console.print(f"  • Reduction: {(success_count / len(people_data) * 100):.1f}%"
+)
 
     # Get merge statistics
     merge_stats = merge_executor.get_statistics()
     console.print("\n[bold]🔧 Merge Executor Statistics:[/bold]")
     console.print(f"  • Total proposals created: {merge_stats['total_proposals']}")
     console.print(f"  • Safety blocks: {merge_stats['safety_blocks']}")
-    console.print(f"  • Success rate: {merge_stats['success_rate']:.1f}%")
+    console.print(f"  • Success rate: {merge_stats['success_rate']:.1f}%"
+)
 
     console.print("\n[bold green]✅ Test completed successfully![/bold green]")
 

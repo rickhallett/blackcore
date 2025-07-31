@@ -1,3 +1,6 @@
+Purpose: A specific test script to verify that low-confidence matches from the deduplication engine are correctly included in the set of items presented for human review.
+Utility: This is a regression test. It ensures that a previous bug—where low-confidence matches were being filtered out before the review step—does not reoccur. It validates a specific part of the review workflow logic.
+
 #!/usr/bin/env python3
 """
 Test to verify low confidence matches are included in review.
