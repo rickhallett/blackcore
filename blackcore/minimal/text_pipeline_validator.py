@@ -328,7 +328,7 @@ class TextPipelineValidator:
         if transformation_type == "sanitize":
             # Count removed characters
             removed_chars = len(original) - len(transformed)
-            if removed_chars > len(original) * 0.1:  # More than 10% removed
+            if len(original) > 0 and removed_chars > len(original) * 0.1:  # More than 10% removed
                 result.add_warning(ValidationError(
                     error_type=ValidationErrorType.SECURITY_ERROR,
                     field_name="text",
@@ -458,7 +458,7 @@ def create_pipeline_validation_rules(validation_level: ValidationLevel = Validat
         
         if isinstance(value, str):
             # Check for garbled text patterns
-            if value.count('?') / len(value) > 0.1:  # More than 10% question marks
+            if len(value) > 0 and value.count('?') / len(value) > 0.1:  # More than 10% question marks
                 result.add_warning(ValidationError(
                     error_type=ValidationErrorType.FORMAT_ERROR,
                     field_name="transcript",

@@ -337,7 +337,7 @@ class TranscriptProcessor:
         )
 
         # Cache result
-        self.cache.set(cache_key, extracted.dict())
+        self.cache.set(cache_key, extracted.model_dump())
 
         return extracted
 
@@ -696,9 +696,13 @@ class TranscriptProcessor:
             )
 
         if transcript.source:
-            properties[db_config.mappings.get("source", "Source")] = (
-                transcript.source.value
-            )
+            # Handle both enum and string sources
+            if hasattr(transcript.source, 'value'):
+                source_value = transcript.source.value
+            else:
+                source_value = str(transcript.source)
+                
+            properties[db_config.mappings.get("source", "Source")] = source_value
 
         if extracted.summary:
             properties[db_config.mappings.get("summary", "AI Summary")] = (

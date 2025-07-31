@@ -33,7 +33,7 @@ class SimpleCache:
         self.ttl = ttl
 
         # Create cache directory if it doesn't exist
-        self.cache_dir.mkdir(exist_ok=True)
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
         
         # Set restricted permissions on cache directory
         self._set_directory_permissions(self.cache_dir)
