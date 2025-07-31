@@ -29,15 +29,11 @@ dev = [
     "ruff>=0.1.0",
 ]
 
-[project.scripts]
-setup-databases = "scripts.setup_databases:main"
-verify-databases = "scripts.verify_databases:main"
-process-intelligence = "scripts.process_new_intelligence:main"
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["blackcore/minimal/tests"]
 pythonpath = ["."]
