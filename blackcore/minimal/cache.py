@@ -10,6 +10,7 @@ import hashlib
 
 from . import constants
 from .logging_config import get_logger, log_event, log_error
+from .error_handling import ErrorHandler, ProcessingError, handle_errors
 
 logger = get_logger(__name__)
 
@@ -73,10 +74,18 @@ class SimpleCache:
 
         except (json.JSONDecodeError, KeyError, IOError) as e:
             # Corrupted cache file - remove it
+            cache_error = ProcessingError(
+                f"Cache file corrupted for key '{key}'",
+                context={
+                    "key": key,
+                    "cache_file": str(cache_file),
+                    "original_error": type(e).__name__
+                }
+            )
             log_error(
                 __name__,
                 "cache_corrupted",
-                e,
+                cache_error,
                 key=key,
                 cache_file=str(cache_file)
             )
@@ -109,10 +118,18 @@ class SimpleCache:
                 value_size=len(json.dumps(value, default=str))
             )
         except (TypeError, IOError) as e:
+            cache_error = ProcessingError(
+                f"Failed to write cache for key '{key}'",
+                context={
+                    "key": key,
+                    "cache_file": str(cache_file),
+                    "original_error": type(e).__name__
+                }
+            )
             log_error(
                 __name__,
                 "cache_write_failed",
-                e,
+                cache_error,
                 key=key,
                 cache_file=str(cache_file)
             )

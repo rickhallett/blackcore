@@ -13,6 +13,14 @@ from .models import NotionPage
 from .property_handlers import PropertyHandlerFactory
 from . import constants
 from .logging_config import get_logger, log_event, log_error, log_performance, Timer
+from .error_handling import (
+    ErrorHandler, 
+    NotionAPIError, 
+    ValidationError,
+    handle_errors,
+    retry_on_error,
+    ErrorContext
+)
 
 logger = get_logger(__name__)
 
@@ -430,11 +438,27 @@ class NotionUpdater:
 
             # Create handler and format
             try:
-                handler = PropertyHandlerFactory.create(prop_type)
-                if handler.validate(value):
-                    formatted[prop_name] = handler.format_for_api(value)
-            except Exception as e:
-                print(f"Warning: Failed to format property '{prop_name}': {e}")
+                with ErrorContext("format_property", property_name=prop_name, convert_to=ValidationError):
+                    handler = PropertyHandlerFactory.create(prop_type)
+                    if handler.validate(value):
+                        formatted[prop_name] = handler.format_for_api(value)
+                    else:
+                        raise ValidationError(
+                            f"Property validation failed for '{prop_name}'",
+                            field_name=prop_name,
+                            field_value=value,
+                            context={"property_type": prop_type}
+                        )
+            except ValidationError as e:
+                # Log validation error but continue processing other properties
+                log_error(
+                    __name__,
+                    "property_format_validation_failed",
+                    e,
+                    property_name=prop_name,
+                    property_type=prop_type,
+                    value_type=type(value).__name__
+                )
 
         return formatted
 
@@ -480,10 +504,18 @@ class NotionUpdater:
             prop_type = prop_data.get("type")
             if prop_type:
                 try:
-                    handler = PropertyHandlerFactory.create(prop_type)
-                    properties[prop_name] = handler.parse_from_api(prop_data)
-                except Exception as e:
-                    print(f"Warning: Failed to parse property '{prop_name}': {e}")
+                    with ErrorContext("parse_property", property_name=prop_name, convert_to=ValidationError):
+                        handler = PropertyHandlerFactory.create(prop_type)
+                        properties[prop_name] = handler.parse_from_api(prop_data)
+                except ValidationError as e:
+                    # Log parsing error but continue with other properties
+                    log_error(
+                        __name__,
+                        "property_parse_failed",
+                        e,
+                        property_name=prop_name,
+                        property_type=prop_type
+                    )
 
         return NotionPage(
             id=response["id"],
@@ -537,8 +569,13 @@ class NotionUpdater:
             Function result
 
         Raises:
-            Last exception if all retries fail
+            NotionAPIError: If all retries fail
         """
+        error_handler = ErrorHandler(
+            context={"operation": "notion_api_call"},
+            log_errors=True
+        )
+        
         attempts = max_attempts or self.retry_attempts
         last_error = None
 
@@ -546,21 +583,48 @@ class NotionUpdater:
             try:
                 return func()
             except Exception as e:
-                last_error = e
+                # Convert to NotionAPIError if needed
+                if not isinstance(e, NotionAPIError):
+                    # Try to extract Notion-specific error details
+                    error_code = getattr(e, "code", None)
+                    status_code = getattr(e, "status", None) or getattr(e, "status_code", None)
+                    
+                    notion_error = NotionAPIError(
+                        f"Notion API error: {str(e)}",
+                        error_code=error_code,
+                        status_code=status_code,
+                        context={
+                            "attempt": attempt + 1,
+                            "max_attempts": attempts,
+                            "original_error": type(e).__name__
+                        }
+                    )
+                else:
+                    notion_error = e
+                    notion_error.context.update({
+                        "attempt": attempt + 1,
+                        "max_attempts": attempts
+                    })
+                
+                last_error = notion_error
 
-                # Check if error is retryable
-                error_code = getattr(e, "code", None)
-                if error_code in ["invalid_request", "unauthorized"]:
-                    # Don't retry these errors
-                    raise
+                # Check if error is retryable using standardized logic
+                if not error_handler.is_retryable(notion_error):
+                    # Log and raise non-retryable errors immediately
+                    error_handler.handle_error(notion_error, critical=True)
 
                 if attempt < attempts - 1:
-                    # Exponential backoff
+                    # Log retry attempt
                     wait_time = (2**attempt) + 0.1
-                    print(
-                        f"API error (attempt {attempt + 1}/{attempts}): {e}. Retrying in {wait_time}s..."
+                    log_event(
+                        __name__,
+                        "notion_api_retry",
+                        attempt=attempt + 1,
+                        max_attempts=attempts,
+                        wait_time=wait_time,
+                        error=str(notion_error)
                     )
                     time.sleep(wait_time)
 
-        # All retries failed
-        raise last_error
+        # All retries failed - log and raise
+        error_handler.handle_error(last_error, critical=True)
