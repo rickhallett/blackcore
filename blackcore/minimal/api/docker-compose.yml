@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ../../..
+      dockerfile: blackcore/minimal/api/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - REDIS_URL=redis://redis:6379
+      - API_SECRET_KEY=${API_SECRET_KEY:-your-secret-key-change-in-production}
+      - NOTION_API_KEY=${NOTION_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080
+      - RUN_WORKER=true
+    volumes:
+      - api-cache:/app/.cache
+      - api-logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Optional: Separate worker for production
+  worker:
+    build:
+      context: ../../..
+      dockerfile: blackcore/minimal/api/Dockerfile
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - API_SECRET_KEY=${API_SECRET_KEY:-your-secret-key-change-in-production}
+      - NOTION_API_KEY=${NOTION_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - api-cache:/app/.cache
+      - api-logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    command: ["python", "-m", "blackcore.minimal.api.worker"]
+    profiles:
+      - production
+
+volumes:
+  redis-data:
+  api-cache:
+  api-logs:

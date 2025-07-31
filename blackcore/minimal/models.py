@@ -2,7 +2,7 @@
 
 from typing import Dict, List, Any, Optional
 from datetime import datetime
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from enum import Enum
 
 
@@ -36,8 +36,7 @@ class Entity(BaseModel):
     context: Optional[str] = None
     confidence: float = Field(ge=0.0, le=1.0, default=1.0)
 
-    class Config:
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class Relationship(BaseModel):
@@ -50,8 +49,7 @@ class Relationship(BaseModel):
     relationship_type: str
     context: Optional[str] = None
 
-    class Config:
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class ExtractedEntities(BaseModel):
@@ -76,15 +74,15 @@ class TranscriptInput(BaseModel):
     source: Optional[TranscriptSource] = TranscriptSource.PERSONAL_NOTE
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    @validator("date", pre=True)
+    @field_validator("date", mode="before")
+    @classmethod
     def parse_date(cls, v):
         """Parse date from string if needed."""
         if isinstance(v, str):
             return datetime.fromisoformat(v.replace("Z", "+00:00"))
         return v
 
-    class Config:
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class NotionPage(BaseModel):
