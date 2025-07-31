@@ -7,6 +7,35 @@ from abc import ABC, abstractmethod
 from .models import ExtractedEntities, Entity, Relationship, EntityType
 
 
+def sanitize_transcript(text: str) -> str:
+    """Sanitize transcript to prevent prompt injection attacks.
+    
+    Removes common prompt injection patterns that could manipulate AI behavior.
+    
+    Args:
+        text: Raw transcript text
+        
+    Returns:
+        Sanitized transcript text
+    """
+    # Remove potential prompt injection patterns
+    sanitized = text
+    
+    # Remove role-based injection attempts
+    injection_patterns = [
+        "\n\nHuman:",
+        "\n\nAssistant:",
+        "\n\nSystem:",
+        "\n\nUser:",
+        "\n\nAI:",
+    ]
+    
+    for pattern in injection_patterns:
+        sanitized = sanitized.replace(pattern, "")
+    
+    return sanitized
+
+
 class AIProvider(ABC):
     """Base class for AI providers."""
 
@@ -35,7 +64,9 @@ class ClaudeProvider(AIProvider):
 
     def extract_entities(self, text: str, prompt: str) -> ExtractedEntities:
         """Extract entities using Claude."""
-        full_prompt = f"{prompt}\n\nTranscript:\n{text}"
+        # Sanitize the transcript to prevent prompt injection
+        sanitized_text = sanitize_transcript(text)
+        full_prompt = f"{prompt}\n\nTranscript:\n{sanitized_text}"
 
         response = self.client.messages.create(
             model=self.model,
@@ -141,6 +172,9 @@ class OpenAIProvider(AIProvider):
 
     def extract_entities(self, text: str, prompt: str) -> ExtractedEntities:
         """Extract entities using OpenAI."""
+        # Sanitize the transcript to prevent prompt injection
+        sanitized_text = sanitize_transcript(text)
+        
         response = self.client.chat.completions.create(
             model=self.model,
             temperature=0.3,
@@ -149,7 +183,7 @@ class OpenAIProvider(AIProvider):
                     "role": "system",
                     "content": "You are a helpful assistant that extracts entities and relationships from text.",
                 },
-                {"role": "user", "content": f"{prompt}\n\nTranscript:\n{text}"},
+                {"role": "user", "content": f"{prompt}\n\nTranscript:\n{sanitized_text}"},
             ],
             response_format={"type": "json_object"},
         )
