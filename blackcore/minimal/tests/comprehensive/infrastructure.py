@@ -287,7 +287,7 @@ class TestEnvironmentManager:
         """Create a test configuration with realistic defaults."""
         base_config = {
             'notion': NotionConfig(
-                api_key="test-notion-key",
+                api_key="secret_" + "a" * 43,  # Valid format for Notion API key
                 databases={
                     "people": DatabaseConfig(
                         id="test-people-db",
@@ -322,7 +322,7 @@ class TestEnvironmentManager:
             ),
             'ai': AIConfig(
                 provider="claude",
-                api_key="test-ai-key",
+                api_key="sk-ant-" + "a" * 95,  # Valid format for Anthropic API key
                 model="claude-3-sonnet-20240229",
                 max_tokens=4000,
                 temperature=0.3
@@ -336,10 +336,20 @@ class TestEnvironmentManager:
             )
         }
         
-        # Apply overrides
+        # Apply overrides with proper nesting
         for key, value in overrides.items():
-            if hasattr(base_config, key):
-                setattr(base_config, key, value)
+            if key in base_config and isinstance(value, dict):
+                # Merge nested dictionaries
+                if hasattr(base_config[key], '__dict__'):
+                    # It's a config object, update its attributes
+                    for sub_key, sub_value in value.items():
+                        if hasattr(base_config[key], sub_key):
+                            setattr(base_config[key], sub_key, sub_value)
+                else:
+                    # Direct update
+                    base_config[key].update(value)
+            else:
+                base_config[key] = value
         
         return Config(**base_config)
     
@@ -349,8 +359,33 @@ class TestEnvironmentManager:
         # Mock Notion client
         notion_mock = MagicMock()
         notion_mock.databases.query.return_value = {"results": [], "has_more": False}
-        notion_mock.pages.create.return_value = {"id": "test-page-123", "properties": {}}
-        notion_mock.pages.update.return_value = {"id": "test-page-123", "properties": {}}
+        notion_mock.pages.create.return_value = {
+            "id": "test-page-123", 
+            "properties": {},
+            "created_time": "2024-01-01T00:00:00.000Z",
+            "last_edited_time": "2024-01-01T00:00:00.000Z",
+            "parent": {"database_id": "test-db-123"},
+            "url": "https://notion.so/test-page-123"
+        }
+        notion_mock.pages.update.return_value = {
+            "id": "test-page-123", 
+            "properties": {},
+            "created_time": "2024-01-01T00:00:00.000Z",
+            "last_edited_time": "2024-01-01T00:00:00.000Z",
+            "parent": {"database_id": "test-db-123"},
+            "url": "https://notion.so/test-page-123"
+        }
+        notion_mock.databases.retrieve.return_value = {
+            "id": "test-db-123",
+            "properties": {
+                "Name": {"type": "title"},
+                "Full Name": {"type": "title"},
+                "Organization Name": {"type": "title"},
+                "Entry Title": {"type": "title"},
+                "Task Name": {"type": "title"},
+                "Title": {"type": "title"}
+            }
+        }
         
         # Mock AI client
         ai_mock = MagicMock()
@@ -369,8 +404,8 @@ class TestEnvironmentManager:
         )
         
         patches = [
-            patch('blackcore.minimal.notion_updater.Client', return_value=notion_mock),
-            patch('blackcore.minimal.ai_extractor.Anthropic', return_value=ai_mock),
+            patch('notion_client.Client', return_value=notion_mock),
+            patch('anthropic.Anthropic', return_value=ai_mock),
         ]
         
         try:
@@ -449,7 +484,7 @@ class FailureSimulator:
             else:
                 raise Exception("Simulated partial API failure")
         
-        with patch('blackcore.minimal.notion_updater.Client') as mock_client:
+        with patch('notion_client.Client') as mock_client:
             mock_instance = mock_client.return_value
             mock_instance.databases.query.side_effect = mock_notion_query
             yield mock_instance
