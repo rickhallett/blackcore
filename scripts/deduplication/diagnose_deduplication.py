@@ -1,3 +1,7 @@
+"""
+Purpose: A diagnostic tool to analyze and tune the performance of the deduplication system. It runs the scoring logic on a set of known duplicate pairs and prints a detailed breakdown of the similarity scores.
+Utility: Extremely useful for developers working on the deduplication engine. It helps in fine-tuning the scoring algorithms, adjusting field weights, and identifying weaknesses in the matching logic without needing to run the full interactive CLI.
+"""
 #!/usr/bin/env python3
 """
 Deduplication Diagnostic Tool

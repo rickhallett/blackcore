@@ -1,3 +1,6 @@
+Purpose: A high-level demonstration script that verifies the core components of the deduplication CLI are functioning correctly.
+Utility: Acts as a quick health check for the CLI. It confirms that databases can be loaded, the engine can analyze data, and the UI components can be created without errors. It's a good first script to run to ensure the basic setup is correct.
+"""
 #!/usr/bin/env python3
 """
 Demonstrate the deduplication CLI is working correctly.

@@ -1,8 +1,17 @@
 """Validators to ensure mock responses match real API behavior."""
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional, Union
 import json
 from datetime import datetime
+from blackcore.minimal.tests.utils.api_contracts import (
+    APIContractValidator,
+    PropertyType,
+    NotionAPIContracts
+)
+from blackcore.minimal.tests.utils.schema_loader import (
+    NotionAPISchemaLoader,
+    SchemaValidator
+)
 
 
 class NotionAPIValidator:
@@ -150,11 +159,14 @@ class AIResponseValidator:
 
 
 class MockBehaviorValidator:
-    """Validates overall mock behavior consistency."""
+    """Validates overall mock behavior consistency with API contract testing."""
     
     def __init__(self):
         self.notion_validator = NotionAPIValidator()
         self.ai_validator = AIResponseValidator()
+        self.contract_validator = APIContractValidator()
+        self.schema_loader = NotionAPISchemaLoader()
+        self.schema_validator = SchemaValidator(self.schema_loader)
     
     def validate_mock_notion_client(self, mock_client) -> List[str]:
         """Validate mock Notion client behavior."""
@@ -194,5 +206,268 @@ class MockBehaviorValidator:
                 errors.append("AI response format invalid")
         except Exception as e:
             errors.append(f"AI client failed: {e}")
+        
+        return errors
+    
+    def validate_with_contract(self, mock_client) -> List[str]:
+        """Validate mock responses against API contracts."""
+        errors = []
+        
+        # Test page creation with contract validation
+        try:
+            response = mock_client.pages.create(
+                parent={"database_id": "test-db"},
+                properties={
+                    "Title": {"title": [{"text": {"content": "Test Page"}}]},
+                    "Description": {"rich_text": [{"text": {"content": "Test description"}}]},
+                    "Status": {"select": {"name": "Active"}},
+                    "Priority": {"number": 5},
+                    "Done": {"checkbox": True}
+                }
+            )
+            
+            # Validate response against contract
+            contract_errors = self.contract_validator.validate_page_response(response)
+            if contract_errors:
+                errors.extend([f"Contract violation: {e}" for e in contract_errors])
+                
+            # Validate individual properties
+            if "properties" in response:
+                for prop_name, prop_value in response["properties"].items():
+                    if isinstance(prop_value, dict) and "type" in prop_value:
+                        prop_errors = self.contract_validator.validate_property_value(
+                            prop_value, prop_value["type"]
+                        )
+                        if prop_errors:
+                            errors.extend([f"Property {prop_name}: {e}" for e in prop_errors])
+            
+        except Exception as e:
+            errors.append(f"Contract validation failed: {e}")
+        
+        # Test database query with contract validation
+        try:
+            response = mock_client.databases.query(
+                database_id="test-db",
+                filter={"property": "Status", "select": {"equals": "Active"}},
+                sorts=[{"property": "Created", "direction": "descending"}],
+                page_size=10
+            )
+            
+            contract_errors = self.contract_validator.validate_database_query_response(response)
+            if contract_errors:
+                errors.extend([f"Query contract violation: {e}" for e in contract_errors])
+                
+        except Exception as e:
+            errors.append(f"Query contract validation failed: {e}")
+        
+        # Test error response validation
+        try:
+            # Simulate an error response
+            error_response = {
+                "object": "error",
+                "status": 400,
+                "code": "invalid_request",
+                "message": "Invalid database ID"
+            }
+            
+            error_contract_errors = self.contract_validator.validate_error_response(error_response)
+            if error_contract_errors:
+                errors.extend([f"Error response contract violation: {e}" for e in error_contract_errors])
+                
+        except Exception as e:
+            errors.append(f"Error response validation failed: {e}")
+        
+        return errors
+    
+    def validate_property_types(self, mock_client) -> List[str]:
+        """Validate all property types against contracts."""
+        errors = []
+        
+        property_test_cases = {
+            "title": {"title": [{"text": {"content": "Test Title"}, "plain_text": "Test Title"}]},
+            "rich_text": {"rich_text": [{"text": {"content": "Rich text"}, "plain_text": "Rich text"}]},
+            "number": {"number": 42},
+            "select": {"select": {"name": "Option1", "color": "blue"}},
+            "multi_select": {"multi_select": [{"name": "Tag1", "color": "red"}, {"name": "Tag2", "color": "green"}]},
+            "date": {"date": {"start": "2025-01-01", "end": None}},
+            "checkbox": {"checkbox": True},
+            "email": {"email": "test@example.com"},
+            "phone_number": {"phone_number": "+1-555-0123"},
+            "url": {"url": "https://example.com"},
+            "relation": {"relation": [{"id": "related-page-id"}], "has_more": False},
+            "people": {"people": [{"object": "user", "id": "user-id"}]},
+            "files": {"files": [{"type": "external", "name": "file.pdf", "external": {"url": "https://example.com/file.pdf"}}]}
+        }
+        
+        for prop_type, test_value in property_test_cases.items():
+            # Add type field
+            test_value["type"] = prop_type
+            test_value["id"] = f"prop-{prop_type}"
+            
+            prop_errors = self.contract_validator.validate_property_value(test_value, prop_type)
+            if prop_errors:
+                errors.extend([f"Property type {prop_type}: {e}" for e in prop_errors])
+        
+        return errors
+    
+    def validate_response_consistency(self, response1: Dict[str, Any], response2: Dict[str, Any]) -> List[str]:
+        """Validate that two responses have consistent structure."""
+        errors = []
+        
+        # Check if both responses have the same top-level keys
+        keys1 = set(response1.keys())
+        keys2 = set(response2.keys())
+        
+        missing_in_2 = keys1 - keys2
+        missing_in_1 = keys2 - keys1
+        
+        if missing_in_2:
+            errors.append(f"Keys missing in second response: {missing_in_2}")
+        if missing_in_1:
+            errors.append(f"Keys missing in first response: {missing_in_1}")
+        
+        # Check if object types match
+        if response1.get("object") != response2.get("object"):
+            errors.append(
+                f"Object type mismatch: {response1.get('object')} vs {response2.get('object')}"
+            )
+        
+        return errors
+    
+    def validate_mock_behavior_compliance(self, mock_client) -> Dict[str, List[str]]:
+        """Comprehensive validation of mock client behavior."""
+        results = {
+            "basic_validation": self.validate_mock_notion_client(mock_client),
+            "contract_validation": self.validate_with_contract(mock_client),
+            "property_validation": self.validate_property_types(mock_client),
+            "schema_validation": self.validate_with_schema(mock_client),
+            "ai_validation": self.validate_mock_ai_client(mock_client) if hasattr(mock_client, 'messages') else []
+        }
+        
+        # Summary
+        total_errors = sum(len(errors) for errors in results.values())
+        results["summary"] = [
+            f"Total validation errors: {total_errors}",
+            f"Passed basic validation: {len(results['basic_validation']) == 0}",
+            f"Passed contract validation: {len(results['contract_validation']) == 0}",
+            f"Passed property validation: {len(results['property_validation']) == 0}",
+            f"Passed schema validation: {len(results['schema_validation']) == 0}"
+        ]
+        
+        return results
+    
+    def validate_with_schema(self, mock_client) -> List[str]:
+        """Validate mock responses against API documentation schemas."""
+        errors = []
+        
+        # Test page response against schema
+        try:
+            response = mock_client.pages.create(
+                parent={"database_id": "test-db"},
+                properties={
+                    "Title": {"title": [{"text": {"content": "Schema Test"}}]}
+                }
+            )
+            
+            # Validate against page schema
+            schema_errors = self.schema_validator.validate(response, "page")
+            if schema_errors:
+                errors.extend([f"Page schema: {e}" for e in schema_errors])
+                
+        except Exception as e:
+            errors.append(f"Page schema validation failed: {e}")
+        
+        # Test database query response against schema
+        try:
+            response = mock_client.databases.query(database_id="test-db")
+            
+            schema_errors = self.schema_validator.validate(response, "database_query_response")
+            if schema_errors:
+                errors.extend([f"Query schema: {e}" for e in schema_errors])
+                
+        except Exception as e:
+            errors.append(f"Query schema validation failed: {e}")
+        
+        # Test property schemas
+        try:
+            # Create a page with various property types
+            response = mock_client.pages.create(
+                parent={"database_id": "test-db"},
+                properties={
+                    "Title": {
+                        "id": "title",
+                        "type": "title",
+                        "title": [
+                            {
+                                "type": "text",
+                                "text": {"content": "Test"},
+                                "plain_text": "Test"
+                            }
+                        ]
+                    },
+                    "Number": {
+                        "id": "number",
+                        "type": "number",
+                        "number": 42
+                    },
+                    "Select": {
+                        "id": "select",
+                        "type": "select",
+                        "select": {
+                            "name": "Option1",
+                            "color": "blue"
+                        }
+                    }
+                }
+            )
+            
+            # Validate each property against its schema
+            if "properties" in response:
+                for prop_name, prop_value in response["properties"].items():
+                    if prop_value.get("type") == "title":
+                        prop_errors = self.schema_validator.validate(prop_value, "property_title")
+                        if prop_errors:
+                            errors.extend([f"Title property: {e}" for e in prop_errors])
+                    elif prop_value.get("type") == "number":
+                        prop_errors = self.schema_validator.validate(prop_value, "property_number")
+                        if prop_errors:
+                            errors.extend([f"Number property: {e}" for e in prop_errors])
+                    elif prop_value.get("type") == "select":
+                        prop_errors = self.schema_validator.validate(prop_value, "property_select")
+                        if prop_errors:
+                            errors.extend([f"Select property: {e}" for e in prop_errors])
+                            
+        except Exception as e:
+            errors.append(f"Property schema validation failed: {e}")
+        
+        return errors
+    
+    def validate_api_documentation_compliance(self, response: Dict[str, Any], 
+                                            endpoint: str) -> List[str]:
+        """Validate that a response complies with API documentation."""
+        errors = []
+        
+        # Map endpoints to schema names
+        schema_mapping = {
+            "/pages": "page",
+            "/databases/query": "database_query_response",
+            "/databases": "database",
+            "/search": "search_response"
+        }
+        
+        schema_name = schema_mapping.get(endpoint)
+        if not schema_name:
+            errors.append(f"No schema mapping for endpoint: {endpoint}")
+            return errors
+        
+        # Check if schema exists
+        schema = self.schema_loader.get_schema(schema_name)
+        if not schema:
+            errors.append(f"Schema not found: {schema_name}")
+            return errors
+        
+        # Validate against schema
+        validation_errors = self.schema_validator.validate(response, schema_name)
+        errors.extend(validation_errors)
         
         return errors

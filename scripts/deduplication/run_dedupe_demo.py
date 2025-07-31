@@ -1,3 +1,7 @@
+"""
+Purpose: A simple launcher script to run the interactive deduplication CLI.
+Utility: Provides a clear and simple entry point for users to start a demo of the deduplication tool. It prints a user-friendly message before launching the main CLI script.
+"""
 #!/usr/bin/env python3
 """
 Run a demo of the deduplication CLI.

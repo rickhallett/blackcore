@@ -1,17 +1,46 @@
 """Consolidated property handlers for all Notion property types."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime, date
 import re
+
+from blackcore.minimal.property_validation import (
+    PropertyValidator,
+    PropertyValidatorFactory,
+    ValidationLevel,
+    ValidationResult,
+    ValidationError,
+    ValidationErrorType
+)
 
 
 class PropertyHandler(ABC):
     """Base class for all property handlers."""
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        self.validation_level = validation_level
+        self._validator: Optional[PropertyValidator] = None
 
-    @abstractmethod
     def validate(self, value: Any) -> bool:
-        """Validate a value for this property type."""
+        """Validate a value for this property type.
+        
+        This method provides backward compatibility.
+        Use validate_with_details() for detailed error information.
+        """
+        result = self.validate_with_details(value)
+        return result.is_valid
+    
+    def validate_with_details(self, value: Any) -> ValidationResult:
+        """Validate a value and return detailed results."""
+        if self._validator is None:
+            # Create validator on demand
+            self._validator = self._create_validator()
+        return self._validator.validate(value)
+    
+    @abstractmethod
+    def _create_validator(self) -> PropertyValidator:
+        """Create the validator for this property type."""
         pass
 
     @abstractmethod
@@ -28,14 +57,20 @@ class PropertyHandler(ABC):
 class TextPropertyHandler(PropertyHandler):
     """Handles text and title properties."""
 
-    def __init__(self, is_title: bool = False, max_length: int = 2000):
+    def __init__(self, is_title: bool = False, max_length: int = 2000, 
+                 validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
         self.is_title = is_title
         self.max_length = max_length
-
-    def validate(self, value: Any) -> bool:
-        if not isinstance(value, str):
-            return False
-        return len(value) <= self.max_length
+    
+    def _create_validator(self) -> PropertyValidator:
+        field_name = "title" if self.is_title else "rich_text"
+        return PropertyValidatorFactory.create_validator(
+            field_name,
+            field_name,
+            {"max_length": self.max_length},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         text = str(value)[: self.max_length]
@@ -58,13 +93,20 @@ class TextPropertyHandler(PropertyHandler):
 
 class NumberPropertyHandler(PropertyHandler):
     """Handles number properties."""
-
-    def validate(self, value: Any) -> bool:
-        try:
-            float(value)
-            return True
-        except (TypeError, ValueError):
-            return False
+    
+    def __init__(self, minimum: Optional[float] = None, maximum: Optional[float] = None,
+                 validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+        self.minimum = minimum
+        self.maximum = maximum
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "number",
+            "number",
+            {"minimum": self.minimum, "maximum": self.maximum},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         return {"number": float(value)}
@@ -76,13 +118,18 @@ class NumberPropertyHandler(PropertyHandler):
 class SelectPropertyHandler(PropertyHandler):
     """Handles select properties."""
 
-    def __init__(self, options: Optional[List[str]] = None):
+    def __init__(self, options: Optional[List[str]] = None,
+                 validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
         self.options = options or []
-
-    def validate(self, value: Any) -> bool:
-        if not isinstance(value, str):
-            return False
-        return not self.options or value in self.options
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "select",
+            "select",
+            {"allowed_values": self.options},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         return {"select": {"name": str(value)}}
@@ -95,13 +142,18 @@ class SelectPropertyHandler(PropertyHandler):
 class MultiSelectPropertyHandler(PropertyHandler):
     """Handles multi-select properties."""
 
-    def __init__(self, options: Optional[List[str]] = None):
+    def __init__(self, options: Optional[List[str]] = None,
+                 validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
         self.options = options or []
-
-    def validate(self, value: Any) -> bool:
-        if not isinstance(value, list):
-            return False
-        return all(isinstance(v, str) for v in value)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "multi_select",
+            "multi_select",
+            {"unique_items": True},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         if isinstance(value, str):
@@ -115,17 +167,17 @@ class MultiSelectPropertyHandler(PropertyHandler):
 
 class DatePropertyHandler(PropertyHandler):
     """Handles date properties."""
-
-    def validate(self, value: Any) -> bool:
-        if isinstance(value, (datetime, date)):
-            return True
-        if isinstance(value, str):
-            try:
-                datetime.fromisoformat(value.replace("Z", "+00:00"))
-                return True
-            except ValueError:
-                return False
-        return False
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "date",
+            "date",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         if isinstance(value, str):
@@ -146,9 +198,17 @@ class DatePropertyHandler(PropertyHandler):
 
 class CheckboxPropertyHandler(PropertyHandler):
     """Handles checkbox properties."""
-
-    def validate(self, value: Any) -> bool:
-        return isinstance(value, bool)
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "checkbox",
+            "checkbox",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         return {"checkbox": bool(value)}
@@ -159,21 +219,17 @@ class CheckboxPropertyHandler(PropertyHandler):
 
 class URLPropertyHandler(PropertyHandler):
     """Handles URL properties."""
-
-    URL_REGEX = re.compile(
-        r"^https?://"
-        r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"
-        r"localhost|"
-        r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
-        r"(?::\d+)?"
-        r"(?:/?|[/?]\S+)$",
-        re.IGNORECASE,
-    )
-
-    def validate(self, value: Any) -> bool:
-        if not isinstance(value, str):
-            return False
-        return bool(self.URL_REGEX.match(value))
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "url",
+            "url",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         return {"url": str(value)}
@@ -184,13 +240,17 @@ class URLPropertyHandler(PropertyHandler):
 
 class EmailPropertyHandler(PropertyHandler):
     """Handles email properties."""
-
-    EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-
-    def validate(self, value: Any) -> bool:
-        if not isinstance(value, str):
-            return False
-        return bool(self.EMAIL_REGEX.match(value))
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "email",
+            "email",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         return {"email": str(value)}
@@ -201,12 +261,17 @@ class EmailPropertyHandler(PropertyHandler):
 
 class PhonePropertyHandler(PropertyHandler):
     """Handles phone number properties."""
-
-    def validate(self, value: Any) -> bool:
-        if not isinstance(value, str):
-            return False
-        # Basic validation - just check it has some digits
-        return any(c.isdigit() for c in value)
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "phone_number",
+            "phone_number",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         return {"phone_number": str(value)}
@@ -217,13 +282,17 @@ class PhonePropertyHandler(PropertyHandler):
 
 class PeoplePropertyHandler(PropertyHandler):
     """Handles people properties."""
-
-    def validate(self, value: Any) -> bool:
-        if isinstance(value, str):
-            return True
-        if isinstance(value, list):
-            return all(isinstance(v, str) for v in value)
-        return False
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "people",
+            "people",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         if isinstance(value, str):
@@ -239,16 +308,17 @@ class PeoplePropertyHandler(PropertyHandler):
 
 class FilesPropertyHandler(PropertyHandler):
     """Handles files & media properties."""
-
-    def validate(self, value: Any) -> bool:
-        if isinstance(value, str):
-            return value.startswith(("http://", "https://"))
-        if isinstance(value, list):
-            return all(
-                isinstance(v, str) and v.startswith(("http://", "https://"))
-                for v in value
-            )
-        return False
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "files",
+            "files",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         if isinstance(value, str):
@@ -273,13 +343,17 @@ class FilesPropertyHandler(PropertyHandler):
 
 class RelationPropertyHandler(PropertyHandler):
     """Handles relation properties."""
-
-    def validate(self, value: Any) -> bool:
-        if isinstance(value, str):
-            return True
-        if isinstance(value, list):
-            return all(isinstance(v, str) for v in value)
-        return False
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        return PropertyValidatorFactory.create_validator(
+            "relation",
+            "relation",
+            {},
+            self.validation_level
+        )
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         if isinstance(value, str):
@@ -293,9 +367,24 @@ class RelationPropertyHandler(PropertyHandler):
 
 class FormulaPropertyHandler(PropertyHandler):
     """Handles formula properties (read-only)."""
-
-    def validate(self, value: Any) -> bool:
-        return False  # Formulas are read-only
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        # Read-only property, always fails validation
+        from blackcore.minimal.property_validation import PropertyValidator
+        class ReadOnlyValidator(PropertyValidator):
+            def _validate_type(self, value: Any) -> ValidationResult:
+                result = ValidationResult(is_valid=False)
+                result.add_error(ValidationError(
+                    error_type=ValidationErrorType.BUSINESS_RULE_ERROR,
+                    field_name=self.field_name,
+                    message=f"{self.field_name} is read-only",
+                    value=value
+                ))
+                return result
+        return ReadOnlyValidator("formula", required=False)
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         raise NotImplementedError("Formula properties are read-only")
@@ -307,9 +396,24 @@ class FormulaPropertyHandler(PropertyHandler):
 
 class RollupPropertyHandler(PropertyHandler):
     """Handles rollup properties (read-only)."""
-
-    def validate(self, value: Any) -> bool:
-        return False  # Rollups are read-only
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        # Read-only property, always fails validation
+        from blackcore.minimal.property_validation import PropertyValidator
+        class ReadOnlyValidator(PropertyValidator):
+            def _validate_type(self, value: Any) -> ValidationResult:
+                result = ValidationResult(is_valid=False)
+                result.add_error(ValidationError(
+                    error_type=ValidationErrorType.BUSINESS_RULE_ERROR,
+                    field_name=self.field_name,
+                    message=f"{self.field_name} is read-only",
+                    value=value
+                ))
+                return result
+        return ReadOnlyValidator("rollup", required=False)
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         raise NotImplementedError("Rollup properties are read-only")
@@ -321,9 +425,24 @@ class RollupPropertyHandler(PropertyHandler):
 
 class CreatedTimePropertyHandler(PropertyHandler):
     """Handles created time property (read-only)."""
-
-    def validate(self, value: Any) -> bool:
-        return False  # Created time is read-only
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        # Read-only property, always fails validation
+        from blackcore.minimal.property_validation import PropertyValidator
+        class ReadOnlyValidator(PropertyValidator):
+            def _validate_type(self, value: Any) -> ValidationResult:
+                result = ValidationResult(is_valid=False)
+                result.add_error(ValidationError(
+                    error_type=ValidationErrorType.BUSINESS_RULE_ERROR,
+                    field_name=self.field_name,
+                    message=f"{self.field_name} is read-only",
+                    value=value
+                ))
+                return result
+        return ReadOnlyValidator("created_time", required=False)
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         raise NotImplementedError("Created time property is read-only")
@@ -334,9 +453,24 @@ class CreatedTimePropertyHandler(PropertyHandler):
 
 class LastEditedTimePropertyHandler(PropertyHandler):
     """Handles last edited time property (read-only)."""
-
-    def validate(self, value: Any) -> bool:
-        return False  # Last edited time is read-only
+    
+    def __init__(self, validation_level: ValidationLevel = ValidationLevel.STANDARD):
+        super().__init__(validation_level)
+    
+    def _create_validator(self) -> PropertyValidator:
+        # Read-only property, always fails validation
+        from blackcore.minimal.property_validation import PropertyValidator
+        class ReadOnlyValidator(PropertyValidator):
+            def _validate_type(self, value: Any) -> ValidationResult:
+                result = ValidationResult(is_valid=False)
+                result.add_error(ValidationError(
+                    error_type=ValidationErrorType.BUSINESS_RULE_ERROR,
+                    field_name=self.field_name,
+                    message=f"{self.field_name} is read-only",
+                    value=value
+                ))
+                return result
+        return ReadOnlyValidator("last_edited_time", required=False)
 
     def format_for_api(self, value: Any) -> Dict[str, Any]:
         raise NotImplementedError("Last edited time property is read-only")
@@ -349,31 +483,32 @@ class PropertyHandlerFactory:
     """Factory for creating property handlers based on type."""
 
     HANDLERS = {
-        "title": lambda: TextPropertyHandler(is_title=True),
-        "rich_text": lambda: TextPropertyHandler(is_title=False),
-        "number": NumberPropertyHandler,
-        "select": SelectPropertyHandler,
-        "multi_select": MultiSelectPropertyHandler,
-        "date": DatePropertyHandler,
-        "checkbox": CheckboxPropertyHandler,
-        "url": URLPropertyHandler,
-        "email": EmailPropertyHandler,
-        "phone_number": PhonePropertyHandler,
-        "people": PeoplePropertyHandler,
-        "files": FilesPropertyHandler,
-        "relation": RelationPropertyHandler,
-        "formula": FormulaPropertyHandler,
-        "rollup": RollupPropertyHandler,
-        "created_time": CreatedTimePropertyHandler,
-        "last_edited_time": LastEditedTimePropertyHandler,
+        "title": lambda **kwargs: TextPropertyHandler(is_title=True, **kwargs),
+        "rich_text": lambda **kwargs: TextPropertyHandler(is_title=False, **kwargs),
+        "number": lambda **kwargs: NumberPropertyHandler(**kwargs),
+        "select": lambda **kwargs: SelectPropertyHandler(**kwargs),
+        "multi_select": lambda **kwargs: MultiSelectPropertyHandler(**kwargs),
+        "date": lambda **kwargs: DatePropertyHandler(**kwargs),
+        "checkbox": lambda **kwargs: CheckboxPropertyHandler(**kwargs),
+        "url": lambda **kwargs: URLPropertyHandler(**kwargs),
+        "email": lambda **kwargs: EmailPropertyHandler(**kwargs),
+        "phone_number": lambda **kwargs: PhonePropertyHandler(**kwargs),
+        "people": lambda **kwargs: PeoplePropertyHandler(**kwargs),
+        "files": lambda **kwargs: FilesPropertyHandler(**kwargs),
+        "relation": lambda **kwargs: RelationPropertyHandler(**kwargs),
+        "formula": lambda **kwargs: FormulaPropertyHandler(**kwargs),
+        "rollup": lambda **kwargs: RollupPropertyHandler(**kwargs),
+        "created_time": lambda **kwargs: CreatedTimePropertyHandler(**kwargs),
+        "last_edited_time": lambda **kwargs: LastEditedTimePropertyHandler(**kwargs),
     }
 
     @classmethod
-    def create(cls, property_type: str, **kwargs) -> PropertyHandler:
+    def create(cls, property_type: str, validation_level: ValidationLevel = ValidationLevel.STANDARD, **kwargs) -> PropertyHandler:
         """Create a property handler for the given type.
 
         Args:
             property_type: The Notion property type
+            validation_level: Validation strictness level
             **kwargs: Additional arguments for the handler
 
         Returns:
@@ -385,5 +520,6 @@ class PropertyHandlerFactory:
         if property_type not in cls.HANDLERS:
             raise ValueError(f"Unsupported property type: {property_type}")
 
-        handler_class = cls.HANDLERS[property_type]
-        return handler_class(**kwargs) if kwargs else handler_class()
+        handler_factory = cls.HANDLERS[property_type]
+        kwargs['validation_level'] = validation_level
+        return handler_factory(**kwargs)

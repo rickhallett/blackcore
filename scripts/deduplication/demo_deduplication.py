@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+Purpose: A simple demonstration script for the MVP (Minimum Viable Product) version of the deduplication feature.
+Utility: It uses a hardcoded sample transcript and a basic configuration to show the deduplication logic in action, printing the expected outcomes to the console. It's useful for quick, isolated tests of the basic matching rules.
+"""
+#!/usr/bin/env python3
+"""
 Demo script showing deduplication in action for MVP Black Mini
 """
 

@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Set environment variable
-os.environ["NOTION_API_KEY"] = "***REMOVED***"
+# os.environ["NOTION_API_KEY"] = "your_notion_api_key_here"  # Use environment variable instead
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))

@@ -1,6 +1,7 @@
 """Main orchestrator for transcript processing pipeline."""
 
 import time
+import logging
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 
@@ -19,6 +20,15 @@ from .notion_updater import NotionUpdater
 from .cache import SimpleCache
 from .simple_scorer import SimpleScorer
 from .llm_scorer import LLMScorerWithFallback
+from .property_validation import ValidationLevel
+from .text_pipeline_validator import (
+    TextPipelineValidator,
+    TransformationContext,
+    TransformationStep,
+    create_pipeline_validation_rules
+)
+
+logger = logging.getLogger(__name__)
 
 
 class TranscriptProcessor:
@@ -66,6 +76,16 @@ class TranscriptProcessor:
 
         # Track database schemas
         self._schemas: Dict[str, Dict[str, str]] = {}
+        
+        # Initialize pipeline validator
+        validation_level = getattr(self.config.processing, "validation_level", ValidationLevel.STANDARD)
+        self.pipeline_validator = TextPipelineValidator(validation_level)
+        
+        # Set up standard validation rules
+        rules = create_pipeline_validation_rules(validation_level)
+        for step, step_rules in rules.items():
+            for rule in step_rules:
+                self.pipeline_validator.add_transformation_rule(step, rule)
 
     def _init_scorer(self):
         """Initialize the appropriate scorer based on configuration."""
@@ -127,7 +147,55 @@ class TranscriptProcessor:
             if self.config.processing.verbose:
                 print(f"Extracting entities from '{transcript.title}'...")
 
+            # Validate transcript before extraction
+            pre_extract_context = TransformationContext(
+                step=TransformationStep.PRE_EXTRACTION,
+                source_type="transcript",
+                target_type="entity",
+                metadata={"title": transcript.title}
+            )
+            
+            pre_validation = self.pipeline_validator.validate_step(
+                transcript.content,
+                TransformationStep.PRE_EXTRACTION,
+                pre_extract_context
+            )
+            
+            if not pre_validation.is_valid:
+                logger.warning(f"Pre-extraction validation issues: {pre_validation.warnings}")
+                if getattr(self.config.processing, "validation_level", ValidationLevel.STANDARD).value >= ValidationLevel.STRICT.value:
+                    result.add_error(
+                        stage="pre_extraction",
+                        error_type="ValidationError",
+                        message=f"Transcript validation failed: {pre_validation.errors}"
+                    )
+                    return result
+
             extracted = self._extract_entities(transcript)
+            
+            # Validate extracted entities
+            post_extract_context = TransformationContext(
+                step=TransformationStep.POST_EXTRACTION,
+                source_type="transcript",
+                target_type="entity",
+                metadata={"title": transcript.title, "entity_count": len(extracted.entities)}
+            )
+            
+            post_validation = self.pipeline_validator.validate_step(
+                extracted,
+                TransformationStep.POST_EXTRACTION,
+                post_extract_context
+            )
+            
+            if not post_validation.is_valid:
+                logger.warning(f"Post-extraction validation issues: {post_validation.warnings}")
+                if getattr(self.config.processing, "validation_level", ValidationLevel.STANDARD).value >= ValidationLevel.STRICT.value:
+                    result.add_error(
+                        stage="post_extraction",
+                        error_type="ValidationError", 
+                        message=f"Entity extraction validation failed: {post_validation.errors}"
+                    )
+                    return result
 
             # Step 2: Create/update entities in Notion
             if self.config.processing.dry_run:

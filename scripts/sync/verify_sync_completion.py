@@ -10,7 +10,7 @@ from pathlib import Path
 from notion_client import Client
 
 # Set environment
-os.environ["NOTION_API_KEY"] = "***REMOVED***"
+# os.environ["NOTION_API_KEY"] = "your_notion_api_key_here"  # Use environment variable instead
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 

@@ -1,6 +1,6 @@
 {
   "notion": {
-    "api_key": "***REMOVED***",
+    "api_key": "YOUR_NOTION_API_KEY",
     "databases": {
       "people": {
         "id": "21f4753d-608e-8173-b6dc-fc6302804e69",

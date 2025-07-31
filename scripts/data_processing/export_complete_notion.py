@@ -1,3 +1,7 @@
+"""
+Purpose: Exports all records from all configured Notion databases, handling pagination and rate limiting to ensure a complete and safe export.
+Utility: Essential for creating a full backup of the Notion workspace. The exported data can be used for local development, data analysis, migration, or as a baseline for comparison scripts.
+"""
 #!/usr/bin/env python3
 """
 Complete Notion Export - Export ALL records from ALL Notion databases with pagination.
@@ -16,7 +20,7 @@ from typing import Dict, Any
 from datetime import datetime
 
 # Set environment variable
-os.environ["NOTION_API_KEY"] = "***REMOVED***"
+# os.environ["NOTION_API_KEY"] = "your_notion_api_key_here"  # Use environment variable instead
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))

@@ -1,3 +1,6 @@
+Purpose: The main entry point for the interactive deduplication CLI. It uses `argparse` to handle command-line arguments and launches the appropriate CLI mode.
+Utility: Provides a user-facing interface for the powerful deduplication engine, making it accessible to non-developers or for guided interactive sessions.
+
 #!/usr/bin/env python3
 """
 Standalone entry point for the Blackcore Deduplication CLI.

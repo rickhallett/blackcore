@@ -1,3 +1,7 @@
+""
+Purpose: A debugging script to diagnose issues with loading local JSON database files, specifically for the deduplication CLI.
+Utility: Helps developers quickly identify pathing or file access problems when the deduplication CLI fails to load data. It's a targeted diagnostic tool.
+""
 #!/usr/bin/env python3
 """Debug database loading issue in the CLI."""
 

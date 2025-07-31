@@ -1,3 +1,6 @@
+Purpose: A safe launcher for the deduplication CLI. It checks for the presence of necessary environment variables (like AI API keys) before running the main CLI script.
+Utility: Prevents the CLI from failing unexpectedly due to a misconfigured environment. It provides helpful feedback to the user, improving usability and reducing frustration.
+"""
 #!/usr/bin/env python3
 """
 Safe launcher for the deduplication CLI that checks environment first.

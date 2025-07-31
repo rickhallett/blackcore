@@ -10,6 +10,14 @@ from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
 from urllib.parse import urlparse
 
+from blackcore.minimal.property_validation import ValidationLevel
+from blackcore.minimal.text_pipeline_validator import (
+    TransformationValidator,
+    TransformationContext,
+    TransformationStep,
+    PipelineValidationResult
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,11 +25,14 @@ class DataTransformer:
     """Transforms JSON data to match Notion property requirements."""
 
     def __init__(
-        self, property_mappings: Dict[str, Any], notion_schemas: Dict[str, Any]
+        self, property_mappings: Dict[str, Any], notion_schemas: Dict[str, Any],
+        validation_level: ValidationLevel = ValidationLevel.STANDARD
     ):
         self.property_mappings = property_mappings
         self.notion_schemas = notion_schemas
         self.page_id_map = {}  # Track created pages for relation linking
+        self.validation_level = validation_level
+        self.validator = TransformationValidator(self, validation_level)
 
     def transform_database_records(
         self, database_name: str, records: List[Dict[str, Any]], stage: int = 1
@@ -98,27 +109,70 @@ class DataTransformer:
         database_name: str,
         field_name: str,
     ) -> Any:
-        """Transform a value based on its type."""
+        """Transform a value based on its type with validation."""
         if value is None or value == "":
             return None
 
-        if transform_type == "date":
-            return self._transform_date(value)
-        elif transform_type == "url":
-            return self._transform_url(value)
-        elif transform_type == "select":
-            return self._transform_select(value, config, database_name, field_name)
-        elif transform_type == "status":
-            return self._transform_status(value, config, database_name, field_name)
-        elif transform_type == "rich_text":
-            return self._transform_rich_text(value, config)
-        elif transform_type == "relation":
-            return self._transform_relation(value, config, database_name, field_name)
-        elif config.get("extract_nested"):
-            return self._extract_nested_value(value)
-        else:
-            # Return as-is for other types
-            return value
+        # Validate before transformation if strict mode
+        if self.validation_level.value >= ValidationLevel.STRICT.value:
+            validation_result = self.validator.validate_transform_value(
+                value, transform_type, config, database_name, field_name
+            )
+            if not validation_result.is_valid:
+                logger.warning(
+                    f"Pre-transformation validation failed for {field_name}: {validation_result.errors}"
+                )
+                if self.validation_level == ValidationLevel.SECURITY:
+                    # In security mode, reject invalid input
+                    return None
+
+        # Create transformation context for pipeline validation
+        context = TransformationContext(
+            step=TransformationStep.PRE_TRANSFORM,
+            source_type="json",
+            target_type="notion_property",
+            database_name=database_name,
+            field_name=field_name,
+            metadata=config
+        )
+
+        # Transform value
+        try:
+            if transform_type == "date":
+                transformed = self._transform_date(value)
+            elif transform_type == "url":
+                transformed = self._transform_url(value)
+            elif transform_type == "select":
+                transformed = self._transform_select(value, config, database_name, field_name)
+            elif transform_type == "status":
+                transformed = self._transform_status(value, config, database_name, field_name)
+            elif transform_type == "rich_text":
+                transformed = self._transform_rich_text(value, config)
+            elif transform_type == "relation":
+                transformed = self._transform_relation(value, config, database_name, field_name)
+            elif config.get("extract_nested"):
+                transformed = self._extract_nested_value(value)
+            else:
+                # Return as-is for other types
+                transformed = value
+
+            # Validate after transformation
+            if self.validation_level.value >= ValidationLevel.STANDARD.value and transformed is not None:
+                post_validation = self.validator.pipeline_validator.validate_text_transformation(
+                    str(value), str(transformed), transform_type or "passthrough"
+                )
+                if not post_validation.is_valid:
+                    logger.warning(
+                        f"Post-transformation validation issues for {field_name}: {post_validation.warnings}"
+                    )
+
+            return transformed
+
+        except Exception as e:
+            logger.error(f"Transformation failed for {field_name}: {str(e)}")
+            if self.validation_level.value >= ValidationLevel.STRICT.value:
+                raise
+            return None
 
     def _transform_date(self, value: Union[str, date]) -> Optional[str]:
         """Transform date to ISO format."""

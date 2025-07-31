@@ -1,3 +1,7 @@
+"""
+Purpose: Scrapes episode data (synopsis, quotes, trivia) for the TV show "Black Sails" from its Fandom wiki page.
+Utility: Populates `black_sails_lore.json` with structured data, likely for entertainment, analysis, or as a sample dataset for another process. It's a one-off data collection script.
+"""
 import requests
 from bs4 import BeautifulSoup
 import json

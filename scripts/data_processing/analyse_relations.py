@@ -1,3 +1,7 @@
+"""
+Purpose: Reads various local JSON data files, analyzes them based on a predefined schema (`DB_INFO`), and identifies potential relationships between entities across different databases.
+Utility: Helps in validating data integrity and discovering connections within the dataset. The output (`potential_relations.json`) can be used to populate relation fields in Notion or for graph database visualization. It's a data analysis and validation tool.
+"""
 import json
 import os
 from pathlib import Path

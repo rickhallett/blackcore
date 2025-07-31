@@ -1,3 +1,7 @@
+"""
+Purpose: A comprehensive script to clean, deduplicate, merge, and standardize data across multiple local JSON files. It follows a specific, hardcoded remediation plan.
+Utility: A one-time or occasional-use script to fix known data quality issues in the local JSON dataset. It's crucial for preparing the data for a clean import into Notion and ensuring consistency. It also includes a backup mechanism for safety.
+"""
 #!/usr/bin/env python3
 """
 Data Remediation Script for Blackcore JSON Files
