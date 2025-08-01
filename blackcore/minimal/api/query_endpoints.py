@@ -205,8 +205,8 @@ async def download_export(
             "tsv": "text/tab-separated-values"
         }
         
-        content_type = content_types.get(job.format, "application/octet-stream")
-        filename = f"export_{job_id}.{job.format}"
+        content_type = content_types.get(job.format.value, "application/octet-stream")
+        filename = f"export_{job_id}.{job.format.value}"
         
         return StreamingResponse(
             file_stream,
