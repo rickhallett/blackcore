@@ -303,12 +303,124 @@ class QueryEngine:
     
     def _load_relationships(self, data: List[Dict[str, Any]], includes: List[Any]) -> List[Dict[str, Any]]:
         """Load related entities for the data."""
-        # TODO: Implement relationship loading
-        # This would involve:
-        # 1. Identifying relation fields in the data
-        # 2. Loading related entities from other databases
-        # 3. Embedding related data in the results
+        if not includes or not data:
+            return data
+        
+        logger.debug(f"Loading relationships for {len(includes)} includes across {len(data)} entities")
+        
+        # Process each include relationship
+        for include in includes:
+            relation_field = getattr(include, 'relation_field', str(include))
+            max_depth = getattr(include, 'max_depth', 1)
+            target_database = getattr(include, 'target_database', None)
+            
+            logger.debug(f"Processing relationship: {relation_field}")
+            
+            # Load relationships for each entity
+            for entity in data:
+                try:
+                    self._load_entity_relationships(entity, relation_field, target_database, max_depth)
+                except Exception as e:
+                    logger.warning(f"Failed to load relationships for entity {entity.get('id', 'unknown')}: {e}")
+                    continue
+        
         return data
+    
+    def _load_entity_relationships(self, entity: Dict[str, Any], relation_field: str, target_database: Optional[str], max_depth: int):
+        """Load relationships for a single entity."""
+        if max_depth <= 0:
+            return
+        
+        # Look for relation field in properties
+        properties = entity.get("properties", {})
+        
+        if relation_field not in properties:
+            return
+        
+        relation_data = properties[relation_field]
+        
+        # Handle different Notion relation formats
+        if isinstance(relation_data, dict) and "relation" in relation_data:
+            relation_ids = [rel.get("id") for rel in relation_data["relation"] if rel.get("id")]
+        elif isinstance(relation_data, list):
+            # Direct list of IDs or relation objects
+            relation_ids = []
+            for item in relation_data:
+                if isinstance(item, dict) and "id" in item:
+                    relation_ids.append(item["id"])
+                elif isinstance(item, str):
+                    relation_ids.append(item)
+        else:
+            return  # Can't process this format
+        
+        if not relation_ids:
+            return
+        
+        # Determine target database
+        if not target_database:
+            # Try to infer from field name or database mappings
+            target_database = self._infer_target_database(relation_field)
+        
+        if not target_database:
+            logger.warning(f"Could not determine target database for relation field: {relation_field}")
+            return
+        
+        # Load related entities
+        try:
+            related_entities = []
+            target_data = self.data_loader.load_database(target_database)
+            
+            # Find matching entities by ID
+            for rel_id in relation_ids:
+                for target_entity in target_data:
+                    if target_entity.get("id") == rel_id:
+                        # Recursively load relationships if max_depth > 1
+                        if max_depth > 1:
+                            self._load_entity_relationships(target_entity, relation_field, None, max_depth - 1)
+                        related_entities.append(target_entity)
+                        break
+            
+            # Store loaded relationships
+            if related_entities:
+                if f"_loaded_{relation_field}" not in entity:
+                    entity[f"_loaded_{relation_field}"] = []
+                entity[f"_loaded_{relation_field}"].extend(related_entities)
+                
+        except Exception as e:
+            logger.error(f"Error loading related entities from {target_database}: {e}")
+    
+    def _infer_target_database(self, relation_field: str) -> Optional[str]:
+        """Infer target database from relation field name."""
+        # Common mappings based on field names
+        field_mappings = {
+            "people": "People & Contacts",
+            "contacts": "People & Contacts", 
+            "assignee": "People & Contacts",
+            "assigned_to": "People & Contacts",
+            "organizations": "Organizations & Bodies",
+            "organization": "Organizations & Bodies",
+            "company": "Organizations & Bodies",
+            "tasks": "Actionable Tasks",
+            "task": "Actionable Tasks",
+            "documents": "Documents & Evidence",
+            "document": "Documents & Evidence",
+            "events": "Key Places & Events",
+            "event": "Key Places & Events",
+            "place": "Key Places & Events",
+            "location": "Key Places & Events"
+        }
+        
+        # Check exact match first
+        field_lower = relation_field.lower()
+        if field_lower in field_mappings:
+            return field_mappings[field_lower]
+        
+        # Check partial matches
+        for key, database in field_mappings.items():
+            if key in field_lower or field_lower in key:
+                return database
+        
+        return None
     
     def execute_graph_query(self, query: GraphQuery) -> GraphResult:
         """Execute a graph traversal query."""
@@ -335,17 +447,58 @@ class QueryEngine:
         """Execute a semantic search query."""
         start_time = time.time()
         
-        # TODO: Implement semantic search
-        # This would involve:
-        # 1. Converting query text to embeddings
-        # 2. Computing similarity with stored embeddings
-        # 3. Ranking results by similarity
-        # 4. Filtering by threshold
+        # Import semantic search engine
+        from .search.semantic_search import SemanticSearchEngine
+        from .models import SearchConfig
+        
+        # Initialize semantic search engine if not already done
+        if not hasattr(self, '_semantic_engine'):
+            self._semantic_engine = SemanticSearchEngine()
+        
+        matches = []
+        search_databases = query.databases or list(self.database_configs.keys())
+        
+        # Search across specified databases
+        for db_name in search_databases:
+            try:
+                # Load database data
+                data = self.data_loader.load_database(db_name)
+                
+                # Configure search parameters  
+                search_config = SearchConfig(
+                    max_results=query.max_results or 50,
+                    min_score=query.similarity_threshold or 0.5
+                )
+                
+                # Execute semantic search
+                db_results = self._semantic_engine.search(query.query_text, data, search_config)
+                
+                # Convert to semantic result format
+                for result in db_results:
+                    match = {
+                        "entity_id": result.entity.get("id", "unknown"),
+                        "database": db_name,
+                        "score": result.score,
+                        "entity": result.entity,
+                        "_score": result.score  # For compatibility
+                    }
+                    matches.append(match)
+                    
+            except Exception as e:
+                logger.error(f"Error searching database {db_name}: {e}")
+                continue
+        
+        # Sort by score descending
+        matches.sort(key=lambda x: x["score"], reverse=True)
+        
+        # Apply global limit
+        if query.max_results:
+            matches = matches[:query.max_results]
         
         execution_time = (time.time() - start_time) * 1000
         
         return SemanticResult(
-            matches=[],
+            matches=matches,
             query_text=query.query_text,
             execution_time_ms=execution_time
         )
