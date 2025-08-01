@@ -1,6 +1,6 @@
 """Query service layer for HTTP API integration."""
 
-from typing import Dict, List, Any, Optional, AsyncIterator
+from typing import Dict, List, Any, Optional, AsyncIterator, Union
 from datetime import datetime
 from pathlib import Path
 import asyncio
@@ -376,21 +376,17 @@ class QueryService:
     
     def _validate_access(self, database: str, user: Dict[str, Any]):
         """Validate user access to database."""
-        # Get available databases dynamically
-        try:
-            available_databases = [db["name"] for db in asyncio.run(self.get_available_databases())]
-        except Exception:
-            # Fallback to hardcoded list if dynamic discovery fails
-            available_databases = [
-                "People & Contacts",
-                "Organizations & Bodies", 
-                "Actionable Tasks",
-                "Intelligence & Transcripts",
-                "Documents & Evidence",
-                "Key Places & Events",
-                "Agendas & Epics",
-                "Identified Transgressions"
-            ]
+        # Get available databases - for now use static list to avoid async complexity
+        available_databases = [
+            "People & Contacts",
+            "Organizations & Bodies", 
+            "Actionable Tasks",
+            "Intelligence & Transcripts",
+            "Documents & Evidence",
+            "Key Places & Events",
+            "Agendas & Epics",
+            "Identified Transgressions"
+        ]
         
         if database not in available_databases:
             raise HTTPException(
@@ -428,7 +424,7 @@ class QueryService:
         
         return False
     
-    def _build_internal_query(self, request: QueryRequest) -> StructuredQuery:
+    def _build_internal_query(self, request: Union[QueryRequest, QueryEstimateRequest]) -> StructuredQuery:
         """Convert API request to internal query format."""
         from ..query_engine.models import QueryPagination, SortField, RelationshipInclude
         
@@ -443,32 +439,38 @@ class QueryService:
             )
             engine_filters.append(engine_filter)
         
-        # Convert sort fields
+        # Convert sort fields (only for QueryRequest)
         engine_sort_fields = []
-        for http_sort in request.sort_fields:
-            from ..query_engine.models import SortOrder
-            sort_order = SortOrder.ASC if http_sort.order == "asc" else SortOrder.DESC
-            engine_sort = SortField(
-                field=http_sort.field,
-                order=sort_order
-            )
-            engine_sort_fields.append(engine_sort)
+        if hasattr(request, 'sort_fields'):
+            for http_sort in request.sort_fields:
+                from ..query_engine.models import SortOrder
+                sort_order = SortOrder.ASC if http_sort.order == "asc" else SortOrder.DESC
+                engine_sort = SortField(
+                    field=http_sort.field,
+                    order=sort_order
+                )
+                engine_sort_fields.append(engine_sort)
         
         # Convert includes (HTTP uses simple strings, engine needs RelationshipInclude objects)
         engine_includes = []
-        for include_field in request.includes:
-            relationship_include = RelationshipInclude(
-                relation_field=include_field,
-                target_database=None,  # Will be auto-detected by engine
-                max_depth=1
-            )
-            engine_includes.append(relationship_include)
+        if hasattr(request, 'includes'):
+            for include_field in request.includes:
+                relationship_include = RelationshipInclude(
+                    relation_field=include_field,
+                    target_database=None,  # Will be auto-detected by engine
+                    max_depth=1
+                )
+                engine_includes.append(relationship_include)
         
-        # Convert pagination
-        engine_pagination = QueryPagination(
-            page=request.pagination.page,
-            size=request.pagination.size
-        )
+        # Convert pagination (only for QueryRequest)
+        if hasattr(request, 'pagination'):
+            engine_pagination = QueryPagination(
+                page=request.pagination.page,
+                size=request.pagination.size
+            )
+        else:
+            # Default pagination for estimate requests
+            engine_pagination = QueryPagination()
         
         return StructuredQuery(
             database=request.database,
@@ -476,7 +478,7 @@ class QueryService:
             sort_fields=engine_sort_fields,
             includes=engine_includes,
             pagination=engine_pagination,
-            distinct=request.distinct
+            distinct=getattr(request, 'distinct', False)
         )
     
     def _build_pagination_links(
