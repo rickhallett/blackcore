@@ -2,6 +2,7 @@
 
 import json
 import time
+import asyncio
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from datetime import datetime
@@ -290,6 +291,15 @@ class QueryEngine:
             
         except Exception as e:
             raise QueryExecutionError(f"Query execution failed: {e}")
+    
+    async def execute_structured_query_async(self, query: StructuredQuery) -> QueryResult:
+        """Execute a structured query asynchronously."""
+        # Use asyncio.to_thread to run synchronous query in thread pool
+        return await asyncio.to_thread(self.execute_structured_query, query)
+    
+    async def text_search_async(self, query_text: str, databases: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+        """Perform text search asynchronously."""
+        return await asyncio.to_thread(self.text_search, query_text, databases)
     
     def _load_relationships(self, data: List[Dict[str, Any]], includes: List[Any]) -> List[Dict[str, Any]]:
         """Load related entities for the data."""
