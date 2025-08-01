@@ -25,6 +25,8 @@ from .models import (
 from .auth import auth_handler, get_current_user, require_admin, rate_limiter
 from .jobs import JobQueue, InMemoryJobQueue, JobWorker
 from .query_endpoints import router as query_router
+from .dashboard_endpoints import router as dashboard_router
+from .search_endpoints import router as search_router
 from ..config import ConfigManager
 from ..models import ProcessingResult
 from ..property_validation import ValidationLevel
@@ -380,6 +382,10 @@ def create_app(title: str = "Blackcore Minimal API", version: str = "1.0.0") -> 
 
     # Include query engine endpoints
     app.include_router(query_router)
+    
+    # Include GUI endpoints
+    app.include_router(dashboard_router)
+    app.include_router(search_router)
 
     return app
 
