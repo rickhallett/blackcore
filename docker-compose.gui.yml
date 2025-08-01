@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  blackcore-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - BLACKCORE_MASTER_KEY=${BLACKCORE_MASTER_KEY:-dev-key-not-for-production}
+      - NOTION_API_KEY=${NOTION_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - RUN_WORKER=true
+    volumes:
+      - ./blackcore:/app/blackcore
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: uvicorn blackcore.minimal.api.app:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  streamlit-gui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://blackcore-api:8000
+    depends_on:
+      - blackcore-api
+    volumes:
+      - ./streamlit_app.py:/app/streamlit_app.py
+    command: streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    name: nassau-intelligence
