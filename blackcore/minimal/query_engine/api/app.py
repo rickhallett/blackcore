@@ -16,6 +16,7 @@ from .models import (
 )
 from .auth import get_current_api_key, RateLimiter
 from .search_api import router as search_router
+from .analytics_api import router as analytics_router
 from ..interfaces import QueryEngine, QueryEngineFactory
 from ..models import (
     StructuredQuery, QueryFilter, SortField, RelationshipInclude,
@@ -69,8 +70,9 @@ def create_app(
     # Initialize rate limiter
     rate_limiter = RateLimiter(requests_per_minute=60)
     
-    # Include search router
+    # Include routers
     app.include_router(search_router)
+    app.include_router(analytics_router)
     
     # Dependency injection
     def get_query_engine() -> QueryEngine:
