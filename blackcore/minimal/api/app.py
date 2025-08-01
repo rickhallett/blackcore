@@ -24,6 +24,7 @@ from .models import (
 )
 from .auth import auth_handler, get_current_user, require_admin, rate_limiter
 from .jobs import JobQueue, InMemoryJobQueue, JobWorker
+from .query_endpoints import router as query_router
 from ..config import ConfigManager
 from ..models import ProcessingResult
 from ..property_validation import ValidationLevel
@@ -376,6 +377,9 @@ def create_app(title: str = "Blackcore Minimal API", version: str = "1.0.0") -> 
         # For now, just update in memory
 
         return {"message": "Validation settings updated"}
+
+    # Include query engine endpoints
+    app.include_router(query_router)
 
     return app
 
