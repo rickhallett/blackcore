@@ -1,0 +1,9 @@
+# Streamlit GUI Requirements
+streamlit>=1.28.0
+plotly>=5.15.0
+pandas>=2.0.0
+requests>=2.31.0
+httpx>=0.24.0
+
+# Required for network visualization
+networkx>=3.1
