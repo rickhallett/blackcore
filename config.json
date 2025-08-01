@@ -1,0 +1,36 @@
+{
+  "notion": {
+    "api_key": "test-key-for-development",
+    "databases": {
+      "people": {
+        "name": "People & Contacts",
+        "id": "dev-people-id",
+        "properties": {}
+      },
+      "organizations": {
+        "name": "Organizations & Bodies", 
+        "id": "dev-orgs-id",
+        "properties": {}
+      },
+      "tasks": {
+        "name": "Actionable Tasks",
+        "id": "dev-tasks-id", 
+        "properties": {}
+      },
+      "transcripts": {
+        "name": "Intelligence & Transcripts",
+        "id": "dev-transcripts-id",
+        "properties": {}
+      },
+      "transgressions": {
+        "name": "Identified Transgressions",
+        "id": "dev-transgressions-id",
+        "properties": {}
+      }
+    }
+  },
+  "ai": {
+    "provider": "anthropic",
+    "model": "claude-3-5-sonnet-20241022"
+  }
+}
