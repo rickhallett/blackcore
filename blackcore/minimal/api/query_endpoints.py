@@ -290,39 +290,18 @@ async def list_databases(
     current_user: Dict[str, Any] = Security(get_current_user)
 ) -> Dict[str, Any]:
     """List available databases."""
-    # TODO: Get actual database list from configuration
-    databases = [
-        {
-            "name": "People & Contacts",
-            "entity_type": "people",
-            "description": "Individual contacts and relationships"
-        },
-        {
-            "name": "Organizations & Bodies",
-            "entity_type": "organizations",
-            "description": "Organizations and institutional entities"
-        },
-        {
-            "name": "Actionable Tasks",
-            "entity_type": "tasks",
-            "description": "Tasks and action items"
-        },
-        {
-            "name": "Intelligence & Transcripts",
-            "entity_type": "intelligence",
-            "description": "Intelligence reports and meeting transcripts"
-        },
-        {
-            "name": "Documents & Evidence",
-            "entity_type": "documents",
-            "description": "Documents and evidence files"
+    try:
+        databases = await query_service.get_available_databases()
+        return {
+            "databases": databases,
+            "total": len(databases)
         }
-    ]
-    
-    return {
-        "databases": databases,
-        "total": len(databases)
-    }
+    except Exception as e:
+        logger.error(f"Failed to get database list: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to get database list"
+        )
 
 
 @router.get(
