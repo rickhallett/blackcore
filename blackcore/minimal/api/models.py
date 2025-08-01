@@ -211,3 +211,119 @@ class ValidationRuleUpdate(BaseModel):
 
     validation_level: ValidationLevel
     custom_rules: Optional[Dict[str, Any]] = None
+
+
+# New models for Streamlit GUI integration
+class DashboardStats(BaseModel):
+    """Dashboard statistics response."""
+    
+    transcripts: Dict[str, int]
+    entities: Dict[str, int] 
+    processing: Dict[str, Any]
+    recent_activity: List[Dict[str, Any]]
+    last_updated: datetime
+
+
+class TimelineEvent(BaseModel):
+    """Timeline event for dashboard."""
+    
+    id: str
+    timestamp: datetime
+    event_type: str
+    title: str
+    description: str
+    entity_type: Optional[str] = None
+    entity_id: Optional[str] = None
+
+
+class ProcessingMetrics(BaseModel):
+    """Processing performance metrics."""
+    
+    avg_processing_time: float
+    success_rate: float
+    entities_per_transcript: float
+    relationships_per_transcript: float
+    cache_hit_rate: float
+
+
+class GlobalSearchResults(BaseModel):
+    """Global search results response."""
+    
+    query: str
+    total_results: int
+    results: List[Dict[str, Any]]
+    search_time: float
+    suggestions: List[str]
+
+
+class EntityResult(BaseModel):
+    """Individual entity search result."""
+    
+    id: str
+    type: str
+    title: str
+    properties: Dict[str, Any]
+    relevance_score: float
+    snippet: Optional[str] = None
+
+
+class NetworkGraph(BaseModel):
+    """Network graph data for visualization."""
+    
+    nodes: List[Dict[str, Any]]
+    edges: List[Dict[str, Any]]
+    metadata: Dict[str, Any]
+    center_node: Optional[str] = None
+
+
+class EntityRelationships(BaseModel):
+    """Entity relationships response."""
+    
+    entity_id: str
+    relationships: List[Dict[str, Any]]
+    relationship_count: int
+
+
+class RelationshipPath(BaseModel):
+    """Relationship path between entities."""
+    
+    from_entity: str
+    to_entity: str
+    path: List[str]
+    path_length: int
+
+
+class QueueStatus(BaseModel):
+    """Processing queue status."""
+    
+    pending_jobs: int
+    running_jobs: int
+    completed_jobs: int
+    failed_jobs: int
+    total_jobs: int
+    worker_status: str
+
+
+class JobSummary(BaseModel):
+    """Job summary for queue display."""
+    
+    job_id: str
+    status: str
+    created_at: datetime
+    completed_at: Optional[datetime]
+    transcript_title: str
+    entities_extracted: int
+    processing_time: Optional[float]
+    
+    @classmethod
+    def from_job(cls, job):
+        """Create JobSummary from job object."""
+        return cls(
+            job_id=job.job_id,
+            status=job.status,
+            created_at=job.created_at,
+            completed_at=job.completed_at,
+            transcript_title=job.metadata.get("title", "Unknown"),
+            entities_extracted=job.result.get("entities_count", 0) if job.result else 0,
+            processing_time=job.processing_time
+        )
