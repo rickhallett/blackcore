@@ -1,0 +1,275 @@
+{
+  "transcript_id": "test_field_001",
+  "title": "Canvassing Field Report - North Swanage Door-to-Door",
+  "date": "2024-07-20",
+  "time": "14:30",
+  "location": "North Swanage residential area",
+  "recording_type": "field_notes",
+  "recorded_by": "James Morrison",
+  "content": "This is James Morrison, recording field notes from today's canvassing session in North Swanage. I'm with volunteers Emma Watson and Tom Bradley.\n\nStarted at Newton Road at 2pm. First house, number 42, spoke with Mrs. Patricia Welling, elderly resident, very concerned about emergency vehicle access if Shore Road closes. She mentioned her husband had a heart attack last year and the ambulance came via Shore Road. Strong supporter, will definitely vote for Phillippe.\n\nNumber 44 no answer.\n\nNumber 46, Mr. and Mrs. Patel, own the corner shop on Redcliffe Road. Already aware of our campaign through Alice Chen and the Business Association. They're worried about delivery trucks having to take longer routes. Confirmed supporters.\n\nMoved to Redcliffe Road. Notable interaction at number 15 - young family, the Johnsons. They just moved here from London. Not aware of the Shore Road issue at all. Emma did a great job explaining. They were shocked about the survey manipulation. The husband, Robert Johnson, works in IT and was particularly outraged about the CAPTCHA issue. He said he'd be happy to provide technical analysis if needed. Took his contact details.\n\nTom Bradley: Can I add something? At number 19, we met Colin Fletcher. He said he's a retired council employee and knows Gary Suttle personally. He confirmed that many council staff are privately opposed to the closure but afraid to speak up because of David Hollister's influence.\n\nJames Morrison: Good point, Tom. Yes, Mr. Fletcher at number 19 Redcliffe Road. He also mentioned that there's a WhatsApp group among council employees where they share concerns. He wouldn't give us access but said the sentiment is definitely shifting our way.\n\nContinuing down Redcliffe Road. Number 23, hostile reception. The resident, who didn't give his name, said he supports David Hollister and slammed the door. Emma noted he had a 'Swanage News' sticker in his window.\n\nNumber 25, Mrs. Evelyn Chang, another elderly resident. She tried to complete the online survey but couldn't get past the CAPTCHA. She's furious about it. Definite supporter.\n\nTom Bradley: We should note that house at number 27 - big 'Vote Phillippe Edes' sign in the garden. The owner, Marcus Thompson, came out and offered us tea. He's been spreading the word among his bowling club.\n\nJames Morrison: Right, Marcus Thompson, very enthusiastic supporter. He mentioned the bowling club has about 60 members, mostly retirees who are concerned about the closure.\n\nWe then moved to Prospect Road, which runs parallel to Shore Road. This is where we hit gold. Number 8 Prospect Road, Dr. Jennifer Hart. She's a GP at the local surgery and has major concerns about patient access if Shore Road closes. She said she'd be willing to write a formal medical opinion about the health impacts. Emma's getting her full contact details.\n\nEmma Watson: Yes, I've got Dr. Hart's email. She also mentioned that the surgery's patient transport service relies heavily on Shore Road.\n\nJames Morrison: Continuing on Prospect Road. Several no-answers, but at number 16 we met Brian Fitzgerald, who turns out to be a cousin of Tony Powell from DCF. Very awkward conversation. He defended the consultation process but couldn't explain the CAPTCHA issue. Not hostile, but definitely not a supporter.\n\nFinal street for today was Church Lane. Notable interaction at number 5, Sarah Mitchell, a teacher at Swanage Primary. She's been discussing the democratic process with her students and using our campaign as a positive example of civic engagement. She wants to bring her year 6 class to see Phillippe speak if we arrange any public events.\n\nTom Bradley: Don't forget the incident at number 11 Church Lane.\n\nJames Morrison: Ah yes, we encountered Mike Harrison at number 11. He claimed to be a journalist with Swanage News and started filming us without permission. I politely asked him to stop and informed him we were conducting lawful political canvassing. He became aggressive and threatened to 'expose' our 'harassment' of residents. We left immediately and I'm documenting this interaction for Barry.\n\nEmma Watson: I got a photo of him filming us, for evidence.\n\nJames Morrison: Good thinking, Emma. Overall summary: Canvassed 24 houses, made contact with 18 residents. 14 confirmed supporters, 2 undecided but leaning our way, 1 hostile, 1 opposition journalist encounter. \n\nKey findings: The medical access angle with Dr. Hart is very powerful. The IT expertise from Robert Johnson could help us analyze the survey data. Colin Fletcher's inside knowledge about council staff sentiment is valuable.\n\nAreas of concern: Mike Harrison from Swanage News is clearly trying to create negative stories about us. We need to brief all canvassers about potential media ambushes.\n\nNext steps: I'll compile all contact details and pass to Barry. Dr. Hart's medical opinion could be crucial for the final push. The WhatsApp group Colin Fletcher mentioned warrants further investigation.\n\nTom Bradley: Should I write up the Marcus Thompson bowling club connection? 60 potential voters is significant.\n\nJames Morrison: Absolutely, Tom. Let's get that to Barry ASAP. Alright, ending field notes. Time is 4:47 PM. Successful session despite the Harrison incident. The momentum is definitely with us.",
+  "expected_entities": {
+    "people": [
+      {
+        "name": "James Morrison",
+        "type": "existing",
+        "role": "NSTCG Canvasser"
+      },
+      {
+        "name": "Emma Watson", 
+        "type": "new",
+        "role": "NSTCG Volunteer"
+      },
+      {
+        "name": "Tom Bradley",
+        "type": "new",
+        "role": "NSTCG Volunteer"
+      },
+      {
+        "name": "Patricia Welling",
+        "type": "new",
+        "role": "Resident - Supporter",
+        "address": "42 Newton Road"
+      },
+      {
+        "name": "Mr. Patel",
+        "type": "new",
+        "role": "Business Owner - Supporter",
+        "address": "46 Newton Road"
+      },
+      {
+        "name": "Mrs. Patel",
+        "type": "new",
+        "role": "Business Owner - Supporter",
+        "address": "46 Newton Road"
+      },
+      {
+        "name": "Robert Johnson",
+        "type": "new",
+        "role": "IT Professional - New Supporter",
+        "address": "15 Redcliffe Road"
+      },
+      {
+        "name": "Colin Fletcher",
+        "type": "new",
+        "role": "Retired Council Employee",
+        "address": "19 Redcliffe Road",
+        "intel_value": "high"
+      },
+      {
+        "name": "Evelyn Chang",
+        "type": "new",
+        "role": "Elderly Resident - Survey Victim",
+        "address": "25 Redcliffe Road"
+      },
+      {
+        "name": "Marcus Thompson",
+        "type": "new",
+        "role": "Bowling Club Member - Strong Supporter",
+        "address": "27 Redcliffe Road"
+      },
+      {
+        "name": "Dr. Jennifer Hart",
+        "type": "new",
+        "role": "GP - Medical Expert",
+        "address": "8 Prospect Road",
+        "intel_value": "very high"
+      },
+      {
+        "name": "Brian Fitzgerald",
+        "type": "new",
+        "role": "Tony Powell's Cousin",
+        "address": "16 Prospect Road",
+        "relationship": "family connection to opposition"
+      },
+      {
+        "name": "Sarah Mitchell",
+        "type": "new",
+        "role": "Primary School Teacher",
+        "address": "5 Church Lane"
+      },
+      {
+        "name": "Mike Harrison",
+        "type": "new",
+        "role": "Swanage News Journalist",
+        "address": "11 Church Lane",
+        "sentiment": "hostile"
+      },
+      {
+        "name": "Gary Suttle",
+        "type": "existing_reference"
+      },
+      {
+        "name": "David Hollister",
+        "type": "existing_reference"
+      },
+      {
+        "name": "Tony Powell",
+        "type": "existing_reference"
+      },
+      {
+        "name": "Alice Chen",
+        "type": "existing_reference"
+      },
+      {
+        "name": "Phillippe Edes",
+        "type": "existing_reference"
+      }
+    ],
+    "organizations": [
+      {
+        "name": "Swanage Primary School",
+        "type": "new"
+      },
+      {
+        "name": "Local Surgery",
+        "type": "new",
+        "context": "medical facility affected by closure"
+      },
+      {
+        "name": "Bowling Club",
+        "type": "new",
+        "size": "60 members"
+      },
+      {
+        "name": "Business Association",
+        "type": "existing_reference"
+      },
+      {
+        "name": "Swanage News",
+        "type": "existing_reference"
+      }
+    ],
+    "places": [
+      {
+        "name": "Newton Road",
+        "type": "existing",
+        "house_numbers": ["42", "44", "46"]
+      },
+      {
+        "name": "Redcliffe Road", 
+        "type": "existing",
+        "house_numbers": ["15", "19", "23", "25", "27"]
+      },
+      {
+        "name": "Prospect Road",
+        "type": "new",
+        "context": "runs parallel to Shore Road",
+        "house_numbers": ["8", "16"]
+      },
+      {
+        "name": "Church Lane",
+        "type": "new",
+        "house_numbers": ["5", "11"]
+      },
+      {
+        "name": "Shore Road",
+        "type": "existing_reference"
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Compile contact details from canvassing",
+        "assignee": "James Morrison",
+        "priority": "high",
+        "status": "planned"
+      },
+      {
+        "name": "Get medical opinion from Dr. Hart",
+        "assignee": "Emma Watson",
+        "priority": "very high",
+        "status": "in_progress"
+      },
+      {
+        "name": "Document bowling club connection",
+        "assignee": "Tom Bradley",
+        "priority": "medium",
+        "status": "planned"
+      },
+      {
+        "name": "Brief canvassers about media ambushes",
+        "assignee": "Barry Cade",
+        "priority": "high",
+        "status": "needed"
+      },
+      {
+        "name": "Investigate council staff WhatsApp group",
+        "priority": "medium",
+        "status": "identified"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "photo",
+        "description": "Mike Harrison filming canvassers without permission",
+        "taken_by": "Emma Watson"
+      },
+      {
+        "type": "contact_list",
+        "description": "18 resident contacts with voting intentions"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Brian Fitzgerald",
+        "to": "Tony Powell",
+        "type": "cousin_of"
+      },
+      {
+        "from": "Colin Fletcher",
+        "to": "Gary Suttle",
+        "type": "knows_personally"
+      },
+      {
+        "from": "Dr. Jennifer Hart",
+        "to": "Local Surgery",
+        "type": "works_at"
+      },
+      {
+        "from": "Sarah Mitchell",
+        "to": "Swanage Primary School",
+        "type": "teaches_at"
+      },
+      {
+        "from": "Mike Harrison",
+        "to": "Swanage News",
+        "type": "journalist_for"
+      },
+      {
+        "from": "Marcus Thompson",
+        "to": "Bowling Club",
+        "type": "member_of"
+      }
+    ],
+    "transgressions": [
+      {
+        "summary": "Journalist filming canvassers without permission",
+        "perpetrator": "Mike Harrison",
+        "organization": "Swanage News",
+        "date": "2024-07-20",
+        "type": "new"
+      }
+    ]
+  },
+  "test_scenarios": {
+    "location_extraction": [
+      "Multiple street names with house numbers",
+      "Spatial relationships (parallel to Shore Road)",
+      "Address-to-person mapping"
+    ],
+    "sentiment_analysis": [
+      "Supporter identification",
+      "Opposition detection",
+      "Neutral/undecided classification"
+    ],
+    "relationship_discovery": [
+      "Family connections to opposition",
+      "Professional relationships",
+      "Social group memberships"
+    ],
+    "informal_speech_parsing": [
+      "Multiple speakers in conversation",
+      "Interjections and corrections",
+      "Field note style vs formal transcript"
+    ]
+  }
+}

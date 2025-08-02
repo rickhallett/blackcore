@@ -1,0 +1,243 @@
+{
+  "transcript_id": "test_strategy_001",
+  "title": "NSTCG Campaign Strategy Call - Phase 2 Planning",
+  "date": "2024-07-16",
+  "time": "20:30",
+  "location": "Remote (Zoom)",
+  "recording_type": "conference_call",
+  "participants": [
+    "Barry Cade",
+    "Phillippe Edes",
+    "James Morrison",
+    "Alice Chen"
+  ],
+  "content": "BARRY CADE: Alright everyone, thanks for joining tonight's strategy call. We need to discuss our response to yesterday's council meeting. I heard David Hollister made some interesting comments.\n\nPHILIPPE EDES: Interesting is one way to put it, Barry. He directly violated Purdah restrictions by mentioning me by name and disparaging our campaign. Margaret Thorne stood up to him though.\n\nALICE CHEN: I'm Alice Chen, I'm new to the group - I run Chen's Hardware on Station Road. The Shore Road closure would devastate our deliveries. I want to help however I can.\n\nBARRY CADE: Welcome Alice! We need all the local business support we can get. James, can you update us on the statistics complaint?\n\nJAMES MORRISON: I've drafted the formal complaint to the UK Statistics Authority. The key points are the mid-survey CAPTCHA implementation on June 26th and the lack of paper alternatives for elderly residents. I'll need your review, Barry, before we submit.\n\nBARRY CADE: Send it to me tonight, I'll review first thing tomorrow. Now, let's talk about the pressure campaign. We need to organize an email campaign targeting Cliff Sutton - he's the weak link in the council.\n\nPHILIPPE EDES: Agreed. Also, I've been thinking - we should reach out to the Purbeck Gazette. Their editor, Michael Harrington, might be sympathetic to our cause. He's no friend of Swanage News.\n\nALICE CHEN: I can organize the Station Road Business Association. We represent 15 shops and restaurants that would be affected.\n\nJAMES MORRISON: That's brilliant, Alice. Barry, should we create a dedicated task force for business outreach?\n\nBARRY CADE: Absolutely. Alice, I'm putting you in charge of business community outreach. Can you have a list of affected businesses and their concerns by Friday?\n\nALICE CHEN: Consider it done.\n\nPHILIPPE EDES: We also need to address the Dorset Highways consultation. They're working hand-in-hand with DCF on this.\n\nBARRY CADE: Good point. James, add Dorset Highways to your complaint. They're complicit in this sham consultation.\n\nJAMES MORRISON: Will do. Also, I've discovered something interesting - Engagement HQ is actually a subsidiary of Granicus, a much larger company. This goes deeper than we thought.\n\nBARRY CADE: Document everything. We might need to escalate this beyond local authorities. \n\nPHILIPPE EDES: Speaking of escalation, I've been invited to speak at the Dorset Democracy Forum next week. It's a regional group that monitors local government transparency.\n\nBARRY CADE: Excellent platform. Make sure to mention the Purdah violation and the survey manipulation.\n\nALICE CHEN: Should we be documenting all these transgressions somewhere central? We're gathering a lot of evidence.\n\nJAMES MORRISON: I've been keeping a spreadsheet, but we might need something more robust. Maybe a shared database?\n\nBARRY CADE: James, look into setting up a proper evidence management system. We need everything documented and cross-referenced.\n\nPHILIPPE EDES: Before we wrap up, what about the door-to-door canvassing? The election is next week.\n\nBARRY CADE: I need volunteers for the final push. We're focusing on North Swanage, particularly the streets around Newton Road and Redcliffe Road. Can everyone commit to at least two hours this weekend?\n\nALL: Yes, confirmed.\n\nJAMES MORRISON: One more thing - I've heard rumors that Dorset Council might be reviewing their relationship with DCF after our complaints. My contact at County Hall, Sandra Williams, mentioned it off the record.\n\nBARRY CADE: Interesting. James, can you follow up with Sandra? But carefully - we don't want to compromise her position.\n\nPHILIPPE EDES: This is all very encouraging. We're building real momentum.\n\nBARRY CADE: Indeed. Let's recap assignments: James - finalize the Statistics Authority complaint and research evidence management systems. Alice - organize the business association and get that impact list. Phillippe - prepare for the Democracy Forum. I'll handle the Cliff Sutton email campaign and coordinate canvassing. Any questions?\n\nALICE CHEN: Just one - should we be worried about retaliation? David Hollister seems quite vindictive.\n\nBARRY CADE: Document everything, stay factual, and always operate in groups when canvassing. We're on the right side of this.\n\nJAMES MORRISON: Agreed. Truth is our best defense.\n\nBARRY CADE: Alright team, let's reconvene Friday evening. Stay strong, stay focused. We're going to win this.\n\n[Call ends]",
+  "expected_entities": {
+    "people": [
+      {
+        "name": "Barry Cade",
+        "type": "existing",
+        "role": "NSTCG Campaign Leader"
+      },
+      {
+        "name": "Phillippe Edes",
+        "type": "existing",
+        "role": "Council Candidate"
+      },
+      {
+        "name": "James Morrison",
+        "type": "new",
+        "role": "NSTCG Member - Research Lead"
+      },
+      {
+        "name": "Alice Chen",
+        "type": "new",
+        "role": "Business Owner - Chen's Hardware"
+      },
+      {
+        "name": "Margaret Thorne",
+        "type": "existing_reference",
+        "context": "supportive council member"
+      },
+      {
+        "name": "Cliff Sutton",
+        "type": "new",
+        "role": "Council Member",
+        "context": "target for pressure campaign"
+      },
+      {
+        "name": "Michael Harrington",
+        "type": "new",
+        "role": "Editor - Purbeck Gazette"
+      },
+      {
+        "name": "Sandra Williams",
+        "type": "new",
+        "role": "Contact at Dorset County Hall"
+      }
+    ],
+    "organizations": [
+      {
+        "name": "North Swanage Traffic Concern Group",
+        "type": "existing",
+        "variant": "NSTCG"
+      },
+      {
+        "name": "UK Statistics Authority",
+        "type": "existing_from_previous"
+      },
+      {
+        "name": "Station Road Business Association",
+        "type": "new"
+      },
+      {
+        "name": "Purbeck Gazette",
+        "type": "new",
+        "context": "sympathetic media outlet"
+      },
+      {
+        "name": "Dorset Democracy Forum",
+        "type": "new",
+        "context": "regional transparency group"
+      },
+      {
+        "name": "Dorset Highways",
+        "type": "existing"
+      },
+      {
+        "name": "Granicus",
+        "type": "existing",
+        "relationship": "parent company of Engagement HQ"
+      },
+      {
+        "name": "Dorset County Hall",
+        "type": "new"
+      },
+      {
+        "name": "Chen's Hardware",
+        "type": "new",
+        "owner": "Alice Chen"
+      }
+    ],
+    "places": [
+      {
+        "name": "Station Road",
+        "type": "existing_from_previous"
+      },
+      {
+        "name": "Newton Road",
+        "type": "new"
+      },
+      {
+        "name": "Redcliffe Road",
+        "type": "new"
+      },
+      {
+        "name": "North Swanage",
+        "type": "potentially_existing"
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Review and submit UK Statistics Authority complaint",
+        "assignee": "Barry Cade",
+        "deadline": "2024-07-17",
+        "priority": "high",
+        "status": "in_progress"
+      },
+      {
+        "name": "Organize email campaign targeting Cliff Sutton",
+        "assignee": "Barry Cade",
+        "priority": "high",
+        "status": "planned"
+      },
+      {
+        "name": "Create list of affected businesses and concerns",
+        "assignee": "Alice Chen",
+        "deadline": "2024-07-19",
+        "priority": "high",
+        "status": "assigned"
+      },
+      {
+        "name": "Add Dorset Highways to complaint",
+        "assignee": "James Morrison",
+        "priority": "medium",
+        "status": "assigned"
+      },
+      {
+        "name": "Research evidence management systems",
+        "assignee": "James Morrison",
+        "priority": "medium",
+        "status": "assigned"
+      },
+      {
+        "name": "Prepare presentation for Dorset Democracy Forum",
+        "assignee": "Phillippe Edes",
+        "deadline": "next week",
+        "priority": "high",
+        "status": "assigned"
+      },
+      {
+        "name": "Follow up with Sandra Williams at County Hall",
+        "assignee": "James Morrison",
+        "priority": "medium",
+        "status": "assigned"
+      },
+      {
+        "name": "Coordinate weekend canvassing",
+        "assignee": "Barry Cade",
+        "deadline": "this weekend",
+        "priority": "high",
+        "status": "planned"
+      }
+    ],
+    "events": [
+      {
+        "name": "Dorset Democracy Forum Speaking Event",
+        "type": "new",
+        "date": "next week",
+        "participant": "Phillippe Edes"
+      },
+      {
+        "name": "Weekend Canvassing Push",
+        "type": "new",
+        "date": "this weekend",
+        "location": "North Swanage"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Alice Chen",
+        "to": "Chen's Hardware",
+        "type": "owns"
+      },
+      {
+        "from": "Alice Chen",
+        "to": "Station Road Business Association",
+        "type": "will_lead"
+      },
+      {
+        "from": "James Morrison",
+        "to": "North Swanage Traffic Concern Group",
+        "type": "member_of"
+      },
+      {
+        "from": "Engagement HQ",
+        "to": "Granicus",
+        "type": "subsidiary_of"
+      },
+      {
+        "from": "Sandra Williams",
+        "to": "Dorset County Hall",
+        "type": "works_at"
+      },
+      {
+        "from": "Michael Harrington",
+        "to": "Purbeck Gazette",
+        "type": "editor_of"
+      }
+    ]
+  },
+  "test_scenarios": {
+    "task_extraction": [
+      "Multiple tasks with different assignees",
+      "Tasks with deadlines and priorities",
+      "Implicit task creation from dialogue"
+    ],
+    "new_entity_creation": [
+      "Alice Chen - new person with business",
+      "Station Road Business Association - new organization",
+      "Multiple new locations for canvassing"
+    ],
+    "relationship_complexity": [
+      "Person-to-organization relationships",
+      "Organization hierarchies (Granicus/Engagement HQ)",
+      "Informal relationships (contacts, sympathizers)"
+    ],
+    "temporal_references": [
+      "Relative dates (tomorrow, Friday, next week)",
+      "Deadline extraction for tasks",
+      "Event scheduling"
+    ]
+  }
+}

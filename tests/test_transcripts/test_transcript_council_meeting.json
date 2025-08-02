@@ -1,0 +1,179 @@
+{
+  "transcript_id": "test_council_001",
+  "title": "Swanage Town Council Emergency Meeting - Shore Road Closure Discussion",
+  "date": "2024-07-15",
+  "time": "19:00",
+  "location": "Swanage Town Hall",
+  "recording_type": "meeting",
+  "participants": [
+    "David Hollister",
+    "Gary Suttle", 
+    "Margaret Thorne",
+    "Council Secretary"
+  ],
+  "content": "DAVID HOLLISTER: Good evening everyone. I'd like to call this emergency meeting of the Swanage Town Council to order. As you know, we're here to discuss the Shore Road closure proposal that's been causing quite a stir in our community.\n\nGARY SUTTLE: Thank you, David. Before we begin, I'd like to note for the record that we're still in the pre-election period, so we need to be careful about any statements that could be construed as political campaigning.\n\nDAVID HOLLISTER: Of course, Gary. Though I must say, some of the opposition to this proposal, particularly from that Phillippe Edes fellow and his North Swanage Traffic Concern Group, has been quite overblown.\n\nMARGARET THORNE: David, I must object. We shouldn't be discussing specific candidates or campaign groups during this meeting. It's inappropriate given the Purdah restrictions.\n\nDAVID HOLLISTER: I'm simply stating facts, Margaret. The Dorset Coast Forum has done excellent work on this proposal, and Tony Powell from DCF has assured me that their consultation process has been thorough.\n\nCOUNCIL SECRETARY: For the minutes, should I note that Councillor Hollister has mentioned a candidate by name during the restricted period?\n\nGARY SUTTLE: Yes, please do note that. David, we really must be more careful. Now, regarding the actual proposal - I've received numerous emails from residents concerned about the impact on local businesses, particularly those on Station Road and the High Street.\n\nMARGARET THORNE: I've been contacted by Sarah Streams, a local resident, who claims that the online survey was manipulated. She says a CAPTCHA was added midway through, which prevented many elderly residents from completing it.\n\nDAVID HOLLISTER: That's nonsense. The survey was conducted by Engagement HQ, a reputable company. They follow all proper procedures.\n\nGARY SUTTLE: Actually, David, I've seen the email from Tony Powell to Ms. Streams confirming that the CAPTCHA was indeed added on June 26th, well after the survey began. This is concerning.\n\nMARGARET THORNE: This could be seen as a deliberate attempt to suppress responses. We should refer this to the UK Statistics Authority for investigation.\n\nDAVID HOLLISTER: I think you're all making a mountain out of a molehill. The Shore Road closure is necessary for the town's development, and a few technical hiccups with an online form shouldn't derail the entire project.\n\nCOUNCIL SECRETARY: Councillor Hollister, should I minute your dismissal of resident concerns as 'a mountain out of a molehill'?\n\nDAVID HOLLISTER: That's not what I... look, let's move on. We have other items on the agenda.\n\nGARY SUTTLE: I motion that we postpone any decision on the Shore Road closure until after the election and after a proper investigation into the survey irregularities.\n\nMARGARET THORNE: I second that motion.\n\nDAVID HOLLISTER: [sighs] Very well. All in favor?\n\n[Vote passes 2-1 with David Hollister dissenting]\n\nMARGARET THORNE: I'd also like to propose that we issue a formal apology for any political statements made during this Purdah period, specifically the comments about Mr. Edes.\n\nDAVID HOLLISTER: That's completely unnecessary!\n\nGARY SUTTLE: I think it's appropriate, given the circumstances. We must maintain the council's impartiality.\n\n[Meeting continues with discussion of other local matters...]",
+  "expected_entities": {
+    "people": [
+      {
+        "name": "David Hollister",
+        "type": "existing",
+        "role": "Swanage Town Council member",
+        "sentiment": "negative"
+      },
+      {
+        "name": "Gary Suttle",
+        "type": "existing", 
+        "role": "Swanage Town Council member",
+        "sentiment": "neutral"
+      },
+      {
+        "name": "Margaret Thorne",
+        "type": "new",
+        "role": "Swanage Town Council member",
+        "sentiment": "positive"
+      },
+      {
+        "name": "Phillippe Edes",
+        "type": "existing",
+        "mentioned": true,
+        "context": "opposition candidate"
+      },
+      {
+        "name": "Tony Powell",
+        "type": "existing",
+        "mentioned": true,
+        "organization": "Dorset Coast Forum"
+      },
+      {
+        "name": "Sarah Streams",
+        "type": "potentially_new",
+        "role": "local resident",
+        "mentioned": true
+      }
+    ],
+    "organizations": [
+      {
+        "name": "Swanage Town Council",
+        "type": "existing",
+        "variant": "STC"
+      },
+      {
+        "name": "North Swanage Traffic Concern Group",
+        "type": "potentially_existing",
+        "variant": "NSTCG"
+      },
+      {
+        "name": "Dorset Coast Forum", 
+        "type": "existing",
+        "variant": "DCF"
+      },
+      {
+        "name": "Engagement HQ",
+        "type": "existing"
+      },
+      {
+        "name": "UK Statistics Authority",
+        "type": "new",
+        "context": "regulatory body"
+      }
+    ],
+    "places": [
+      {
+        "name": "Swanage Town Hall",
+        "type": "new"
+      },
+      {
+        "name": "Shore Road",
+        "type": "potentially_existing"
+      },
+      {
+        "name": "Station Road",
+        "type": "new"
+      },
+      {
+        "name": "High Street",
+        "type": "new"
+      }
+    ],
+    "transgressions": [
+      {
+        "summary": "David Hollister discussing candidate during Purdah period",
+        "type": "new",
+        "severity": "high",
+        "perpetrator": "David Hollister",
+        "date": "2024-07-15"
+      },
+      {
+        "summary": "CAPTCHA manipulation in survey",
+        "type": "existing_reference",
+        "perpetrator": "Tony Powell",
+        "organization": "Dorset Coast Forum"
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Refer survey irregularities to UK Statistics Authority",
+        "type": "potential",
+        "suggested_by": "Margaret Thorne",
+        "priority": "high"
+      },
+      {
+        "name": "Issue formal apology for Purdah violation",
+        "type": "proposed",
+        "suggested_by": "Margaret Thorne",
+        "target": "David Hollister"
+      }
+    ],
+    "events": [
+      {
+        "name": "Shore Road Closure Decision Postponement",
+        "type": "new",
+        "date": "2024-07-15",
+        "outcome": "Motion passed 2-1"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "David Hollister",
+        "to": "Swanage Town Council",
+        "type": "member_of"
+      },
+      {
+        "from": "Tony Powell",
+        "to": "Dorset Coast Forum",
+        "type": "works_for"
+      },
+      {
+        "from": "David Hollister",
+        "to": "Tony Powell",
+        "type": "allied_with"
+      },
+      {
+        "from": "Phillippe Edes",
+        "to": "North Swanage Traffic Concern Group",
+        "type": "associated_with"
+      }
+    ]
+  },
+  "test_scenarios": {
+    "entity_variations": [
+      "STC should map to Swanage Town Council",
+      "DCF should map to Dorset Coast Forum", 
+      "Mr. Edes should map to Phillippe Edes"
+    ],
+    "new_entity_creation": [
+      "Margaret Thorne - new council member",
+      "UK Statistics Authority - new organization",
+      "Swanage Town Hall - new location"
+    ],
+    "transgression_detection": [
+      "Purdah violation by David Hollister",
+      "Reference to existing CAPTCHA transgression"
+    ],
+    "relationship_extraction": [
+      "Council membership relationships",
+      "Opposition between David Hollister and Phillippe Edes",
+      "Alliance between David Hollister and Tony Powell"
+    ]
+  }
+}
