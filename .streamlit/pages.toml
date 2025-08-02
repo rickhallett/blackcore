@@ -1,0 +1,24 @@
+[[pages]]
+path = "streamlit_app.py"
+name = "Dashboard"
+icon = "📊"
+
+[[pages]]
+path = "pages/network_explorer.py"
+name = "Network Explorer"
+icon = "🕸️"
+
+[[pages]]
+path = "pages/transgression_tracker.py"
+name = "Transgression Tracker"
+icon = "⚠️"
+
+[[pages]]
+path = "pages/advanced_search.py"
+name = "Advanced Search"
+icon = "🔍"
+
+[[pages]]
+path = "pages/task_board.py"
+name = "Task Board"
+icon = "✅"
