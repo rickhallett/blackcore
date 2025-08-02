@@ -4,6 +4,23 @@
 
 Blackcore is a production-ready Python system that transforms raw intelligence data (transcripts, documents, meetings) into structured knowledge graphs using AI-powered entity extraction and sophisticated Notion database integration. Built with security-first design and enterprise-grade reliability.
 
+## 🚀 Enhanced GUI Now Available!
+
+The Blackcore system now includes a powerful Streamlit-based GUI with advanced features:
+
+- **🕸️ Network Explorer** - Interactive entity relationship visualization
+- **⚠️ Transgression Tracker** - Comprehensive violation monitoring  
+- **🔍 Advanced Search** - Powerful search with filters and facets
+- **✅ Task Board** - Kanban-style campaign task management
+
+### Quick Start GUI
+```bash
+# Launch the enhanced GUI
+./run_enhanced_gui.sh
+```
+
+See [Enhanced GUI Documentation](docs/streamlit-gui-enhanced.md) for full details.
+
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://img.shields.io/badge/tests-686%20passing-green.svg)](#testing)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
