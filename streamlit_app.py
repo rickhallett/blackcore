@@ -374,38 +374,56 @@ def show_processing():
 
 def main():
     """Main application."""
-    # Sidebar navigation
-    with st.sidebar:
-        st.title("🏴‍☠️ Nassau Campaign")
-        st.markdown("*Intelligence Operations*")
-        st.markdown("---")
-        
-        # Navigation
-        pages = {
-            "📊 Dashboard": show_dashboard,
-            "🔍 Intelligence Search": show_search, 
-            "⚡ Processing": show_processing
-        }
-        
-        selected_page = st.selectbox("Navigate", list(pages.keys()))
-        
-        st.markdown("---")
-        
-        # Show connection status
-        show_connection_status()
-        
-        # Campaign info
-        st.markdown("---")
-        st.markdown("### 📅 Campaign Status")
-        st.info("**Phase 1:** Mobilization & Intelligence Gathering")
-        
-        # Quick stats in sidebar
-        st.markdown("### 🎯 Quick Stats")
-        st.metric("Days Active", "15")
-        st.metric("Phase 1 Remaining", "14 days")
-        
-    # Display selected page
-    pages[selected_page]()
+    # Check if we're running as a multi-page app
+    if 'page' not in st.query_params:
+        # Single page mode - show navigation
+        with st.sidebar:
+            st.title("🏴‍☠️ Nassau Campaign")
+            st.markdown("*Intelligence Operations*")
+            st.markdown("---")
+            
+            # Navigation
+            pages = {
+                "📊 Dashboard": show_dashboard,
+                "🔍 Intelligence Search": show_search, 
+                "⚡ Processing": show_processing
+            }
+            
+            st.markdown("### 🚀 New Features")
+            st.info("""
+            **Enhanced GUI Available!**
+            
+            Run with pages enabled:
+            ```bash
+            streamlit run streamlit_app.py
+            ```
+            
+            Then access:
+            - 🕸️ Network Explorer
+            - ⚠️ Transgression Tracker
+            - 🔍 Advanced Search
+            - ✅ Task Board
+            """)
+            
+            selected_page = st.selectbox("Navigate", list(pages.keys()))
+            
+            st.markdown("---")
+            
+            # Show connection status
+            show_connection_status()
+            
+            # Campaign info
+            st.markdown("---")
+            st.markdown("### 📅 Campaign Status")
+            st.info("**Phase 1:** Mobilization & Intelligence Gathering")
+            
+            # Quick stats in sidebar
+            st.markdown("### 🎯 Quick Stats")
+            st.metric("Days Active", "15")
+            st.metric("Phase 1 Remaining", "14 days")
+            
+        # Display selected page
+        pages[selected_page]()
     
     # Footer
     st.markdown("---")
