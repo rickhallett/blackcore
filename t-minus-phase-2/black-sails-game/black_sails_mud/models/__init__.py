@@ -1,0 +1,1 @@
+"""Game models for Black Sails MUD"""

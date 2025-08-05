@@ -1,0 +1,1112 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: monospace;
+  font-size: 120%;
+  background-color: #0a0a0a;
+  color: #00ff00;
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+  padding: 20px 0;
+}
+
+/* Homepage specific centering */
+.main-content.homepage {
+  align-items: center;
+  padding: 0;
+}
+
+/* Particles Background */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Terminal Container */
+.terminal-container {
+  background-color: #0d0d0d;
+  border: 2px solid #00ff00;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5), inset 0 0 20px rgba(0, 255, 0, 0.1);
+  position: relative;
+  z-index: 10;
+  animation: terminal-flicker 0.15s infinite alternate;
+}
+
+/* Terminal Header */
+.terminal-header {
+  background-color: #1a1a1a;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #00ff00;
+}
+
+.terminal-title {
+  font-size: 21.6px;
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.control.red {
+  background-color: #ff5f56;
+}
+
+.control.yellow {
+  background-color: #ffbd2e;
+}
+
+.control.green {
+  background-color: #27c93f;
+}
+
+/* Terminal Body */
+.terminal-body {
+  padding: 40px;
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scanlines Effect */
+.scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+  background-size: 100% 4px;
+  z-index: 1;
+  pointer-events: none;
+  animation: scanlines 8s linear infinite;
+}
+
+/* Countdown Wrapper */
+.countdown-wrapper {
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}
+
+.status-line {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #ffb000;
+  text-shadow: 0 0 10px #ffb000;
+}
+
+/* Countdown Display */
+.countdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-value {
+  font-size: 86.4px;
+  font-weight: 400;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+  display: inline-block;
+  min-width: 100px;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.time-label {
+  font-size: 19.2px;
+  margin-top: 5px;
+  opacity: 0.8;
+  letter-spacing: 2px;
+}
+
+.separator {
+  font-size: 86.4px;
+  animation: blink-animation 1s infinite;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+}
+
+.target-date {
+  font-size: 21.6px;
+  color: #ffb000;
+  margin-top: 20px;
+  opacity: 0.9;
+  text-shadow: 0 0 5px #ffb000;
+}
+
+/* Blinking Cursor */
+.blink-cursor {
+  font-size: 28.8px;
+  animation: blink-animation 1s infinite;
+  margin-top: 20px;
+}
+
+/* Animations */
+@keyframes terminal-flicker {
+  0% {
+    opacity: 0.98;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scanlines {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes blink-animation {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+/* Glitch Effect */
+.glitch {
+  animation: glitch 0.3s;
+}
+
+@keyframes glitch {
+  0%,
+  100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+    filter: hue-rotate(90deg);
+  }
+  40% {
+    transform: translate(-1px, -1px);
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    transform: translate(1px, 1px);
+    filter: hue-rotate(270deg);
+  }
+  80% {
+    transform: translate(1px, -1px);
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: #0d0d0d;
+  border-right: 2px solid #00ff00;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-bottom: 1px solid #00ff00;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar-title {
+  font-size: 24px;
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-size: 28.8px;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-family: monospace;
+}
+
+.sidebar-toggle:hover {
+  background-color: #00ff00;
+  color: #0a0a0a;
+}
+
+.nav-content {
+  padding: 20px 0;
+}
+
+.nav-link {
+  display: block;
+  width: 100%;
+  padding: 15px 20px;
+  color: #00ff00;
+  text-decoration: none;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  position: relative;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background-color: rgba(0, 255, 0, 0.1);
+  padding-left: 30px;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.nav-link.active {
+  background-color: rgba(0, 255, 0, 0.2);
+  border-left: 4px solid #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+.nav-section {
+  margin: 5px 0;
+}
+
+.phase-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.phase-toggle.expanded .toggle-icon {
+  transform: rotate(45deg);
+}
+
+.phase-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: rgba(0, 255, 0, 0.05);
+}
+
+.phase-content.expanded {
+  max-height: 300px;
+}
+
+.sub-link {
+  display: block;
+  padding: 10px 40px;
+  color: #ffb000;
+  text-decoration: none;
+  font-size: 19.2px;
+  transition: all 0.3s ease;
+}
+
+.sub-link:hover {
+  padding-left: 50px;
+  text-shadow: 0 0 5px #ffb000;
+  color: #ffd000;
+}
+
+/* Scrollbar Styling */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #00dd00;
+}
+
+/* Phase Pages Styles */
+.phase-container {
+  background-color: #0d0d0d;
+  border: 2px solid #00ff00;
+  border-radius: 8px;
+  padding: 40px;
+  margin: 20px;
+  max-width: 900px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.phase-header {
+  color: #00ff00;
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+.section-title {
+  color: #ffb000;
+  font-size: 24px;
+  margin: 30px 0 15px 0;
+  text-shadow: 0 0 5px #ffb000;
+}
+
+.content-block {
+  background-color: rgba(0, 255, 0, 0.05);
+  border-left: 3px solid #00ff00;
+  padding: 20px;
+  margin: 15px 0;
+}
+
+.request-item {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.request-title {
+  color: #00ff00;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.request-content {
+  color: #88ff88;
+  line-height: 1.6;
+}
+
+.warning-box {
+  background-color: rgba(255, 176, 0, 0.1);
+  border: 2px solid #ffb000;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.duration {
+  color: #ffb000;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Animated Hamburger Menu */
+.mobile-nav-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 35px;
+  height: 30px;
+  z-index: 1000;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.hamburger {
+  position: relative;
+  display: block;
+  width: 35px;
+  height: 3px;
+  background: #00ff00;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 5px #00ff00;
+}
+
+.hamburger::before,
+.hamburger::after {
+  content: "";
+  position: absolute;
+  width: 35px;
+  height: 3px;
+  background: #00ff00;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 5px #00ff00;
+}
+
+.hamburger::before {
+  top: -10px;
+}
+
+.hamburger::after {
+  top: 10px;
+}
+
+/* Hamburger animation when active */
+.mobile-nav-toggle.active .hamburger {
+  background: transparent;
+  box-shadow: none;
+}
+
+.mobile-nav-toggle.active .hamburger::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.mobile-nav-toggle.active .hamburger::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+/* Responsive Design - Mobile First at 380px */
+@media (max-width: 500px) {
+  /* Show mobile hamburger menu */
+  .mobile-nav-toggle {
+    display: block;
+  }
+
+  /* Hide desktop sidebar toggle */
+  .sidebar-toggle {
+    display: none;
+  }
+
+  /* Sidebar mobile behavior */
+  .sidebar {
+    transform: translateX(-100%);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px; /* Space for hamburger menu */
+  }
+
+  /* Terminal adjustments for mobile */
+  .terminal-container {
+    width: calc(100% - 20px);
+    margin: 10px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+
+  .terminal-header {
+    padding: 8px 12px;
+  }
+
+  .terminal-title {
+    font-size: 14px;
+  }
+
+  .terminal-body {
+    padding: 15px;
+    min-height: auto;
+  }
+
+  .countdown-wrapper {
+    padding: 10px 0;
+  }
+
+  .status-line {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .target-date {
+    font-size: 14px;
+  }
+
+  .blink-cursor {
+    font-size: 20px;
+  }
+
+  /* Phase pages mobile styles */
+  .phase-container {
+    padding: 15px;
+    margin: 10px;
+    margin-top: 70px; /* Space for hamburger */
+    border-radius: 5px;
+  }
+
+  .phase-header {
+    font-size: 20px;
+    line-height: 1.3;
+    margin-bottom: 15px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    margin: 20px 0 10px 0;
+  }
+
+  .content-block {
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  .request-item {
+    margin: 10px 0;
+    padding-left: 5px;
+  }
+
+  .request-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .request-content {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .warning-box {
+    padding: 10px;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+
+  .duration {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  /* Sidebar mobile styles */
+  .sidebar-header {
+    padding: 15px;
+    padding-right: 60px; /* Space for hamburger */
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    padding: 12px 15px;
+  }
+
+  .nav-link:hover {
+    padding-left: 20px;
+  }
+
+  .sub-link {
+    font-size: 14px;
+    padding: 8px 25px;
+  }
+
+  .sub-link:hover {
+    padding-left: 30px;
+  }
+
+  /* Controls sizing */
+  .control {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Ensure text doesn't overflow */
+  body {
+    font-size: 100%;
+  }
+}
+
+/* Keep other breakpoints for tablets and larger phones */
+@media (min-width: 501px) and (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .phase-container {
+    margin: 15px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Terminal styles for homepage */
+  .terminal-body {
+    padding: 20px;
+  }
+
+  .terminal-container {
+    width: 95%;
+  }
+
+  .time-value {
+    font-size: 57.6px;
+    min-width: 70px;
+  }
+
+  .separator {
+    font-size: 57.6px;
+  }
+
+  .time-label {
+    font-size: 16.8px;
+  }
+
+  .status-line {
+    font-size: 19.2px;
+  }
+
+  .target-date {
+    font-size: 16.8px;
+  }
+
+  /* Phase pages responsive styles */
+  .phase-container {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .phase-header {
+    font-size: 28px;
+    line-height: 1.3;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .content-block {
+    padding: 15px;
+  }
+
+  .request-item {
+    padding-left: 10px;
+  }
+
+  .request-title {
+    font-size: 18px;
+  }
+
+  .warning-box {
+    padding: 15px;
+  }
+
+  .duration {
+    font-size: 18px;
+  }
+
+  /* Sidebar adjustments */
+  .sidebar {
+    width: 85%;
+    max-width: 320px;
+  }
+
+  .sidebar-title {
+    font-size: 20px;
+  }
+
+  .nav-link {
+    font-size: 16px;
+    padding: 12px 15px;
+  }
+
+  .sub-link {
+    font-size: 16px;
+    padding: 8px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Terminal styles for homepage */
+  .time-value {
+    font-size: 43.2px;
+    min-width: 50px;
+  }
+
+  .separator {
+    font-size: 43.2px;
+  }
+
+  .time-label {
+    font-size: 14.4px;
+  }
+
+  .countdown {
+    gap: 5px;
+  }
+
+  .terminal-header {
+    padding: 8px 15px;
+  }
+
+  .terminal-title {
+    font-size: 16px;
+  }
+
+  /* Phase pages mobile styles */
+  .phase-container {
+    padding: 15px;
+    margin: 5px;
+    border-radius: 5px;
+  }
+
+  .phase-header {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    margin: 20px 0 10px 0;
+  }
+
+  .content-block {
+    padding: 12px;
+    margin: 10px 0;
+  }
+
+  .request-item {
+    margin: 10px 0;
+    padding-left: 5px;
+  }
+
+  .request-title {
+    font-size: 16px;
+  }
+
+  .request-content {
+    font-size: 14px;
+  }
+
+  .warning-box {
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 14px;
+  }
+
+  .duration {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  /* Sidebar mobile adjustments */
+  .sidebar-header {
+    padding: 15px;
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+  }
+
+  .sidebar-toggle {
+    font-size: 24px;
+    padding: 4px 8px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .nav-link:hover {
+    padding-left: 20px;
+  }
+
+  .sub-link {
+    font-size: 14px;
+    padding: 6px 25px;
+  }
+
+  .sub-link:hover {
+    padding-left: 35px;
+  }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 375px) {
+  body {
+    font-size: 100%;
+  }
+
+  .time-value {
+    font-size: 36px;
+    min-width: 40px;
+  }
+
+  .separator {
+    font-size: 36px;
+  }
+
+  .phase-header {
+    font-size: 20px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+}
+
+/* Ensure touch-friendly tap targets */
+@media (pointer: coarse) {
+  .nav-link,
+  .sub-link,
+  .sidebar-toggle {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .control {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Utility classes for better mobile layout */
+.mobile-padding {
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .mobile-padding {
+    padding: 5px;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Fix for long text breaking layout on mobile */
+.request-content,
+.content-block {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Overlay effect when sidebar is open */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Ensure main content doesn't overlap sidebar when open */
+@media (max-width: 1024px) {
+  .sidebar.active ~ .main-content {
+    filter: blur(2px);
+  }
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Intermediate screen size - horizontal but smaller */
+@media (max-width: 500px) and (min-width: 381px) {
+  .countdown {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .time-value {
+    font-size: 36px;
+    min-width: 50px;
+  }
+
+  .time-label {
+    font-size: 14px;
+  }
+
+  .separator {
+    font-size: 36px;
+  }
+}
+
+/* Vertical countdown for small screens */
+@media (max-width: 380px) {
+  .countdown {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .time-unit {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 15px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .time-value {
+    font-size: 48px;
+    min-width: auto;
+    width: 80px;
+    text-align: right;
+  }
+
+  .time-label {
+    font-size: 14px;
+    width: 60px;
+    text-align: left;
+    margin-top: 0;
+  }
+
+  /* Add dividers between time units */
+  .time-unit:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 1px;
+    background: rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+  }
+
+  .time-unit {
+    position: relative;
+    padding-bottom: 8px;
+  }
+}
+
+/* Even smaller screens - more compact */
+@media (max-width: 320px) {
+  .time-value {
+    font-size: 40px;
+    width: 70px;
+  }
+
+  .time-label {
+    font-size: 12px;
+    width: 50px;
+  }
+
+  .countdown {
+    gap: 12px;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .terminal-container {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .phase-container {
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .time-value {
+    font-size: 48px;
+  }
+
+  .phase-header {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Sails: Text Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="header">
+            <h1>⚓ Black Sails: Nassau 1715</h1>
+            <div id="status-bar">
+                <span id="player-name"></span>
+                <span id="location"></span>
+                <span id="gold"></span>
+                <span id="health"></span>
+            </div>
+        </div>
+        
+        <div id="main-content">
+            <div id="terminal-output"></div>
+            <div id="input-container">
+                <span id="prompt">&gt;</span>
+                <input type="text" id="terminal-input" autofocus>
+            </div>
+        </div>
+        
+        <div id="sidebar">
+            <div id="map-container">
+                <h3>Map</h3>
+                <div id="mini-map"></div>
+            </div>
+            <div id="quick-stats">
+                <h3>Character</h3>
+                <div id="stats-display"></div>
+            </div>
+            <div id="active-quests">
+                <h3>Quests</h3>
+                <div id="quest-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login/Register Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="auth-title">Welcome to Nassau</h2>
+            <div id="login-form" class="auth-form">
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Enter Nassau</button>
+                <p>New to Nassau? <a href="#" onclick="showRegister()">Create Account</a></p>
+            </div>
+            <div id="register-form" class="auth-form" style="display: none;">
+                <input type="text" id="register-username" placeholder="Username">
+                <input type="email" id="register-email" placeholder="Email">
+                <input type="password" id="register-password" placeholder="Password">
+                <button onclick="register()">Join the Pirates</button>
+                <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character Creation Modal -->
+    <div id="character-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Create Your Character</h2>
+            <div id="character-form">
+                <input type="text" id="character-name" placeholder="Character Name">
+                
+                <h3>Choose Your Path</h3>
+                <select id="faction-select">
+                    <option value="pirates">Pirate - Live by the sword, die by the sword</option>
+                    <option value="merchants">Merchant - Gold is the greatest power</option>
+                    <option value="british">British Navy - For King and Country</option>
+                    <option value="independent">Independent - Chart your own course</option>
+                </select>
+                
+                <h3>Attributes (20 points total)</h3>
+                <div class="attribute">
+                    <label>Combat: <span id="combat-value">5</span></label>
+                    <input type="range" id="combat" min="1" max="10" value="5" onchange="updateAttributes()">
+                </div>
+                <div class="attribute">
+                    <label>Sailing: <span id="sailing-value">5</span></label>
+                    <input type="range" id="sailing" min="1" max="10" value="5" onchange="updateAttributes()">
+                </div>
+                <div class="attribute">
+                    <label>Negotiation: <span id="negotiation-value">5</span></label>
+                    <input type="range" id="negotiation" min="1" max="10" value="5" onchange="updateAttributes()">
+                </div>
+                <div class="attribute">
+                    <label>Deception: <span id="deception-value">5</span></label>
+                    <input type="range" id="deception" min="1" max="10" value="5" onchange="updateAttributes()">
+                </div>
+                <p>Points Remaining: <span id="points-remaining">0</span>/20</p>
+                
+                <button onclick="createCharacter()">Set Sail</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

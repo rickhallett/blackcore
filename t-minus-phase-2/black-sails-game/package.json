@@ -1,0 +1,36 @@
+{
+  "name": "black-sails-game",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js",
+    "db:setup": "node database/setup.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "redis": "^5.7.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "nodemon": "^3.1.10"
+  }
+}

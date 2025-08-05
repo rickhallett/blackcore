@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>T-MINUS: PHASE 2</title>
+    <!-- Google Fonts for terminal font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Animate.css for animations -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="particles-js"></div>
+
+    <!-- Mobile Hamburger Menu -->
+    <button
+      class="mobile-nav-toggle"
+      id="mobile-nav-toggle"
+      aria-label="Toggle navigation"
+    >
+      <span class="hamburger"></span>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">MISSION://PHASES</span>
+        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      </div>
+
+      <div class="nav-content">
+        <a href="index.html" class="nav-link active">▶ HOME://COUNTDOWN</a>
+        <a href="campaign.html" class="nav-link">▶ THE CAMPAIGN</a>
+
+        <div class="nav-section">
+          <button class="nav-link phase-toggle" data-phase="1">
+            ▶ PHASE 1: INFORMATION OFFENSIVE
+            <span class="toggle-icon">+</span>
+          </button>
+          <div class="phase-content" id="phase1-content">
+            <a href="phase1.html#foi-requests" class="sub-link"
+              >→ FOI Requests</a
+            >
+            <a href="phase1.html#exemptions" class="sub-link"
+              >→ Anticipating Exemptions</a
+            >
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <button class="nav-link phase-toggle" data-phase="2">
+            ▶ PHASE 2: REGULATORY ASSAULT
+            <span class="toggle-icon">+</span>
+          </button>
+          <div class="phase-content" id="phase2-content">
+            <a href="phase2.html#ico" class="sub-link">→ ICO Complaints</a>
+            <a href="phase2.html#lgo" class="sub-link">→ LGO Procedures</a>
+            <a href="phase2.html#ehrc" class="sub-link">→ EHRC Submissions</a>
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <button class="nav-link phase-toggle" data-phase="3">
+            ▶ PHASE 3: PUBLIC & POLITICAL
+            <span class="toggle-icon">+</span>
+          </button>
+          <div class="phase-content" id="phase3-content">
+            <a href="phase3.html#media" class="sub-link">→ Media Briefings</a>
+            <a href="phase3.html#political" class="sub-link"
+              >→ Political Leverage</a
+            >
+            <a href="phase3.html#community" class="sub-link"
+              >→ Community Mobilization</a
+            >
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <button class="nav-link phase-toggle" data-phase="4">
+            ▶ PHASE 4: LEGAL GAUNTLET
+            <span class="toggle-icon">+</span>
+          </button>
+          <div class="phase-content" id="phase4-content">
+            <a href="phase4.html#legal-firm" class="sub-link"
+              >→ Legal Firm Selection</a
+            >
+            <a href="phase4.html#letter-action" class="sub-link"
+              >→ Letter Before Action</a
+            >
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <button class="nav-link phase-toggle" data-phase="5">
+            ▶ PHASE 5: CORPORATE ACCOUNTABILITY
+            <span class="toggle-icon">+</span>
+          </button>
+          <div class="phase-content" id="phase5-content">
+            <a href="phase5.html#open-letters" class="sub-link"
+              >→ Open Letters</a
+            >
+            <a href="phase5.html#investor-comms" class="sub-link"
+              >→ Investor Communications</a
+            >
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <button class="nav-link phase-toggle" data-phase="6">
+            ▶ PHASE 6: LEGAL ESCALATION
+            <span class="toggle-icon">+</span>
+          </button>
+          <div class="phase-content" id="phase6-content">
+            <a href="phase6.html#judicial-review" class="sub-link"
+              >→ Judicial Review</a
+            >
+            <a href="phase6.html#appeals" class="sub-link">→ Appeals Process</a>
+            <a href="phase6.html#supreme-court" class="sub-link"
+              >→ Supreme Court</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-content homepage">
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <span class="terminal-title">SYSTEM://COUNTDOWN.TERMINAL</span>
+          <div class="terminal-controls">
+            <span class="control red"></span>
+            <span class="control yellow"></span>
+            <span class="control green"></span>
+          </div>
+        </div>
+
+        <div class="terminal-body">
+          <div class="scanlines"></div>
+          <div class="countdown-wrapper">
+            <div class="status-line animate__animated animate__fadeIn">
+              ▶ INITIATING COUNTDOWN SEQUENCE...
+            </div>
+            <div class="countdown" id="countdown">
+              <span class="time-unit">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">DAYS</span>
+              </span>
+              <span class="separator">::</span>
+              <span class="time-unit">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">HOURS</span>
+              </span>
+              <span class="separator">::</span>
+              <span class="time-unit">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">MINS</span>
+              </span>
+              <span class="separator">::</span>
+              <span class="time-unit">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">SECS</span>
+              </span>
+            </div>
+            <div
+              class="target-date animate__animated animate__fadeIn animate__delay-1s"
+            >
+              TARGET: 2025-08-31 00:00:00 UTC
+            </div>
+            <div class="blink-cursor">_</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Particles.js for background effect -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
